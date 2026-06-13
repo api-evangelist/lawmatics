@@ -1,0 +1,14 @@
+{
+  "repo": "lawmatics",
+  "feeds": [
+    {
+      "source": "https://www.lawmatics.com/blog",
+      "feed_url": "https://www.lawmatics.com/blog",
+      "title": "Lawmatics Blog",
+      "saved": 0,
+      "method": "html"
+    }
+  ],
+  "post_count": 0,
+  "fetched": "2026-06-13T00:00:00Z"
+}

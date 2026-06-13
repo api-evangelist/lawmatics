@@ -1,0 +1,122 @@
+{
+  "@context": {
+    "@version": 1.1,
+    "schema": "https://schema.org/",
+    "lawmatics": "https://app.lawmatics.com/api/vocab/",
+    "xsd": "http://www.w3.org/2001/XMLSchema#",
+    "name": "schema:name",
+    "description": "schema:description",
+    "url": "schema:url",
+    "email": "schema:email",
+    "telephone": "schema:telephone",
+    "dateCreated": {
+      "@id": "schema:dateCreated",
+      "@type": "xsd:dateTime"
+    },
+    "dateModified": {
+      "@id": "schema:dateModified",
+      "@type": "xsd:dateTime"
+    },
+    "Contact": {
+      "@id": "schema:Person",
+      "@type": "@id"
+    },
+    "Matter": {
+      "@id": "lawmatics:Matter",
+      "@type": "@id"
+    },
+    "Lead": {
+      "@id": "lawmatics:Lead",
+      "@type": "@id"
+    },
+    "Pipeline": {
+      "@id": "lawmatics:Pipeline",
+      "@type": "@id"
+    },
+    "Stage": {
+      "@id": "lawmatics:Stage",
+      "@type": "@id"
+    },
+    "IntakeForm": {
+      "@id": "lawmatics:IntakeForm",
+      "@type": "@id"
+    },
+    "Appointment": {
+      "@id": "schema:Event",
+      "@type": "@id"
+    },
+    "Document": {
+      "@id": "schema:DigitalDocument",
+      "@type": "@id"
+    },
+    "Tag": {
+      "@id": "lawmatics:Tag",
+      "@type": "@id"
+    },
+    "CustomField": {
+      "@id": "lawmatics:CustomField",
+      "@type": "@id"
+    },
+    "Workflow": {
+      "@id": "lawmatics:Workflow",
+      "@type": "@id"
+    },
+    "id": {
+      "@id": "schema:identifier",
+      "@type": "xsd:string"
+    },
+    "firstName": {
+      "@id": "schema:givenName",
+      "@type": "xsd:string"
+    },
+    "lastName": {
+      "@id": "schema:familyName",
+      "@type": "xsd:string"
+    },
+    "status": {
+      "@id": "lawmatics:status",
+      "@type": "xsd:string"
+    },
+    "assignedTo": {
+      "@id": "schema:accountablePerson",
+      "@type": "@id"
+    },
+    "practiceArea": {
+      "@id": "lawmatics:practiceArea",
+      "@type": "xsd:string"
+    },
+    "referralSource": {
+      "@id": "lawmatics:referralSource",
+      "@type": "xsd:string"
+    },
+    "tags": {
+      "@id": "lawmatics:tags",
+      "@container": "@set"
+    },
+    "customFields": {
+      "@id": "lawmatics:customFields",
+      "@container": "@set"
+    },
+    "startDate": {
+      "@id": "schema:startDate",
+      "@type": "xsd:dateTime"
+    },
+    "endDate": {
+      "@id": "schema:endDate",
+      "@type": "xsd:dateTime"
+    },
+    "value": {
+      "@id": "schema:value",
+      "@type": "xsd:decimal"
+    },
+    "currency": {
+      "@id": "schema:priceCurrency",
+      "@type": "xsd:string"
+    }
+  },
+  "@type": "schema:WebAPI",
+  "name": "Lawmatics OAuth API",
+  "url": "https://app.lawmatics.com/api",
+  "description": "RESTful OAuth API for managing leads, matters, contacts, intake forms, pipelines, and automated client follow-ups within the Lawmatics legal CRM platform.",
+  "schema:documentation": "https://docs.lawmatics.com/"
+}
