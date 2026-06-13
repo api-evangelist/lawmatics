@@ -1,0 +1,77 @@
+specificationVersion: '1.0'
+name: Lawmatics FinOps
+description: FinOps Framework FOCUS-aligned cost and usage metadata for the Lawmatics
+  legal CRM and automation platform API.
+url: https://www.lawmatics.com/pricing
+provider: Lawmatics
+providerUrl: https://www.lawmatics.com/
+billingModel: subscription
+pricingUrl: https://www.lawmatics.com/pricing
+costAllocation:
+  - dimension: Plan
+    description: Cost varies by subscription tier — Essential, Premium, or Enterprise
+    values:
+      - Essential
+      - Premium
+      - Enterprise
+  - dimension: Users
+    description: Per-seat pricing with a minimum of 3 users per plan; additional users
+      billed incrementally
+  - dimension: Contacts
+    description: Each plan includes a contact allotment; additional contacts purchased
+      separately
+  - dimension: AddOns
+    description: Optional add-on services (QualifyAI, Time and Billing) billed separately
+      on credit or subscription basis
+skus:
+  - id: lawmatics-essential
+    name: Essential Plan
+    description: Base CRM and client intake plan for small to mid-size law firms
+    billingPeriod: monthly
+    currency: USD
+    priceRangeMin: 99
+    priceRangeMax: 199
+    unit: user/month
+    contactsIncluded: 500
+    usersMin: 3
+  - id: lawmatics-premium
+    name: Premium Plan
+    description: Full-featured plan with marketing automation and advanced reporting
+    billingPeriod: monthly
+    currency: USD
+    priceRangeMin: 99
+    priceRangeMax: 199
+    unit: user/month
+    contactsIncluded: 10000
+    usersMin: 3
+  - id: lawmatics-enterprise
+    name: Enterprise Plan
+    description: Custom enterprise plan with dedicated support and full feature access
+    billingPeriod: monthly
+    currency: USD
+    pricing: custom
+    contactsIncluded: 10000
+    usersMin: 3
+  - id: lawmatics-qualifyai
+    name: QualifyAI Add-On
+    description: AI-powered lead qualification and routing, billed on a credit basis
+    billingPeriod: credit-based
+    currency: USD
+    pricing: credit-based
+  - id: lawmatics-time-billing
+    name: Time and Billing Add-On
+    description: Time tracking, invoicing, and payment processing add-on
+    billingPeriod: monthly
+    currency: USD
+    pricing: contact-sales
+optimization:
+  - tip: Start with the Essential plan and upgrade as your firm grows to avoid overpaying
+      for unused automation features.
+  - tip: Monitor contact usage — both Premium and Enterprise plans include 10,000
+      contacts, but additional contacts are billed separately.
+  - tip: Use the first-month-free promotion to evaluate ROI before committing to an
+      annual plan.
+  - tip: Consider whether QualifyAI credits align with your lead volume; high-volume
+      firms may see better unit economics at scale.
+  - tip: Enterprise plan dedicated account manager can help optimize feature usage
+      and reduce time-to-value for complex workflows.

@@ -1,0 +1,31 @@
+specificationVersion: '0.1'
+name: Lawmatics API Rate Limits
+description: Rate limiting policies for the Lawmatics OAuth REST API. Specific numeric
+  thresholds are not publicly documented; firms should contact api@lawmatics.com for
+  plan-specific limits.
+url: https://docs.lawmatics.com/
+contact: api@lawmatics.com
+rateLimits:
+  - name: Default API Rate Limit
+    description: Lawmatics applies rate limiting to API requests. Specific limits
+      are enforced per OAuth access token and are managed server-side. Exact thresholds
+      are not publicly disclosed; contact api@lawmatics.com for details.
+    type: request
+    scope: per-token
+    notes:
+      - Rate limits are applied per OAuth2 access token
+      - Integration platforms such as Make and Pipedream handle rate limit back-off
+        automatically
+      - Exceeding rate limits returns HTTP 429 Too Many Requests
+      - Contact api@lawmatics.com for plan-specific rate limit information
+headers:
+  - name: Retry-After
+    description: Returned with HTTP 429 responses to indicate when the client may
+      retry the request
+authentication:
+  type: OAuth2
+  description: All API requests require a valid OAuth2 Bearer token obtained via the
+    Lawmatics OAuth2 authorization flow. Tokens are scoped to the authorized firm
+    account.
+  authorizationUrl: https://app.lawmatics.com/oauth/authorize
+  tokenUrl: https://app.lawmatics.com/oauth/token

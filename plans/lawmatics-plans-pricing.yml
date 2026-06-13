@@ -1,0 +1,75 @@
+specificationVersion: '0.1'
+name: Lawmatics Plans and Pricing
+description: Pricing plans for Lawmatics legal CRM and automation platform, designed
+  for law firms ranging from solo practices to large enterprises.
+url: https://www.lawmatics.com/pricing
+plans:
+  - name: Essential
+    description: Designed for firms striving to boost client capacity while operating
+      at peak efficiency. Provides foundational CRM and client intake tools.
+    url: https://www.lawmatics.com/pricing
+    type: paid
+    usersMin: 3
+    features:
+      - Client intake
+      - Lead management
+      - Calendaring
+      - Custom forms
+      - E-signature
+      - SMS messaging
+      - Task management
+      - 500 contacts included
+      - Additional contacts sold separately
+  - name: Premium
+    description: Most popular plan for firms targeting rapid growth, record high profitability,
+      and market leadership. Includes full marketing and workflow automation.
+    url: https://www.lawmatics.com/pricing
+    type: paid
+    usersMin: 3
+    features:
+      - Everything in Essential
+      - Workflow automation
+      - Marketing automation
+      - Round-robin scheduling
+      - Advanced conflict checking
+      - Email marketing
+      - Custom reporting
+      - Analytics and ROI tracking
+      - Custom dashboards
+      - Event management
+      - 10000 contacts included
+      - Additional contacts sold separately
+  - name: Enterprise
+    description: Tailored for large law firms with complex, cross-functional workflows
+      spanning multiple departments or practice areas. Includes a dedicated account
+      manager and white-glove onboarding.
+    url: https://www.lawmatics.com/pricing
+    type: custom
+    usersMin: 3
+    features:
+      - Everything in Premium
+      - Custom pricing
+      - Dedicated account manager
+      - White-glove onboarding
+      - Strategic consulting
+      - Priority support
+      - Full feature access
+      - 10000 contacts included
+      - Additional contacts sold separately
+addons:
+  - name: QualifyAI
+    description: AI-powered lead identification and routing. Instantly identify and
+      route best leads with AI. Credit-based pricing.
+    type: credit-based
+  - name: Time and Billing
+    description: Time tracking, data insights, client management, payment processing,
+      and invoicing add-on for law firms.
+    type: paid
+promotions:
+  - First month free
+  - $50 gift card for demo participation
+notes:
+  - Exact per-seat monthly pricing requires contacting Lawmatics sales for a custom
+    quote
+  - General range is approximately $99 to $199 per user per month depending on plan
+    and firm size

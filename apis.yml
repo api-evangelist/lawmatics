@@ -1,0 +1,63 @@
+name: Lawmatics
+description: Lawmatics is a legal CRM and automation platform with a REST API for
+  managing leads, matters, contacts, intake forms, pipelines, and automated client
+  follow-ups for law firms of all sizes.
+image: https://kinlane-productions.s3.amazonaws.com/apis-json/apis-json-logo.jpg
+url: https://raw.githubusercontent.com/api-evangelist/lawmatics/refs/heads/main/apis.yml
+created: '2026-06-13'
+modified: '2026-06-13'
+specificationVersion: '0.19'
+type: Index
+tags:
+  - Legal
+  - CRM
+  - Law Firms
+  - Client Intake
+  - Marketing Automation
+  - Matter Management
+  - E-Signature
+  - Workflow Automation
+apis:
+  - name: Lawmatics OAuth API
+    description: RESTful OAuth API for managing leads, matters, contacts, intake forms,
+      pipelines, and automated client follow-ups within the Lawmatics legal CRM platform.
+    image: https://kinlane-productions.s3.amazonaws.com/apis-json/apis-json-logo.jpg
+    humanURL: https://docs.lawmatics.com/
+    baseURL: https://app.lawmatics.com/api
+    tags:
+      - Legal CRM
+      - Leads
+      - Matters
+      - Contacts
+      - Intake Forms
+      - Pipelines
+      - Automation
+    properties:
+      - type: Documentation
+        url: https://docs.lawmatics.com/
+      - type: OpenAPI
+        url: https://docs.lawmatics.com/
+common:
+  - type: Website
+    url: https://www.lawmatics.com/
+  - type: Documentation
+    url: https://docs.lawmatics.com/
+  - type: Blog
+    url: https://www.lawmatics.com/blog
+  - type: Pricing
+    url: https://www.lawmatics.com/pricing
+  - type: StatusPage
+    url: https://status.lawmatics.com/
+  - type: LinkedIn
+    url: https://www.linkedin.com/company/lawmatics
+  - type: X
+    url: https://x.com/lawmatics
+  - type: Plans
+    url: plans/lawmatics-plans-pricing.yml
+  - type: RateLimits
+    url: rate-limits/lawmatics-rate-limits.yml
+  - type: FinOps
+    url: finops/lawmatics-finops.yml
+maintainers:
+  - FN: Kin Lane
+    email: kin@apievangelist.com
