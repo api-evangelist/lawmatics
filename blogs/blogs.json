@@ -4,11 +4,18 @@
     {
       "source": "https://www.lawmatics.com/blog",
       "feed_url": "https://www.lawmatics.com/blog",
-      "title": "Lawmatics Blog",
+      "title": "",
       "saved": 0,
-      "method": "html"
+      "method": "none"
+    },
+    {
+      "source": "https://docs.lawmatics.com/",
+      "feed_url": "https://docs.lawmatics.com/",
+      "title": "",
+      "saved": 0,
+      "method": "none"
     }
   ],
   "post_count": 0,
-  "fetched": "2026-06-13T00:00:00Z"
+  "fetched": "2026-06-14T20:42:17Z"
 }
