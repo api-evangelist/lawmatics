@@ -38,6 +38,8 @@ apis:
       - type: OpenAPI
         url: https://docs.lawmatics.com/
 common:
+  - type: DomainSecurity
+    url: security/lawmatics-domain-security.yml
   - type: Website
     url: https://www.lawmatics.com/
   - type: Documentation
