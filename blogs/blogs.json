@@ -2,13 +2,14 @@
   "repo": "lawmatics",
   "feeds": [
     {
-      "source": "https://www.lawmatics.com/blog",
-      "feed_url": "",
+      "source": "https://docs.lawmatics.com/",
+      "feed_url": "https://docs.lawmatics.com/",
+      "title": "",
       "saved": 0,
-      "method": "agent-scrape"
+      "method": "none"
     }
   ],
   "post_count": 1,
-  "fetched": "2026-06-27T12:51:08Z",
-  "agent_pulled": "2026-06-27"
+  "fetched": "2026-07-11T11:50:51Z",
+  "agent_pulled": "2026-07-04"
 }
