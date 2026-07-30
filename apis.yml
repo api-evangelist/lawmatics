@@ -2,7 +2,19 @@ name: Lawmatics
 description: Lawmatics is a legal CRM and automation platform with a REST API for
   managing leads, matters, contacts, intake forms, pipelines, and automated client
   follow-ups for law firms of all sizes.
-image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
+accessModel:
+  pricing: paid
+  onboarding: unknown
+  trial: false
+  try_now: false
+  public: false
+  label: Paid
+  confidence: medium
+  source:
+  - plans
+  generated: '2026-07-22'
+  method: derived
+image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/icons/lawmatics.png
 url: https://raw.githubusercontent.com/api-evangelist/lawmatics/refs/heads/main/apis.yml
 created: '2026-06-13'
 modified: '2026-06-13'
