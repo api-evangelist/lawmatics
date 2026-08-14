@@ -1,23 +1,34 @@
 name: Lawmatics
-description: Lawmatics is a legal CRM and automation platform with a REST API for
-  managing leads, matters, contacts, intake forms, pipelines, and automated client
-  follow-ups for law firms of all sizes.
+description: Lawmatics is a legal CRM, client-intake and marketing-automation platform
+  for law firms, from solo practices to multi-office firms. Its public developer surface
+  is the Lawmatics OAuth API — a REST API of 177 operations across matters (called
+  prospects in the API), contacts, companies, custom intake forms and form entries,
+  custom fields, collections, pipelines, stages, practice areas, marketing sources
+  and campaigns, events, tasks, notes, files, tags, users, time entries, expenses,
+  invoices and transactions — plus a set of signed outbound webhooks. Access is OAuth
+  2.0 authorization code, gated on a Lawmatics support representative enabling developer
+  settings on the account, and the resulting access token is non-expiring, unscoped
+  and grants full CRUD over the firm.
 accessModel:
   pricing: paid
-  onboarding: unknown
+  onboarding: request
   trial: false
   try_now: false
   public: false
   label: Paid
-  confidence: medium
+  confidence: high
   source:
   - plans
-  generated: '2026-07-22'
-  method: derived
+  - docs
+  generated: '2026-08-13'
+  method: searched
+  note: Pricing is published by tier without prices; API access additionally requires
+    Lawmatics support to enable developer settings on the account before a developer
+    app can be created.
 image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/icons/lawmatics.png
 url: https://raw.githubusercontent.com/api-evangelist/lawmatics/refs/heads/main/apis.yml
 created: '2026-06-13'
-modified: '2026-06-13'
+modified: '2026-08-13'
 specificationVersion: '0.19'
 type: Index
 tags:
@@ -29,13 +40,20 @@ tags:
   - Matter Management
   - E-Signature
   - Workflow Automation
+  - Legal Tech
+  - Time and Billing
+  - Webhooks
+  - OAuth
 apis:
   - name: Lawmatics OAuth API
     description: RESTful OAuth API for managing leads, matters, contacts, intake forms,
       pipelines, and automated client follow-ups within the Lawmatics legal CRM platform.
+      177 operations over 95 paths, all under /v1, using a JSON:API-shaped data/attributes/relationships
+      envelope and a shared query grammar for field selection, pagination, sorting
+      and single-field filtering.
     image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
     humanURL: https://docs.lawmatics.com/
-    baseURL: https://app.lawmatics.com/api
+    baseURL: https://api.lawmatics.com
     tags:
       - Legal CRM
       - Leads
@@ -48,14 +66,74 @@ apis:
       - type: Documentation
         url: https://docs.lawmatics.com/
       - type: OpenAPI
-        url: https://docs.lawmatics.com/
+        url: openapi/lawmatics-openapi.yml
+      - type: Postman
+        url: postman/lawmatics-oauth-api.postman_collection.json
+    x-evidence:
+      verified: '2026-08-13'
+      base_url_correction: https://app.lawmatics.com/api was recorded as the base and
+        is wrong — it returns HTTP 403 AccessDenied from S3. Every curl example in
+        the Lawmatics Param Guide and the OAuth token endpoint use https://api.lawmatics.com,
+        and GET https://api.lawmatics.com/v1/contacts returned HTTP 401 unauthenticated
+        on 2026-08-13, confirming the host serves the documented API.
+      contract: https://docs.lawmatics.com/ publishes the "Lawmatics OAuth API v1.22.0"
+        Postman collection (186 requests, 216 saved response examples) as its official
+        API documentation. Saved verbatim to postman/ and converted to openapi/.
 common:
+  - type: AgenticAccess
+    url: agentic-access/lawmatics-agentic-access.yml
+  - type: OAuthScopes
+    url: scopes/lawmatics-scopes.yml
+  - type: Authentication
+    url: authentication/lawmatics-authentication.yml
   - type: DomainSecurity
     url: security/lawmatics-domain-security.yml
+  - type: Packages
+    url: packages/lawmatics-packages.yml
+  - type: LLMsTxt
+    url: llms/lawmatics-llms.txt
+  - type: Overlay
+    url: overlays/lawmatics-openapi-overlay.yaml
+  - type: Conformance
+    url: conformance/lawmatics-conformance.yml
+  - type: Compliance
+    url: https://www.lawmatics.com/security
+  - type: Lifecycle
+    url: lifecycle/lawmatics-lifecycle.yml
+  - type: ChangeLog
+    url: changelog/lawmatics-changelog.yml
+  - type: Conventions
+    url: conventions/lawmatics-conventions.yml
+  - type: ErrorCatalog
+    url: errors/lawmatics-problem-types.yml
+  - type: DataModel
+    url: data-model/lawmatics-data-model.yml
+  - type: Webhooks
+    url: asyncapi/lawmatics-webhooks.yml
+  - type: Components
+    url: components/lawmatics-components.yml
+  - type: AgentSkill
+    url: skills/_index.yml
+  - type: Postman
+    url: postman/lawmatics-oauth-api.postman_collection.json
   - type: Website
     url: https://www.lawmatics.com/
   - type: Documentation
     url: https://docs.lawmatics.com/
+  - type: APIReference
+    url: https://docs.lawmatics.com/
+  - type: GettingStarted
+    url: https://help.lawmatics.com/en/articles/10699983-lawmatics-open-api
+  - type: Support
+    url: https://help.lawmatics.com/
+  - type: GitHubOrganization
+    url: https://github.com/boost-legal
+  - type: Login
+    url: https://app.lawmatics.com/
+  - type: TermsOfService
+    url: https://www.lawmatics.com/terms-of-use
+  - type: PrivacyPolicy
+    url: https://www.lawmatics.com/privacy-policy
   - type: Blog
     url: https://www.lawmatics.com/blog
   - type: Pricing
@@ -75,3 +153,30 @@ common:
 maintainers:
   - FN: Kin Lane
     email: kin@apievangelist.com
+x-pointers-deliberately-absent:
+  MCPServer: mcp/lawmatics-mcp.yml exists but records deployment mode "none" — Lawmatics
+    ships no MCP server, hosted or stdio. The file is an API Evangelist candidate tool
+    list derived from the OpenAPI. Wiring MCPServer would assert an agent surface that
+    does not exist.
+  WellKnown: well-known/lawmatics-well-known.yml records 36 probes across 4 hosts and
+    zero documents. The file documents an absence, not a served surface.
+  SecurityTxt: /.well-known/security.txt returns 404 on every Lawmatics host.
+  AgentCard: /.well-known/agent-card.json and /.well-known/agent.json return 404 (or
+    403 on the S3-fronted app host) on every Lawmatics host. Nothing was written to
+    a2a/ — an agent card is never authored on a provider's behalf.
+  Security: probe-security-programs.py found no vulnerability-disclosure policy, no
+    security@ contact and no bug-bounty program on 2026-08-13.
+  TrustCenter: no trust centre, no report portal and no subprocessor list. Certifications
+    are published as prose on the marketing security page, which is wired as Compliance.
+  Idempotency: the Lawmatics REST API documents no idempotency key on any of its 177
+    operations. The only idempotency in the platform is consumer-side de-duplication
+    of webhook deliveries on event_id, which is not an idempotency contract on writes.
+  SDKs: Lawmatics publishes no first-party API client library in any language.
+  AsyncAPI: webhooks are documented in prose only; no AsyncAPI document is published.
+  Sandbox: no sandbox, test mode or test credentials exist.
+  Deprecation: no deprecation policy, notice period or Sunset header support is published.
+x-enrichment:
+  date: '2026-08-13'
+  status: enriched
+  artifacts_added: 24
+  pass: local-v1
