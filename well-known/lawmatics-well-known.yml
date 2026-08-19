@@ -1,0 +1,68 @@
+generated: '2026-08-13'
+method: probed
+source: live HTTP probes of every Lawmatics host named in apis.yml and the OpenAPI servers[]
+note: >-
+  Every /.well-known/ path probed on every Lawmatics host missed. No pointer of type WellKnown,
+  APICatalog or SecurityTxt is emitted for this provider, because this file records an ABSENCE and
+  not a served discovery surface. www.lawmatics.com answers 404 with a Webflow HTML page reading
+  "Invalid .well-known request"; app.lawmatics.com answers 403 from S3 (AccessDenied XML) for every
+  path, which is a bucket-level deny rather than a document; api.lawmatics.com answers its normal
+  JSON:API 404 envelope; docs.lawmatics.com is Postman's hosted documenter and answers its 404 shell.
+  None of these is a document.
+hosts:
+  - host: https://www.lawmatics.com
+    documents:
+      - {path: /.well-known/security.txt, status: 404}
+      - {path: /.well-known/openid-configuration, status: 404}
+      - {path: /.well-known/oauth-authorization-server, status: 404}
+      - {path: /.well-known/oauth-protected-resource, status: 404}
+      - {path: /.well-known/api-catalog, status: 404}
+      - {path: /.well-known/ai-plugin.json, status: 404}
+      - {path: /.well-known/agent-card.json, status: 404}
+      - {path: /.well-known/agent.json, status: 404}
+      - {path: /.well-known/mcp.json, status: 404}
+  - host: https://api.lawmatics.com
+    documents:
+      - {path: /.well-known/security.txt, status: 404}
+      - {path: /.well-known/openid-configuration, status: 404}
+      - {path: /.well-known/oauth-authorization-server, status: 404}
+      - {path: /.well-known/oauth-protected-resource, status: 404}
+      - {path: /.well-known/api-catalog, status: 404}
+      - {path: /.well-known/ai-plugin.json, status: 404}
+      - {path: /.well-known/agent-card.json, status: 404}
+      - {path: /.well-known/agent.json, status: 404}
+      - {path: /.well-known/mcp.json, status: 404}
+  - host: https://app.lawmatics.com
+    documents:
+      - {path: /.well-known/security.txt, status: 403}
+      - {path: /.well-known/openid-configuration, status: 403}
+      - {path: /.well-known/oauth-authorization-server, status: 403}
+      - {path: /.well-known/oauth-protected-resource, status: 403}
+      - {path: /.well-known/api-catalog, status: 403}
+      - {path: /.well-known/ai-plugin.json, status: 403}
+      - {path: /.well-known/agent-card.json, status: 403}
+      - {path: /.well-known/agent.json, status: 403}
+      - {path: /.well-known/mcp.json, status: 403}
+  - host: https://docs.lawmatics.com
+    documents:
+      - {path: /.well-known/security.txt, status: 404}
+      - {path: /.well-known/openid-configuration, status: 404}
+      - {path: /.well-known/oauth-authorization-server, status: 404}
+      - {path: /.well-known/oauth-protected-resource, status: 404}
+      - {path: /.well-known/api-catalog, status: 404}
+      - {path: /.well-known/ai-plugin.json, status: 404}
+      - {path: /.well-known/agent-card.json, status: 404}
+      - {path: /.well-known/agent.json, status: 404}
+      - {path: /.well-known/mcp.json, status: 404}
+summary:
+  hosts_probed: 4
+  paths_probed: 36
+  documents_found: 0
+  security_txt: false
+  oauth_metadata: false
+  agent_card: false
+opportunity: >-
+  Lawmatics runs a real OAuth 2.0 authorization server (authorize on app.lawmatics.com, token on
+  api.lawmatics.com) but publishes neither RFC 8414 /.well-known/oauth-authorization-server metadata
+  nor RFC 9116 /.well-known/security.txt. Both are static documents and both are read by automated
+  discovery.

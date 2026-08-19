@@ -1,0 +1,63 @@
+overlay: 1.0.0
+info:
+  title: API Evangelist enhancements for the Lawmatics OAuth API
+  version: 1.0.0
+extends: openapi/lawmatics-openapi.yml
+x-provenance:
+  generated: '2026-08-13'
+  method: generated
+  source: >-
+    API Evangelist enrichment of openapi/lawmatics-openapi.yml. The base document is itself derived
+    from the Postman collection Lawmatics publishes at https://docs.lawmatics.com/ - this overlay
+    carries only API Evangelist annotations and applies none of them to the harvested source.
+actions:
+  - target: $.info
+    description: Annotate the document with its provenance and the artifacts that qualify it.
+    update:
+      x-apievangelist-source: https://docs.lawmatics.com/
+      x-apievangelist-source-type: postman-collection
+      x-apievangelist-provider-publishes-openapi: false
+      x-apievangelist-artifacts:
+        conventions: conventions/lawmatics-conventions.yml
+        errors: errors/lawmatics-problem-types.yml
+        rate_limits: rate-limits/lawmatics-rate-limits.yml
+        authentication: authentication/lawmatics-authentication.yml
+        lifecycle: lifecycle/lawmatics-lifecycle.yml
+        data_model: data-model/lawmatics-data-model.yml
+        webhooks: asyncapi/lawmatics-webhooks.yml
+        conformance: conformance/lawmatics-conformance.yml
+        skills: skills/_index.yml
+  - target: $.info
+    description: Record the runtime semantics an agent needs and cannot read off the paths.
+    update:
+      x-apievangelist-runtime:
+        idempotency: none
+        pagination: page-number
+        field_expansion: '?fields=all'
+        filtering: filter_by / filter_on / filter_with, one filter per request
+        rate_limit: per-firm per-minute ceiling, 429 with Retry-After, no pre-exhaustion headers
+        token_lifetime: non-expiring
+        scopes: none
+  - target: $.components.securitySchemes.oauth2
+    description: >-
+      Flag the security consequences the provider states in prose so they travel with the contract.
+    update:
+      x-apievangelist-warnings:
+        - Access tokens never expire and there is no revocation or deauthorization endpoint.
+        - No scopes - an authorized app holds full CRUD over the entire firm account.
+        - No refresh tokens are issued.
+        - Developer settings must be enabled on the account by Lawmatics support before an app can be created.
+  - target: $.paths['/v1/prospects']
+    description: Record the product-to-API naming mismatch on the API's central resource.
+    update:
+      x-apievangelist-note: >-
+        /v1/prospects is the MATTER endpoint. Lawmatics calls these Matters throughout the product and
+        the help centre, but the API type, path and path parameter are all `prospect` /
+        `prospect_id`. This is the most common source of confusion on a first integration.
+  - target: $.paths['/v1/forms/{custom_form_uuid}/submit']
+    description: Flag the one unauthenticated write path on the API.
+    update:
+      x-apievangelist-note: >-
+        The only unauthenticated operation on the API. Public custom-form submission accepts either
+        multipart/form-data or JSON and requires no developer app or access token; the form UUID is
+        the only credential. Treat the UUID as a semi-secret and expect unsolicited traffic.

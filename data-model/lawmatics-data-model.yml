@@ -1,0 +1,1330 @@
+generated: '2026-08-13'
+method: derived
+source: openapi/lawmatics-openapi.yml
+source_note: Derived from the JSON:API-shaped `data` / `type` / `attributes` / `relationships` envelopes
+  in the 216 saved response examples the provider publishes in its Postman collection. Lawmatics publishes
+  no JSON Schema and no object reference, so every entity, attribute and edge below is observed in a real
+  provider-published payload rather than declared in a schema. Absence of an attribute here means it did
+  not appear in a published example, not that it does not exist - `?fields=all` on any endpoint is the
+  authoritative expansion.
+id_style: string integers (e.g. "74"); custom forms are addressed by UUID
+root_entity: prospect
+root_note: The product calls it a Matter; the API type and path are `prospect` and /v1/prospects. Contacts
+  and companies hang off matters; tasks, notes, events, files, interactions, invoices, time entries and
+  expenses hang off matters and contacts.
+entity_count: 43
+entities:
+- type: address
+  attributes:
+  - city
+  - city_state_zip
+  - country
+  - created_at
+  - full_address
+  - full_street
+  - label
+  - second_half
+  - state
+  - street
+  - street2
+  - updated_at
+  - zipcode
+  attribute_count: 13
+  relationships:
+  - name: addressable
+    kind: has_one
+    target: contact
+    via: addressable_id
+  - name: addressable
+    kind: has_one
+    target: firm
+    via: addressable_id
+  - name: locations
+    kind: has_many
+    target: null
+    via: null
+  - name: locations
+    kind: has_many
+    target: location
+    via: null
+  observed_in:
+  - /v1/addresses
+  - /v1/addresses/{address_id}
+- type: campaign
+  attributes:
+  - created_at
+  - description
+  - name
+  - pnc_count
+  - tracking_number
+  - updated_at
+  - utm_match
+  attribute_count: 7
+  relationships:
+  - name: prospects
+    kind: has_many
+    target: prospect
+    via: null
+  - name: source
+    kind: has_one
+    target: source
+    via: source_id
+  observed_in:
+  - /v1/campaigns
+  - /v1/campaigns/{campaign_id}
+- type: collection
+  attributes:
+  - created_at
+  - custom_fields
+  - name
+  - updated_at
+  attribute_count: 4
+  relationships: []
+  observed_in:
+  - /v1/collections
+  - /v1/collections/{collection_id}
+- type: collection_item
+  attributes:
+  - collection_id
+  - contactable_id
+  - contactable_type
+  - created_at
+  - custom_field_values
+  - updated_at
+  attribute_count: 6
+  relationships: []
+  observed_in:
+  - /v1/collection_items
+  - /v1/collection_items/{collection_item_id}
+- type: comment
+  attributes:
+  - body
+  - commentable_id
+  - commentable_type
+  - created_at
+  - mentioned_user_ids
+  - updated_at
+  attribute_count: 6
+  relationships:
+  - name: comment_mentions
+    kind: has_many
+    target: null
+    via: null
+  - name: comment_mentions
+    kind: has_many
+    target: comment_mention
+    via: null
+  - name: commentable
+    kind: has_one
+    target: task
+    via: commentable_id
+  observed_in:
+  - /v1/tasks/{task_id}/comments
+  - /v1/tasks/{task_id}/comments/{comment_id}
+- type: company
+  attributes:
+  - address
+  - addresses
+  - city
+  - country
+  - created_at
+  - email
+  - name
+  - phone_number
+  - state
+  - updated_at
+  - zipcode
+  attribute_count: 11
+  relationships:
+  - name: addresses
+    kind: has_many
+    target: null
+    via: null
+  - name: addresses
+    kind: has_many
+    target: address
+    via: null
+  - name: created_by
+    kind: has_one
+    target: user
+    via: created_by_id
+  - name: emails
+    kind: has_many
+    target: null
+    via: null
+  - name: emails
+    kind: has_many
+    target: email_address
+    via: null
+  observed_in:
+  - /v1/companies
+  - /v1/companies/find_by_email/{email_address}
+  - /v1/companies/find_by_name/{name}
+  - /v1/companies/find_by_phone/{phone_number}
+  - /v1/companies/{company_id}
+- type: contact
+  attributes:
+  - age
+  - bio
+  - birthdate
+  - citizenship
+  - contact_type
+  - created_at
+  - custom_fields
+  - date_of_last_contact
+  - days_since_last_contact
+  - driver_license
+  - email
+  - email_address
+  - employer
+  - first_name
+  - gender
+  - hobbies
+  - informal_name
+  - last_name
+  - marital_status
+  - middle_name
+  - name_prefix
+  - name_suffix
+  - occupation
+  - phone
+  - phone_number
+  - photo_url
+  - social_security
+  - timezone
+  - title
+  - tracking_source_id
+  - updated_at
+  attribute_count: 31
+  relationships:
+  - name: client
+    kind: has_one
+    target: null
+    via: client_id
+  - name: company
+    kind: has_one
+    target: null
+    via: company_id
+  - name: created_by
+    kind: has_one
+    target: user
+    via: created_by_id
+  - name: prospects
+    kind: has_many
+    target: prospect
+    via: null
+  observed_in:
+  - /v1/contacts
+  - /v1/contacts/find_by_email/{email_address}
+  - /v1/contacts/find_by_name/{name}
+  - /v1/contacts/find_by_phone/{phone_number}
+  - /v1/contacts/{contact_id}
+  - /v1/forms/{custom_form_uuid}/submit
+- type: custom_contact_type
+  attributes:
+  - created_at
+  - name
+  - updated_at
+  attribute_count: 3
+  relationships: []
+  observed_in:
+  - /v1/custom_contact_types
+  - /v1/custom_contact_types/{contact_id}
+  - /v1/custom_contact_types/{custom_contact_type_id}
+- type: custom_email
+  attributes:
+  - bounce_rate
+  - bounces
+  - click_rate
+  - clicks
+  - created_at
+  - delivered_rate
+  - name
+  - open_rate
+  - opens
+  - promotional
+  - sends
+  - subject
+  - updated_at
+  attribute_count: 13
+  relationships: []
+  observed_in:
+  - /v1/custom_emails
+  - /v1/custom_emails/{custom_email_id}
+- type: custom_field
+  attributes:
+  - created_at
+  - field_type
+  - list_options
+  - lookup_type
+  - name
+  - practice_area
+  - type
+  - updated_at
+  - visibility
+  attribute_count: 9
+  relationships: []
+  observed_in:
+  - /v1/custom_fields
+  - /v1/custom_fields/{custom_field_id}
+- type: custom_form
+  attributes:
+  - created_at
+  - name
+  - rows
+  - type
+  - updated_at
+  attribute_count: 5
+  relationships: []
+  observed_in:
+  - /v1/forms
+  - /v1/forms/{custom_form_uuid}
+- type: custom_form_entry
+  attributes:
+  - body
+  - created_at
+  - updated_at
+  attribute_count: 3
+  relationships:
+  - name: contactable
+    kind: has_one
+    target: prospect
+    via: contactable_id
+  - name: custom_form
+    kind: has_one
+    target: custom_form
+    via: custom_form_id
+  observed_in:
+  - /v1/forms/{custom_form_uuid}/entries
+- type: email_address
+  attributes:
+  - info
+  - label
+  attribute_count: 2
+  relationships:
+  - name: informationable
+    kind: has_one
+    target: contact
+    via: informationable_id
+  observed_in:
+  - /v1/email_addresses
+  - /v1/email_addresses/{email_address_id}
+- type: email_campaign
+  attributes:
+  - campaign_type
+  - created_at
+  - name
+  - open_rate
+  - send_count
+  - sent_at
+  - started_processing_at
+  - status
+  attribute_count: 8
+  relationships:
+  - name: audience
+    kind: has_one
+    target: audience
+    via: audience_id
+  - name: custom_email
+    kind: has_one
+    target: custom_email
+    via: custom_email_id
+  observed_in:
+  - /v1/email_campaigns
+- type: email_event
+  attributes:
+  - bounces
+  - clicks
+  - contactable_id
+  - delivered
+  - email
+  - first_name
+  - last_name
+  - opens
+  attribute_count: 8
+  relationships: []
+  observed_in:
+  - /v1/email_campaign_stats/{id}
+- type: event
+  attributes:
+  - all_day
+  - attendee_email
+  - attendee_name
+  - attendee_phone
+  - created_at
+  - description
+  - end_date
+  - event_type_id
+  - location
+  - location_address
+  - location_name
+  - name
+  - reminder_delay_length
+  - reminder_sent
+  - reminder_type
+  - send_invites
+  - start_date
+  - time_zone
+  - updated_at
+  - zoom_us_meeting_url
+  attribute_count: 20
+  relationships:
+  - name: address
+    kind: has_one
+    target: address
+    via: address_id
+  - name: event_type
+    kind: has_one
+    target: event_type
+    via: event_type_id
+  - name: eventable
+    kind: has_one
+    target: prospect
+    via: eventable_id
+  - name: eventable
+    kind: has_one
+    target: null
+    via: eventable_id
+  - name: users
+    kind: has_many
+    target: user
+    via: null
+  observed_in:
+  - /v1/events
+  - /v1/events/{event_id}
+- type: event_type
+  attributes:
+  - created_at
+  - duration
+  - name
+  - updated_at
+  attribute_count: 4
+  relationships:
+  - name: events
+    kind: has_many
+    target: null
+    via: null
+  observed_in:
+  - /v1/event_types
+  - /v1/event_types/{event_type_id}
+- type: expense
+  attributes:
+  - billable
+  - completed_at
+  - created_at
+  - description
+  - duration
+  - duration_rounded
+  - is_billable
+  - is_flat_fee
+  - rate
+  - rate_flat_fee
+  - started_at
+  - updated_at
+  attribute_count: 12
+  relationships:
+  - name: activity_type
+    kind: has_one
+    target: activity_type
+    via: activity_type_id
+  - name: activity_type
+    kind: has_one
+    target: null
+    via: activity_type_id
+  - name: contactable
+    kind: has_one
+    target: prospect
+    via: contactable_id
+  - name: contactable
+    kind: has_one
+    target: null
+    via: contactable_id
+  - name: created_by
+    kind: has_one
+    target: user
+    via: created_by_id
+  - name: invoice
+    kind: has_one
+    target: invoice
+    via: invoice_id
+  - name: invoice
+    kind: has_one
+    target: null
+    via: invoice_id
+  - name: staff
+    kind: has_one
+    target: user
+    via: staff_id
+  - name: user
+    kind: has_one
+    target: user
+    via: user_id
+  observed_in:
+  - /v1/expenses
+  - /v1/expenses/{expense_id}
+- type: file
+  attributes:
+  - created_at
+  - file_name
+  - file_size
+  - file_type
+  - file_url
+  - folder_id
+  - name
+  - updated_at
+  attribute_count: 8
+  relationships:
+  - name: documentable
+    kind: has_one
+    target: firm
+    via: documentable_id
+  - name: documentable
+    kind: has_one
+    target: prospect
+    via: documentable_id
+  - name: documentable
+    kind: has_one
+    target: contact
+    via: documentable_id
+  - name: documentable
+    kind: has_one
+    target: invoice
+    via: documentable_id
+  observed_in:
+  - /v1/files
+  - /v1/files/{file_id}
+- type: folder
+  attributes:
+  - created_at
+  - folder_id
+  - name
+  - updated_at
+  attribute_count: 4
+  relationships:
+  - name: documentable
+    kind: has_one
+    target: prospect
+    via: documentable_id
+  - name: documentable
+    kind: has_one
+    target: contact
+    via: documentable_id
+  - name: files
+    kind: has_many
+    target: null
+    via: null
+  - name: files
+    kind: has_many
+    target: file
+    via: null
+  - name: folders
+    kind: has_many
+    target: null
+    via: null
+  - name: folders
+    kind: has_many
+    target: folder
+    via: null
+  observed_in:
+  - /v1/folders
+  - /v1/folders/{folder_id}
+- type: interaction
+  attributes:
+  - body
+  - created_at
+  - happened_at
+  - interaction_type
+  - updated_at
+  attribute_count: 5
+  relationships:
+  - name: created_by
+    kind: has_one
+    target: user
+    via: created_by_id
+  - name: interactable
+    kind: has_one
+    target: prospect
+    via: interactable_id
+  observed_in:
+  - /v1/interactions
+  - /v1/interactions/{interaction_id}
+- type: invoice
+  attributes:
+  - amount_cents
+  - amount_paid_cents
+  - contactable_address
+  - contactable_name
+  - created_at
+  - due_at
+  - enable_online_payment
+  - include_balance_forward
+  - include_statement_of_accounts
+  - invoiced_at
+  - note
+  - number
+  - outstanding_amount_cents
+  - payment_terms
+  - pdf_url
+  - status
+  - target_account_type
+  - updated_at
+  - voided_at
+  attribute_count: 19
+  relationships:
+  - name: created_by
+    kind: has_one
+    target: created_by
+    via: created_by_id
+  - name: expenses
+    kind: has_many
+    target: null
+    via: null
+  - name: forwarded_from
+    kind: has_many
+    target: null
+    via: null
+  - name: forwarded_to
+    kind: has_one
+    target: null
+    via: forwarded_to_id
+  - name: invoice_adjustments
+    kind: has_many
+    target: null
+    via: null
+  - name: invoice_type
+    kind: has_one
+    target: null
+    via: invoice_type_id
+  - name: prospect
+    kind: has_one
+    target: prospect
+    via: prospect_id
+  - name: time_entries
+    kind: has_many
+    target: time_entry
+    via: null
+  - name: transactions
+    kind: has_many
+    target: null
+    via: null
+  observed_in:
+  - /v1/invoices
+  - /v1/invoices/{invoice_id}
+- type: location
+  attributes:
+  - address
+  - created_at
+  - name
+  - updated_at
+  attribute_count: 4
+  relationships:
+  - name: address
+    kind: has_one
+    target: address
+    via: address_id
+  observed_in:
+  - /v1/locations
+- type: marketing_campaign_view
+  attributes:
+  - campaign_type
+  - created_at
+  - name
+  - open_rate
+  - send_count
+  - sent_at
+  - started_processing_at
+  - status
+  attribute_count: 8
+  relationships:
+  - name: audience
+    kind: has_one
+    target: audience
+    via: audience_id
+  - name: custom_email
+    kind: has_one
+    target: custom_email
+    via: custom_email_id
+  observed_in:
+  - /v1/email_campaigns
+  - /v1/email_campaigns/{id}
+- type: note
+  attributes:
+  - body
+  - created_at
+  - name
+  - updated_at
+  attribute_count: 4
+  relationships:
+  - name: notable
+    kind: has_one
+    target: prospect
+    via: notable_id
+  - name: notable
+    kind: has_one
+    target: company
+    via: notable_id
+  observed_in:
+  - /v1/notes
+  - /v1/notes/{note_id}
+- type: phone_number
+  attributes:
+  - info
+  - label
+  attribute_count: 2
+  relationships:
+  - name: informationable
+    kind: has_one
+    target: contact
+    via: informationable_id
+  - name: informationable
+    kind: has_one
+    target: company
+    via: informationable_id
+  observed_in:
+  - /v1/phone_numbers
+  - /v1/phone_numbers/{phone_number_id}
+- type: pipeline
+  attributes:
+  - created_at
+  - description
+  - estimated_value
+  - matter_count
+  - name
+  - pipeline_type
+  - statuses
+  - updated_at
+  attribute_count: 8
+  relationships:
+  - name: created_by
+    kind: has_one
+    target: user
+    via: created_by_id
+  - name: stages
+    kind: has_many
+    target: stage
+    via: null
+  - name: stages
+    kind: has_many
+    target: null
+    via: null
+  observed_in:
+  - /v1/pipelines
+  - /v1/pipelines/{pipeline_id}
+- type: practice_area
+  attributes:
+  - color
+  - created_at
+  - matter_count
+  - name
+  - statute_of_limitations_enabled
+  - updated_at
+  attribute_count: 6
+  relationships:
+  - name: prospects
+    kind: has_many
+    target: null
+    via: null
+  observed_in:
+  - /v1/practice_areas
+  - /v1/practice_areas/{practice_area_id}
+- type: prospect
+  attributes:
+  - actual_value_cents
+  - address
+  - age
+  - bio
+  - birthdate
+  - case_blurb
+  - case_number
+  - case_title
+  - citizenship
+  - city
+  - city_state_zip
+  - converted_date
+  - country
+  - created_at
+  - custom_field_values
+  - custom_fields
+  - date_of_last_contact
+  - days_since_last_contact
+  - driver_license
+  - email
+  - email_address
+  - employer
+  - estimated_value_cents
+  - first_name
+  - full_address
+  - full_street
+  - gender
+  - hobbies
+  - informal_name
+  - last_contacted_date
+  - last_name
+  - lead_cost_cents
+  - marital_status
+  - middle_name
+  - name_prefix
+  - name_suffix
+  - occupation
+  - phone
+  - phone_number
+  - photo_url
+  - referring_url
+  - social_security
+  - state
+  - status
+  - statute_of_limitations
+  - street
+  - street2
+  - sub_status
+  - timezone
+  - title
+  - type_of_billing
+  - updated_at
+  - utm_campaign
+  - utm_medium
+  - utm_source
+  - utm_term
+  - zipcode
+  attribute_count: 57
+  relationships:
+  - name: addresses
+    kind: has_many
+    target: null
+    via: null
+  - name: assigned_staff
+    kind: has_many
+    target: null
+    via: null
+  - name: campaign
+    kind: has_one
+    target: null
+    via: campaign_id
+  - name: campaign
+    kind: has_one
+    target: campaign
+    via: campaign_id
+  - name: company
+    kind: has_one
+    target: null
+    via: company_id
+  - name: contact
+    kind: has_one
+    target: contact
+    via: contact_id
+  - name: created_by
+    kind: has_one
+    target: user
+    via: created_by_id
+  - name: documents
+    kind: has_many
+    target: null
+    via: null
+  - name: emails
+    kind: has_many
+    target: email_address
+    via: null
+  - name: emails
+    kind: has_many
+    target: email
+    via: null
+  - name: emails
+    kind: has_many
+    target: null
+    via: null
+  - name: events
+    kind: has_many
+    target: null
+    via: null
+  - name: file_requests
+    kind: has_many
+    target: null
+    via: null
+  - name: invoices
+    kind: has_many
+    target: null
+    via: null
+  - name: lead_attorney
+    kind: has_one
+    target: null
+    via: lead_attorney_id
+  - name: notes
+    kind: has_many
+    target: note
+    via: null
+  - name: notes
+    kind: has_many
+    target: null
+    via: null
+  - name: originating_attorney
+    kind: has_one
+    target: null
+    via: originating_attorney_id
+  - name: owned_by
+    kind: has_one
+    target: null
+    via: owned_by_id
+  - name: phone_numbers
+    kind: has_many
+    target: phone_number
+    via: null
+  - name: phone_numbers
+    kind: has_many
+    target: null
+    via: null
+  - name: practice_area
+    kind: has_one
+    target: practice_area
+    via: practice_area_id
+  - name: relationships
+    kind: has_many
+    target: null
+    via: null
+  - name: salesperson
+    kind: has_one
+    target: null
+    via: salesperson_id
+  - name: source
+    kind: has_one
+    target: null
+    via: source_id
+  - name: source
+    kind: has_one
+    target: source
+    via: source_id
+  - name: stage
+    kind: has_one
+    target: null
+    via: stage_id
+  - name: stage
+    kind: has_one
+    target: stage
+    via: stage_id
+  - name: tags
+    kind: has_many
+    target: tag
+    via: null
+  - name: tasks
+    kind: has_many
+    target: null
+    via: null
+  - name: tasks
+    kind: has_many
+    target: task
+    via: null
+  observed_in:
+  - /v1/prospects
+  - /v1/prospects/find_by_email/{email_address}
+  - /v1/prospects/find_by_name/{name}
+  - /v1/prospects/find_by_phone/{phone_number}
+  - /v1/prospects/{prospect_id}
+  - /v1/tags/attach
+- type: prospect_sub_status
+  attributes:
+  - created_at
+  - name
+  - status
+  - updated_at
+  attribute_count: 4
+  relationships:
+  - name: created_by
+    kind: has_one
+    target: user
+    via: created_by_id
+  - name: prospects
+    kind: has_many
+    target: null
+    via: null
+  observed_in:
+  - /v1/sub_statuses
+  - /v1/sub_statuses/{sub_status_id}
+- type: relationship
+  attributes:
+  - contact_id
+  - created_at
+  - has_portal_access?
+  - name
+  - prospect_id
+  - relationship_type_id
+  - updated_at
+  attribute_count: 7
+  relationships:
+  - name: custom_field
+    kind: has_one
+    target: custom_field
+    via: custom_field_id
+  - name: relationship_type
+    kind: has_one
+    target: relationship_type
+    via: relationship_type_id
+  observed_in:
+  - /v1/relationship_types/{relationship_type_id}
+  - /v1/relationships
+  - /v1/relationships/{relationship_id}
+- type: relationship_type
+  attributes:
+  - created_at
+  - is_repeatable
+  - name
+  - updated_at
+  attribute_count: 4
+  relationships:
+  - name: created_by
+    kind: has_one
+    target: user
+    via: created_by_id
+  observed_in:
+  - /v1/relationship_types
+  - /v1/relationship_types/{relationship_type_id}
+- type: source
+  attributes:
+  - color
+  - created_at
+  - description
+  - name
+  - pnc_count
+  - spend_frequency
+  - tracking_number
+  - updated_at
+  - utm_match
+  attribute_count: 9
+  relationships:
+  - name: campaigns
+    kind: has_many
+    target: campaign
+    via: null
+  - name: prospects
+    kind: has_many
+    target: null
+    via: null
+  observed_in:
+  - /v1/sources
+  - /v1/sources/{source_id}
+- type: stage
+  attributes:
+  - color
+  - created_at
+  - name
+  - order
+  - updated_at
+  attribute_count: 5
+  relationships:
+  - name: pipeline
+    kind: has_one
+    target: pipeline
+    via: pipeline_id
+  - name: prospects
+    kind: has_many
+    target: prospect
+    via: null
+  observed_in:
+  - /v1/stages
+  - /v1/stages/{stage_id}
+- type: sub_status
+  attributes:
+  - created_at
+  - name
+  - status
+  - updated_at
+  attribute_count: 4
+  relationships:
+  - name: prospects
+    kind: has_many
+    target: prospect
+    via: null
+  observed_in:
+  - /v1/sub_statuses
+  - /v1/sub_statuses/{status_id}
+- type: subtask
+  attributes:
+  - body
+  - created_at
+  - done
+  - order
+  - updated_at
+  attribute_count: 5
+  relationships:
+  - name: task
+    kind: has_one
+    target: task
+    via: task_id
+  observed_in:
+  - /v1/tasks/{task_id}/subtasks
+  - /v1/tasks/{task_id}/subtasks/{subtask_id}
+- type: tag
+  attributes:
+  - color
+  - created_at
+  - description
+  - name
+  - title
+  - updated_at
+  attribute_count: 6
+  relationships: []
+  observed_in:
+  - /v1/tags
+  - /v1/tags/{tag_id}
+- type: task
+  attributes:
+  - assigned_by_id
+  - created_at
+  - description
+  - done
+  - due_date
+  - name
+  - priority
+  - recurrence_rule
+  - status
+  - tags
+  - taskable_id
+  - taskable_type
+  - updated_at
+  attribute_count: 13
+  relationships:
+  - name: comments
+    kind: has_many
+    target: null
+    via: null
+  - name: documents
+    kind: has_many
+    target: null
+    via: null
+  - name: subtasks
+    kind: has_many
+    target: null
+    via: null
+  - name: taskable
+    kind: has_one
+    target: prospect
+    via: taskable_id
+  - name: taskable
+    kind: has_one
+    target: contact
+    via: taskable_id
+  - name: taskable
+    kind: has_one
+    target: null
+    via: taskable_id
+  - name: taskable
+    kind: has_one
+    target: client
+    via: taskable_id
+  - name: taskable
+    kind: has_one
+    target: company
+    via: taskable_id
+  - name: users
+    kind: has_many
+    target: user
+    via: null
+  - name: users
+    kind: has_many
+    target: null
+    via: null
+  observed_in:
+  - /v1/tasks
+  - /v1/tasks/{task_id}
+- type: task_status
+  attributes:
+  - color
+  - created_at
+  - name
+  - updated_at
+  attribute_count: 4
+  relationships: []
+  observed_in:
+  - /v1/task_statuses
+  - /v1/task_statuses/{task_status_id}
+- type: time_entry
+  attributes:
+  - billable
+  - completed_at
+  - created_at
+  - description
+  - duration
+  - duration_rounded
+  - is_billable
+  - is_flat_fee
+  - rate
+  - rate_flat_fee
+  - started_at
+  - updated_at
+  attribute_count: 12
+  relationships:
+  - name: activity_type
+    kind: has_one
+    target: null
+    via: activity_type_id
+  - name: activity_type
+    kind: has_one
+    target: activity_type
+    via: activity_type_id
+  - name: contactable
+    kind: has_one
+    target: null
+    via: contactable_id
+  - name: contactable
+    kind: has_one
+    target: prospect
+    via: contactable_id
+  - name: created_by
+    kind: has_one
+    target: user
+    via: created_by_id
+  - name: invoice
+    kind: has_one
+    target: null
+    via: invoice_id
+  - name: invoice
+    kind: has_one
+    target: invoice
+    via: invoice_id
+  - name: staff
+    kind: has_one
+    target: user
+    via: staff_id
+  - name: user
+    kind: has_one
+    target: user
+    via: user_id
+  observed_in:
+  - /v1/expenses/{expense_id}
+  - /v1/time_entries
+  - /v1/time_entries/{time_entry_id}
+- type: timeline_activity
+  attributes:
+  - created_at
+  - detail_keys
+  - key
+  - parent_id
+  - type
+  - updated_at
+  attribute_count: 6
+  relationships:
+  - name: owner
+    kind: has_one
+    target: user
+    via: owner_id
+  - name: owner
+    kind: has_one
+    target: firm
+    via: owner_id
+  - name: owner
+    kind: has_one
+    target: application
+    via: owner_id
+  - name: recipient
+    kind: has_one
+    target: prospect
+    via: recipient_id
+  - name: recipient
+    kind: has_one
+    target: contact
+    via: recipient_id
+  - name: tracked
+    kind: has_one
+    target: prospect
+    via: tracked_id
+  - name: tracked
+    kind: has_one
+    target: note
+    via: tracked_id
+  - name: tracked
+    kind: has_one
+    target: task
+    via: tracked_id
+  - name: tracked
+    kind: has_one
+    target: null
+    via: tracked_id
+  observed_in:
+  - /v1/activities
+  - /v1/activities/{activity_id}
+- type: transaction
+  attributes:
+  - account_id
+  - account_type
+  - amount_cents
+  - amount_currency
+  - bank_account_type
+  - created_at
+  - created_by_id
+  - external_id
+  - firm_id
+  - invoice_id
+  - note
+  - payment_method
+  - prospect_id
+  - status
+  - transaction_type
+  - updated_at
+  attribute_count: 16
+  relationships:
+  - name: account
+    kind: has_one
+    target: contact
+    via: account_id
+  - name: created_by
+    kind: has_one
+    target: user
+    via: created_by_id
+  - name: invoice
+    kind: has_one
+    target: null
+    via: invoice_id
+  - name: invoice
+    kind: has_one
+    target: invoice
+    via: invoice_id
+  - name: prospect
+    kind: has_one
+    target: prospect
+    via: prospect_id
+  - name: prospect
+    kind: has_one
+    target: null
+    via: prospect_id
+  - name: refunded_transaction
+    kind: has_one
+    target: transaction
+    via: refunded_transaction_id
+  - name: trust_fund_request
+    kind: has_one
+    target: null
+    via: trust_fund_request_id
+  observed_in:
+  - /v1/transactions
+  - /v1/transactions/{transaction_id}
+- type: user
+  attributes:
+  - confirmed_at
+  - created_at
+  - current_sign_in_at
+  - email
+  - first_name
+  - invitation_accepted_at
+  - invitation_sent_at
+  - last_name
+  - name
+  - profile_pic_url
+  - role
+  - sign_in_count
+  - updated_at
+  attribute_count: 13
+  relationships:
+  - name: current_firm
+    kind: has_one
+    target: firm
+    via: current_firm_id
+  - name: firms
+    kind: has_many
+    target: firm
+    via: null
+  - name: invited_by
+    kind: has_one
+    target: user
+    via: invited_by_id
+  observed_in:
+  - /v1/users
+  - /v1/users/me
+  - /v1/users/{user_id}

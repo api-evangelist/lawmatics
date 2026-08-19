@@ -1,0 +1,52 @@
+generated: '2026-08-13'
+method: searched
+source: >-
+  npm registry search + registry.npmjs.org metadata, PyPI, RubyGems, GitHub code search, the
+  Lawmatics API documentation at https://docs.lawmatics.com/ and the Lawmatics help centre article
+  https://help.lawmatics.com/en/articles/10699983-lawmatics-open-api
+summary:
+  official_api_clients: 0
+  official_packages: 1
+  note: >-
+    Lawmatics publishes NO first-party API client library in any language. The one first-party
+    package found on a public registry is a fork of a rich-text editor used inside the Lawmatics
+    product, not an SDK for the Lawmatics OAuth API. Because no official client library exists, this
+    artifact deliberately does NOT carry an `SDKs` pointer in apis.yml - the sdk_count checks must
+    read zero for this provider, which is the true measurement. Lawmatics' own help centre confirms
+    the position: "both the REST API and Outbound Webhooks require technical implementation
+    resources" and names no SDK.
+packages:
+  - language: javascript
+    registry: npm
+    name: "@lawmatics/ckeditor5-build-classic"
+    url: https://www.npmjs.com/package/@lawmatics/ckeditor5-build-classic
+    install: npm install @lawmatics/ckeditor5-build-classic
+    official: true
+    api_client: false
+    version: 41.4.0
+    published: '2026-03-12'
+    license: GPL-2.0-or-later
+    repository: https://github.com/boost-legal/lm-ckeditor5
+    note: >-
+      First-party (published by sean@lawmatics.com; maintainers all @lawmatics.com) but NOT a client
+      for the Lawmatics OAuth API - it is Lawmatics' custom CKEditor 5 classic build, used for
+      rich-text editing inside the product. Recorded for completeness and because it is the only
+      evidence of a public Lawmatics package-publishing practice.
+third_party:
+  - language: javascript
+    registry: npm
+    name: "@pipedream/lawmatics"
+    url: https://www.npmjs.com/package/@pipedream/lawmatics
+    official: false
+    api_client: true
+    version: 0.8.0
+    published: '2026-08-06'
+    note: >-
+      Pipedream-authored components wrapping the Lawmatics API. Published by Pipedream, not
+      Lawmatics; listed here so the absence of a first-party client is not mistaken for an absence of
+      any client.
+searched_registries:
+  - {registry: npm, query: "lawmatics", first_party_api_client: false}
+  - {registry: pypi, query: "lawmatics", status: 404, first_party_api_client: false}
+  - {registry: rubygems, query: "lawmatics", results: 0, first_party_api_client: false}
+  - {registry: github, org: boost-legal, note: "Lawmatics' GitHub organisation; no public API client library published"}

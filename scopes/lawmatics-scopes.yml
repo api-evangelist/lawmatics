@@ -1,0 +1,24 @@
+generated: '2026-08-13'
+method: searched
+source: https://docs.lawmatics.com/
+docs: https://docs.lawmatics.com/
+derived_from: openapi/lawmatics-openapi.yml
+schemes:
+- name: oauth2
+  source: openapi/lawmatics-openapi.yml
+  flows:
+  - flow: authorizationCode
+    authorizationUrl: https://app.lawmatics.com/oauth/authorize
+    tokenUrl: https://api.lawmatics.com/oauth/token
+  description: OAuth 2.0 authorization code grant. Register a developer app at https://app.lawmatics.com/settings/developers
+    (developer settings must be enabled by Lawmatics support). Access tokens are non-expiring; no refresh
+    tokens are issued and scopes are not supported.
+scopes: []
+scope_count: 0
+supported: false
+finding: 'Lawmatics runs OAuth 2.0 but implements NO scopes, and says so in its own documentation: "We
+  currently do not support scopes. Once a user authenticates your app, they are giving you full CRUD access
+  to their account." The empty scopes list below is therefore a measured fact, not a harvesting failure.
+  Combined with non-expiring tokens and no deauthorization endpoint, an authorized integration holds permanent
+  unrestricted access to a law firm''s client data - there is no least-privilege posture available to
+  an integrator, and no way to issue a read-only credential to an agent.'

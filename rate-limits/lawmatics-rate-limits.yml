@@ -1,31 +1,70 @@
 specificationVersion: '0.1'
+generated: '2026-08-13'
+method: searched
+source: https://docs.lawmatics.com/
+sources:
+  - https://docs.lawmatics.com/
+  - https://help.lawmatics.com/en/articles/10699983-lawmatics-open-api
 name: Lawmatics API Rate Limits
-description: Rate limiting policies for the Lawmatics OAuth REST API. Specific numeric
-  thresholds are not publicly documented; firms should contact api@lawmatics.com for
-  plan-specific limits.
+description: >-
+  Published rate limits for the Lawmatics OAuth REST API. Lawmatics enforces a per-firm request
+  ceiling on all endpoints and answers 429 on exhaustion with a Retry-After header. The two documents
+  Lawmatics publishes state DIFFERENT numbers; both are recorded rather than reconciled.
 url: https://docs.lawmatics.com/
 contact: api@lawmatics.com
+limit_count: 2
 rateLimits:
-  - name: Default API Rate Limit
-    description: Lawmatics applies rate limiting to API requests. Specific limits
-      are enforced per OAuth access token and are managed server-side. Exact thresholds
-      are not publicly disclosed; contact api@lawmatics.com for details.
+  - name: Per-firm request limit (API documentation)
+    description: >-
+      "We have a 50 req/min per-firm rate limit on all endpoints. Exceeding this limit returns a 429
+      error with `Retry-After: 60` header" - Getting Started With Auth, docs.lawmatics.com
+      (collection v1.22.0).
     type: request
-    scope: per-token
-    notes:
-      - Rate limits are applied per OAuth2 access token
-      - Integration platforms such as Make and Pipedream handle rate limit back-off
-        automatically
-      - Exceeding rate limits returns HTTP 429 Too Many Requests
-      - Contact api@lawmatics.com for plan-specific rate limit information
+    scope: per-firm
+    window: 1m
+    limit: 50
+    burst: null
+    applies_to: all endpoints
+    status_on_exhaustion: 429
+    source: https://docs.lawmatics.com/
+  - name: Per-firm request limit (help centre)
+    description: >-
+      "150 requests per minute per firm. Exceeding this limit returns a 429 error response" -
+      Lawmatics Developer Tools: Open API & Webhooks.
+    type: request
+    scope: per-firm
+    window: 1m
+    limit: 150
+    burst: null
+    applies_to: all endpoints
+    status_on_exhaustion: 429
+    source: https://help.lawmatics.com/en/articles/10699983-lawmatics-open-api
 headers:
   - name: Retry-After
-    description: Returned with HTTP 429 responses to indicate when the client may
-      retry the request
+    returned_on: 429
+    value: '60'
+    description: >-
+      Seconds to wait before retrying. This is the only rate-limit signal Lawmatics returns - the
+      documented value is a fixed 60 in the API documentation.
+missing_headers:
+  - X-RateLimit-Limit
+  - X-RateLimit-Remaining
+  - X-RateLimit-Reset
+  - RateLimit
+  - RateLimit-Policy
+missing_headers_note: >-
+  No pre-exhaustion signal is returned. A client cannot see how much budget is left; it discovers the
+  ceiling only by hitting 429. For an agent this is the difference between pacing and back-off.
+discrepancy:
+  note: >-
+    Lawmatics' API documentation says 50 req/min per firm and its help centre says 150 req/min per
+    firm. Both are first-party and current as of 2026-08-13. An integrator should design to the lower
+    figure (50/min) until Lawmatics reconciles the two.
+  values: [50, 150]
 authentication:
   type: OAuth2
-  description: All API requests require a valid OAuth2 Bearer token obtained via the
-    Lawmatics OAuth2 authorization flow. Tokens are scoped to the authorized firm
-    account.
+  description: >-
+    All authenticated requests carry an OAuth 2.0 bearer token. Limits are enforced per firm, not per
+    token, so multiple apps authorized by the same firm share one budget.
   authorizationUrl: https://app.lawmatics.com/oauth/authorize
-  tokenUrl: https://app.lawmatics.com/oauth/token
+  tokenUrl: https://api.lawmatics.com/oauth/token

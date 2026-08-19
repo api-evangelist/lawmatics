@@ -1,0 +1,52 @@
+generated: '2026-08-13'
+method: searched
+source: https://docs.lawmatics.com/
+sources:
+  - https://docs.lawmatics.com/
+  - https://status.lawmatics.com/
+  - https://help.lawmatics.com/en/articles/10699983-lawmatics-open-api
+  - openapi/lawmatics-openapi.yml
+versioning:
+  scheme: uri-path
+  current: v1
+  collection_version: 1.22.0
+  collection_version_date: '2026-05-26'
+  docs: https://docs.lawmatics.com/
+  note: >-
+    A single unversioned-in-practice /v1 path. The 1.x number is the version of the published Postman
+    collection, not a selectable API version; there is no version header, no date pinning and no
+    parallel version in service.
+deprecation:
+  policy_url: null
+  policy_published: false
+  sunset_header: false
+  deprecation_header: false
+  note: >-
+    No deprecation policy of any kind is published - no sunset schedule, no notice period, no RFC
+    8594 Sunset/Deprecation header support. The full changelog back to 2019 records only additions
+    and fixes; nothing has ever been marked deprecated or removed. Because there is no published
+    policy, no `Deprecation` pointer is wired in apis.yml.
+deprecated_operations: []
+sla:
+  url: null
+  uptime_target: null
+  published: false
+  note: No public SLA or uptime target is published for the API.
+status_page:
+  url: https://status.lawmatics.com/
+  provider: Better Stack
+  http_status: 200
+  history: true
+  subscribe: true
+support:
+  api_contact: api@lawmatics.com
+  help_center: https://help.lawmatics.com/
+  note: >-
+    API access itself is gated on a human step - developer settings must be switched on for an
+    account by a Lawmatics support representative before a developer app can be created.
+maturity:
+  self_description: >-
+    "Like the Lawmatics Platform, our API is under active development!" - the provider's own framing
+    at the top of docs.lawmatics.com.
+  release_cadence: >-
+    Fourteen releases between 2022-04 and 2023-10, then a ~19-month gap before 1.22.0 on 2026-05-26.

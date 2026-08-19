@@ -1,0 +1,79 @@
+generated: '2026-08-13'
+method: derived
+source: openapi/lawmatics-openapi.yml
+sources:
+  - openapi/lawmatics-openapi.yml
+  - https://docs.lawmatics.com/
+  - https://help.lawmatics.com/en/articles/10699983-lawmatics-open-api
+format: custom
+format_note: >-
+  NOT RFC 9457. Lawmatics returns application/json (never application/problem+json) with a top-level
+  `errors` array whose members carry `status`, `title` and `detail`. There is no `type` URI, no
+  `instance`, and no published registry of error codes - the values below are the ones Lawmatics
+  actually publishes as saved examples or states in prose. Lawmatics has no error-code reference
+  page; a machine-readable error catalogue is a genuine gap.
+envelope:
+  media_type: application/json
+  shape:
+    errors:
+      - status: integer
+        title: string
+        detail: string
+  example:
+    errors:
+      - status: 404
+        title: Not found
+        detail: File with id invalidId was not found.
+problems:
+  - status: 401
+    title: Unauthorized
+    detail: Missing or invalid OAuth 2.0 bearer token.
+    evidence: >-
+      Observed live on 2026-08-13: GET https://api.lawmatics.com/v1/contacts with no Authorization
+      header returned HTTP 401 with an empty body.
+    remediation: >-
+      Send Authorization: Bearer <access_token>. Tokens do not expire, so a 401 means the token is
+      wrong, was issued for a different firm, or the authorization was removed inside Lawmatics -
+      not that it aged out.
+    applies_to: all authenticated operations
+  - status: 404
+    title: Not found
+    detail: File with id invalidId was not found.
+    evidence: saved response example "File Not Found" on the Download File request
+    source_operation: openapi/lawmatics-openapi.yml#downloadFile
+    remediation: Verify the record id and that it belongs to the authorized firm.
+  - status: 404
+    title: Not Found
+    detail: "This resource path does not exist \U0001F47B"
+    evidence: >-
+      Observed live on 2026-08-13 for any unrouted path on https://api.lawmatics.com, e.g.
+      /v1/openapi.json and /.well-known/openid-configuration.
+    remediation: Check the path; every documented operation lives under /v1/.
+    note: This is the router-level 404, distinct from the record-level 404 above.
+  - status: 422
+    title: Filter By Parameter Not Available
+    detail: When applying filters, a valid 'filter_by' parameter is required.
+    evidence: saved response example "Invalid Parameter" on the Activities request
+    source_operation: openapi/lawmatics-openapi.yml#getActivities
+    remediation: >-
+      Pass filter_on (or filter_value) alongside filter_by, unless the operator is a presence check
+      ('null' / 'not_null'). Only one filter is supported per request.
+  - status: 429
+    title: Too Many Requests
+    detail: The per-firm rate limit was exceeded.
+    evidence: >-
+      Documented in the Getting Started With Auth section of docs.lawmatics.com ("Exceeding this
+      limit returns a 429 error with `Retry-After: 60` header") and in
+      help.lawmatics.com article 10699983.
+    headers: [Retry-After]
+    remediation: Wait the number of seconds in Retry-After, then retry. See rate-limits/lawmatics-rate-limits.yml.
+    applies_to: all operations
+coverage:
+  operations_in_spec: 177
+  operations_with_a_documented_error_response: 2
+  distinct_documented_problems: 5
+  gap: >-
+    Only two of 177 operations carry a provider-published error example (Download File 404, Activities
+    422). Validation errors on the many POST/PUT operations are undocumented; the 1.9.0 and 1.7.0
+    changelog entries both say "Improve validations, and error handling on many endpoints" without
+    publishing what those errors are.

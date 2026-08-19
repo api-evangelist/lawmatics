@@ -1,0 +1,108 @@
+generated: '2026-08-13'
+method: searched
+source: https://help.lawmatics.com/en/articles/15438485-outbound-webhooks
+sources:
+  - https://help.lawmatics.com/en/articles/15438485-outbound-webhooks
+  - https://help.lawmatics.com/en/articles/10699983-lawmatics-open-api
+  - https://docs.lawmatics.com/
+spec_type: none
+spec_note: >-
+  Lawmatics publishes NO AsyncAPI document. This file is the webhook catalogue captured verbatim from
+  the provider's own outbound-webhooks developer guide and the Webhooks folder of the published
+  Postman collection, so the event surface is recorded without fabricating a specification. Wire
+  `type: Webhooks` only - do NOT wire `type: AsyncAPI` for this provider.
+name: Lawmatics Outbound Webhooks
+description: >-
+  Outbound, provider-push webhooks. Lawmatics POSTs a signed JSON event to an HTTPS endpoint the firm
+  registers in the dashboard. There is no REST endpoint for managing subscriptions - webhooks are not
+  part of the REST API surface; a firm administrator creates them under Settings > Webhooks and the
+  signing secret is shown exactly once on creation.
+direction: outbound
+transport: https
+delivery: at-least-once
+management:
+  self_service_api: false
+  location: Lawmatics dashboard, Settings > Webhooks
+  actor: firm administrator
+  note: >-
+    The Postman collection states plainly that webhooks are not part of the REST API and that the
+    Webhooks folder is reference documentation that makes no HTTP call.
+subscription_limits:
+  - "Maximum of 2 webhook subscriptions per event type per firm (v1)"
+  - "Endpoint URL must use HTTPS"
+envelope:
+  content_type: application/json
+  version: v1
+  fields:
+    - {name: event_id, type: string, description: "Unique event identifier, prefixed evt_; use for idempotent de-duplication"}
+    - {name: firm_id, type: integer, description: "The Lawmatics firm the event belongs to"}
+    - {name: event_type, type: string, description: "The event name, e.g. matter.converted"}
+    - {name: version, type: string, description: "Envelope version; currently v1"}
+    - {name: timestamp, type: string, format: date-time, description: "ISO 8601 event time"}
+    - {name: data, type: object, description: "Event-specific payload"}
+  example:
+    event_id: evt_550e8400-e29b-41d4-a716-446655440000
+    firm_id: 123
+    event_type: matter.converted
+    version: v1
+    timestamp: '2026-06-02T18:30:00.000Z'
+    data:
+      matter_id: 456
+security:
+  scheme: hmac-sha256
+  headers:
+    - {name: X-Lawmatics-Signature, description: "sha256= followed by the HMAC-SHA256 hex digest of the signed payload"}
+    - {name: X-Lawmatics-Timestamp, description: "Unix timestamp in seconds"}
+    - {name: X-Lawmatics-Event-Id, description: "Unique event id, for consumer-side idempotency"}
+  signed_payload: '"<X-Lawmatics-Timestamp>" + "." + "<raw JSON request body>"'
+  secret_format: "whsec_..."
+  secret_handling: >-
+    Shown once at subscription creation with a copy button; regenerable from the webhook action menu
+    if lost. Store as an environment variable (the guide uses LAWMATICS_WEBHOOK_SECRET).
+  verification_rules:
+    - Compute HMAC-SHA256 of the signed payload with the full whsec_ secret string
+    - Prefix the hex digest with "sha256=" before comparing
+    - Use a constant-time comparison to prevent timing attacks
+    - Reject any request whose timestamp is older than 5 minutes to prevent replay
+delivery_policy:
+  acknowledgement: "Return any 2xx status"
+  timeout_seconds: 10
+  response_body: ignored
+  permanent_failure: "Any 4xx other than 429 is treated as permanent - Lawmatics will not retry"
+  attempts: 7
+  retry_schedule:
+    - {attempt: 1, delay: immediate}
+    - {attempt: 2, delay: ~15 seconds}
+    - {attempt: 3, delay: ~1 minute}
+    - {attempt: 4, delay: ~5 minutes}
+    - {attempt: 5, delay: ~30 minutes}
+    - {attempt: 6, delay: ~1 hour}
+    - {attempt: 7, delay: ~2 hours}
+  consumer_idempotency: "De-duplicate on event_id; the same event may be delivered more than once"
+events:
+  - {name: matter.converted, description: "A matter's status moves to Hired"}
+  - {name: matter.created, description: "A new matter is created"}
+  - {name: matter.status_changed, description: "A matter status transition occurs"}
+  - {name: matter.updated, description: "Matter fields change"}
+  - {name: matter.note_added, description: "A note is added to a matter"}
+  - {name: matter.task_completed, description: "A matter task is marked complete"}
+  - {name: form.submitted, description: "An intake form is submitted"}
+  - {name: invoice.created, description: "A new invoice is generated"}
+  - {name: invoice.paid, description: "An invoice is paid in full"}
+  - {name: document.signed, description: "A signature is completed"}
+  - {name: contact.updated, description: "Contact details change"}
+  - {name: contact.merged, description: "Two contacts are merged"}
+  - {name: contact.deleted, description: "A contact is removed"}
+event_count: 13
+discrepancy:
+  note: >-
+    The Webhooks folder inside the published Postman collection states that matter.converted is
+    currently the only event delivered ("More event types are coming; today matter.converted is the
+    only event delivered") and describes a limit of two webhooks per ENDPOINT per firm. The help
+    centre developer guide published at help.lawmatics.com lists 13 event types and states a limit of
+    two subscriptions per EVENT TYPE per firm. Both are provider-published and they disagree; both
+    are recorded here rather than silently reconciled. An integrator should confirm which events are
+    live before depending on anything other than matter.converted.
+related:
+  rest_api: openapi/lawmatics-openapi.yml
+  conventions: conventions/lawmatics-conventions.yml

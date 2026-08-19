@@ -1,0 +1,76 @@
+generated: '2026-08-13'
+method: searched
+source: https://docs.lawmatics.com/
+docs: https://docs.lawmatics.com/
+docs_detail: The "Getting Started With Auth" section of the Lawmatics-published Postman documentation,
+  plus https://help.lawmatics.com/en/articles/10699983-lawmatics-open-api
+derived_from: openapi/lawmatics-openapi.yml
+summary:
+  types:
+  - http
+  - oauth2
+  oauth2_flows:
+  - authorizationCode
+schemes:
+- name: oauth2
+  type: oauth2
+  flows:
+  - flow: authorizationCode
+    authorizationUrl: https://app.lawmatics.com/oauth/authorize
+    tokenUrl: https://api.lawmatics.com/oauth/token
+    scopes: 0
+  description: OAuth 2.0 authorization code grant. Register a developer app at https://app.lawmatics.com/settings/developers
+    (developer settings must be enabled by Lawmatics support). Access tokens are non-expiring; no refresh
+    tokens are issued and scopes are not supported.
+  sources:
+  - openapi/lawmatics-openapi.yml
+- name: bearerAuth
+  type: http
+  scheme: bearer
+  description: 'The OAuth 2.0 access token is sent as `Authorization: Bearer <access_token>`.'
+  sources:
+  - openapi/lawmatics-openapi.yml
+onboarding:
+  self_service: false
+  gate: Developer settings must be enabled on the account by a Lawmatics support representative before
+    a developer app can be created.
+  app_registration_url: https://app.lawmatics.com/settings/developers
+  required_app_fields:
+  - Name
+  - Description
+  - Logo
+  - Callback URL
+flow:
+  step_1: Redirect the user to https://app.lawmatics.com/oauth/authorize with client_id, redirect_uri,
+    response_type=code and an optional state.
+  step_2: Lawmatics redirects back to redirect_uri with a short-lived ?code= grant token.
+  step_3: POST https://api.lawmatics.com/oauth/token from your backend with client_id, client_secret,
+    grant_type=authorization_code, code and redirect_uri.
+  step_4: 'The response is {"token_type":"bearer","access_token":"...","created_at":<unix>}. Send it as
+    Authorization: Bearer <access_token>.'
+token_properties:
+  expires: false
+  refresh_token: false
+  scopes: false
+  revocation_endpoint: false
+  grants: full CRUD over the authorizing firm account
+  note: 'Lawmatics states all four directly: "We currently do not support scopes. Once a user authenticates
+    your app, they are giving you full CRUD access to their account", "We do not have a deauthorization
+    endpoint", and "We do not give you a refresh token. Access tokens do not expire so they are not needed."
+    A leaked Lawmatics access token is a permanent, unscoped, unrevocable key to a law firm''s client
+    data.'
+unauthenticated_operations:
+- operation: submitCustomFormEntryFormDataBody
+  path: POST /v1/forms/{custom_form_uuid}/submit
+  note: Public custom-form submission; marked noauth in the published collection. The form UUID is the
+    only credential.
+discovery:
+  oauth_authorization_server_metadata: false
+  openid_configuration: false
+  note: Neither RFC 8414 nor OIDC discovery documents are served; see well-known/lawmatics-well-known.yml
+evidence:
+- url: https://api.lawmatics.com/v1/contacts
+  method: GET
+  http_status: 401
+  checked: '2026-08-13'
+  note: unauthenticated request rejected, confirming the bearer requirement

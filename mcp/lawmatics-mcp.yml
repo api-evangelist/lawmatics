@@ -1,0 +1,1085 @@
+generated: '2026-08-13'
+method: derived
+status: candidate
+source: openapi/lawmatics-openapi.yml
+deployment:
+  mode: none
+  endpoint: null
+  install: null
+  package: null
+  auth: oauth
+  verified: searched
+note: 'Lawmatics ships NO MCP server - not hosted, not stdio, not a package. This is a CANDIDATE tool
+  list derived from the OpenAPI that API Evangelist converted from the Lawmatics-published Postman collection;
+  it is a design input, not an agent surface anyone can call today. Third-party Lawmatics MCP servers
+  do exist (for example github.com/dschnurbusch/lawmatics-mcp-server and community servers from My Legal
+  Academy) but none is published or endorsed by Lawmatics, so none is recorded as this provider''s deployment.
+  `auth: oauth` records what a server WOULD have to use: the Lawmatics OAuth 2.0 authorization-code grant,
+  which today issues a non-expiring, unscoped, full-CRUD token - a material constraint on any agent deployment.'
+tools:
+- name: get_address
+  description: Address
+  category: Addresses
+  method: GET
+  path: /v1/addresses/{address_id}
+  source_operation: openapi/lawmatics-openapi.yml#getAddress
+- name: update_address
+  description: Update Address
+  category: Addresses
+  method: PUT
+  path: /v1/addresses/{address_id}
+  source_operation: openapi/lawmatics-openapi.yml#updateAddress
+- name: delete_address
+  description: Delete Address
+  category: Addresses
+  method: DELETE
+  path: /v1/addresses/{address_id}
+  source_operation: openapi/lawmatics-openapi.yml#deleteAddress
+- name: get_addresses
+  description: Addresses
+  category: Addresses
+  method: GET
+  path: /v1/addresses
+  source_operation: openapi/lawmatics-openapi.yml#getAddresses
+- name: create_address
+  description: Create Address
+  category: Addresses
+  method: POST
+  path: /v1/addresses
+  source_operation: openapi/lawmatics-openapi.yml#createAddress
+- name: get_collections
+  description: Collections
+  category: Collections
+  method: GET
+  path: /v1/collections
+  source_operation: openapi/lawmatics-openapi.yml#getCollections
+- name: create_collection
+  description: Create Collection
+  category: Collections
+  method: POST
+  path: /v1/collections
+  source_operation: openapi/lawmatics-openapi.yml#createCollection
+- name: get_collection
+  description: Collection
+  category: Collections
+  method: GET
+  path: /v1/collections/{collection_id}
+  source_operation: openapi/lawmatics-openapi.yml#getCollection
+- name: update_collection
+  description: Update Collection
+  category: Collections
+  method: PUT
+  path: /v1/collections/{collection_id}
+  source_operation: openapi/lawmatics-openapi.yml#updateCollection
+- name: delete_collection
+  description: Delete Collection
+  category: Collections
+  method: DELETE
+  path: /v1/collections/{collection_id}
+  source_operation: openapi/lawmatics-openapi.yml#deleteCollection
+- name: get_collection_items
+  description: Collection Items
+  category: Collections
+  method: GET
+  path: /v1/collection_items
+  source_operation: openapi/lawmatics-openapi.yml#getCollectionItems
+- name: create_collection_item
+  description: Create Collection Item
+  category: Collections
+  method: POST
+  path: /v1/collection_items
+  source_operation: openapi/lawmatics-openapi.yml#createCollectionItem
+- name: get_collection_item
+  description: Collection Item
+  category: Collections
+  method: GET
+  path: /v1/collection_items/{collection_item_id}
+  source_operation: openapi/lawmatics-openapi.yml#getCollectionItem
+- name: update_collection_item
+  description: Update Collection Item
+  category: Collections
+  method: PUT
+  path: /v1/collection_items/{collection_item_id}
+  source_operation: openapi/lawmatics-openapi.yml#updateCollectionItem
+- name: delete_collection_item
+  description: Delete Collection Item
+  category: Collections
+  method: DELETE
+  path: /v1/collection_items/{collection_item_id}
+  source_operation: openapi/lawmatics-openapi.yml#deleteCollectionItem
+- name: find_contact_by_phone_number
+  description: Find Contact By Phone Number
+  category: Contacts
+  method: GET
+  path: /v1/contacts/find_by_phone/{phone_number}
+  source_operation: openapi/lawmatics-openapi.yml#findContactByPhoneNumber
+- name: find_contact_by_email_address
+  description: Find Contact By Email Address
+  category: Contacts
+  method: GET
+  path: /v1/contacts/find_by_email/{email_address}
+  source_operation: openapi/lawmatics-openapi.yml#findContactByEmailAddress
+- name: find_contact_by_name
+  description: Find Contact By Name
+  category: Contacts
+  method: GET
+  path: /v1/contacts/find_by_name/{name}
+  source_operation: openapi/lawmatics-openapi.yml#findContactByName
+- name: get_custom_contact_type
+  description: Custom Contact Type
+  category: Contacts
+  method: GET
+  path: /v1/custom_contact_types/{custom_contact_type_id}
+  source_operation: openapi/lawmatics-openapi.yml#getCustomContactType
+- name: delete_custom_contact_type
+  description: Delete Custom Contact Type
+  category: Contacts
+  method: DELETE
+  path: /v1/custom_contact_types/{custom_contact_type_id}
+  source_operation: openapi/lawmatics-openapi.yml#deleteCustomContactType
+- name: get_custom_contact_types
+  description: Custom Contact Types
+  category: Contacts
+  method: GET
+  path: /v1/custom_contact_types
+  source_operation: openapi/lawmatics-openapi.yml#getCustomContactTypes
+- name: create_custom_contact_type
+  description: Create Custom Contact Type
+  category: Contacts
+  method: POST
+  path: /v1/custom_contact_types
+  source_operation: openapi/lawmatics-openapi.yml#createCustomContactType
+- name: update_custom_contact_type
+  description: Update Custom Contact Type
+  category: Contacts
+  method: PUT
+  path: /v1/custom_contact_types/{contact_id}
+  source_operation: openapi/lawmatics-openapi.yml#updateCustomContactType
+- name: get_contact
+  description: Contact
+  category: Contacts
+  method: GET
+  path: /v1/contacts/{contact_id}
+  source_operation: openapi/lawmatics-openapi.yml#getContact
+- name: update_contact
+  description: Update Contact
+  category: Contacts
+  method: PUT
+  path: /v1/contacts/{contact_id}
+  source_operation: openapi/lawmatics-openapi.yml#updateContact
+- name: delete_contact
+  description: Delete Contact
+  category: Contacts
+  method: DELETE
+  path: /v1/contacts/{contact_id}
+  source_operation: openapi/lawmatics-openapi.yml#deleteContact
+- name: get_contacts
+  description: Contacts
+  category: Contacts
+  method: GET
+  path: /v1/contacts
+  source_operation: openapi/lawmatics-openapi.yml#getContacts
+- name: create_contact
+  description: Create Contact
+  category: Contacts
+  method: POST
+  path: /v1/contacts
+  source_operation: openapi/lawmatics-openapi.yml#createContact
+- name: find_company_by_phone_number
+  description: Find Company By Phone Number
+  category: Companies
+  method: GET
+  path: /v1/companies/find_by_phone/{phone_number}
+  source_operation: openapi/lawmatics-openapi.yml#findCompanyByPhoneNumber
+- name: find_company_by_email_address
+  description: Find Company By Email Address
+  category: Companies
+  method: GET
+  path: /v1/companies/find_by_email/{email_address}
+  source_operation: openapi/lawmatics-openapi.yml#findCompanyByEmailAddress
+- name: find_company_by_name
+  description: Find Company By Name
+  category: Companies
+  method: GET
+  path: /v1/companies/find_by_name/{name}
+  source_operation: openapi/lawmatics-openapi.yml#findCompanyByName
+- name: get_company
+  description: Company
+  category: Companies
+  method: GET
+  path: /v1/companies/{company_id}
+  source_operation: openapi/lawmatics-openapi.yml#getCompany
+- name: update_company
+  description: Update Company
+  category: Companies
+  method: PUT
+  path: /v1/companies/{company_id}
+  source_operation: openapi/lawmatics-openapi.yml#updateCompany
+- name: delete_company
+  description: Delete Company
+  category: Companies
+  method: DELETE
+  path: /v1/companies/{company_id}
+  source_operation: openapi/lawmatics-openapi.yml#deleteCompany
+- name: get_companies
+  description: Companies
+  category: Companies
+  method: GET
+  path: /v1/companies
+  source_operation: openapi/lawmatics-openapi.yml#getCompanies
+- name: create_company
+  description: Create Company
+  category: Companies
+  method: POST
+  path: /v1/companies
+  source_operation: openapi/lawmatics-openapi.yml#createCompany
+- name: get_custom_email
+  description: Custom Email
+  category: Custom Emails
+  method: GET
+  path: /v1/custom_emails/{custom_email_id}
+  source_operation: openapi/lawmatics-openapi.yml#getCustomEmail
+- name: get_custom_emails
+  description: Custom Emails
+  category: Custom Emails
+  method: GET
+  path: /v1/custom_emails
+  source_operation: openapi/lawmatics-openapi.yml#getCustomEmails
+- name: get_custom_field
+  description: Custom Field
+  category: Custom Fields
+  method: GET
+  path: /v1/custom_fields/{custom_field_id}
+  source_operation: openapi/lawmatics-openapi.yml#getCustomField
+- name: update_custom_field
+  description: Update Custom Field
+  category: Custom Fields
+  method: PUT
+  path: /v1/custom_fields/{custom_field_id}
+  source_operation: openapi/lawmatics-openapi.yml#updateCustomField
+- name: delete_custom_field
+  description: Delete Custom Field
+  category: Custom Fields
+  method: DELETE
+  path: /v1/custom_fields/{custom_field_id}
+  source_operation: openapi/lawmatics-openapi.yml#deleteCustomField
+- name: get_custom_fields
+  description: Custom Fields
+  category: Custom Fields
+  method: GET
+  path: /v1/custom_fields
+  source_operation: openapi/lawmatics-openapi.yml#getCustomFields
+- name: create_custom_field
+  description: Create Custom Field
+  category: Custom Fields
+  method: POST
+  path: /v1/custom_fields
+  source_operation: openapi/lawmatics-openapi.yml#createCustomField
+- name: get_custom_form
+  description: Custom Form
+  category: Custom Forms
+  method: GET
+  path: /v1/forms/{custom_form_uuid}
+  source_operation: openapi/lawmatics-openapi.yml#getCustomForm
+- name: get_custom_forms
+  description: Custom Forms
+  category: Custom Forms
+  method: GET
+  path: /v1/forms
+  source_operation: openapi/lawmatics-openapi.yml#getCustomForms
+- name: get_custom_form_entries
+  description: Custom Form Entries
+  category: Custom Forms
+  method: GET
+  path: /v1/forms/{custom_form_uuid}/entries
+  source_operation: openapi/lawmatics-openapi.yml#getCustomFormEntries
+- name: submit_custom_form_entry_form_data_body
+  description: Submit Custom Form Entry  (Form Data Body)
+  category: Custom Forms
+  method: POST
+  path: /v1/forms/{custom_form_uuid}/submit
+  source_operation: openapi/lawmatics-openapi.yml#submitCustomFormEntryFormDataBody
+- name: get_email_address
+  description: Email Address
+  category: Email Addresses
+  method: GET
+  path: /v1/email_addresses/{email_address_id}
+  source_operation: openapi/lawmatics-openapi.yml#getEmailAddress
+- name: update_email_address
+  description: Update Email Address
+  category: Email Addresses
+  method: PUT
+  path: /v1/email_addresses/{email_address_id}
+  source_operation: openapi/lawmatics-openapi.yml#updateEmailAddress
+- name: delete_email_address
+  description: Delete Email Address
+  category: Email Addresses
+  method: DELETE
+  path: /v1/email_addresses/{email_address_id}
+  source_operation: openapi/lawmatics-openapi.yml#deleteEmailAddress
+- name: get_email_addresses
+  description: Email Addresses
+  category: Email Addresses
+  method: GET
+  path: /v1/email_addresses
+  source_operation: openapi/lawmatics-openapi.yml#getEmailAddresses
+- name: create_email_address
+  description: Create Email Address
+  category: Email Addresses
+  method: POST
+  path: /v1/email_addresses
+  source_operation: openapi/lawmatics-openapi.yml#createEmailAddress
+- name: get_email_campaign
+  description: Email Campaign
+  category: Email Campaigns
+  method: GET
+  path: /v1/email_campaigns/{id}
+  source_operation: openapi/lawmatics-openapi.yml#getEmailCampaign
+- name: get_email_campaigns
+  description: Email Campaigns
+  category: Email Campaigns
+  method: GET
+  path: /v1/email_campaigns
+  source_operation: openapi/lawmatics-openapi.yml#getEmailCampaigns
+- name: get_email_campaign_stats
+  description: Email Campaign Stats
+  category: Email Campaign Stats
+  method: GET
+  path: /v1/email_campaign_stats/{id}
+  source_operation: openapi/lawmatics-openapi.yml#getEmailCampaignStats
+- name: get_event
+  description: Event
+  category: Events (Appointments)
+  method: GET
+  path: /v1/events/{event_id}
+  source_operation: openapi/lawmatics-openapi.yml#getEvent
+- name: update_event
+  description: Update Event
+  category: Events (Appointments)
+  method: PUT
+  path: /v1/events/{event_id}
+  source_operation: openapi/lawmatics-openapi.yml#updateEvent
+- name: cancel_event
+  description: Cancel Event
+  category: Events (Appointments)
+  method: DELETE
+  path: /v1/events/{event_id}
+  source_operation: openapi/lawmatics-openapi.yml#cancelEvent
+- name: get_events
+  description: Events
+  category: Events (Appointments)
+  method: GET
+  path: /v1/events
+  source_operation: openapi/lawmatics-openapi.yml#getEvents
+- name: create_event
+  description: Create Event
+  category: Events (Appointments)
+  method: POST
+  path: /v1/events
+  source_operation: openapi/lawmatics-openapi.yml#createEvent
+- name: get_locations
+  description: Locations
+  category: Event Locations
+  method: GET
+  path: /v1/locations
+  source_operation: openapi/lawmatics-openapi.yml#getLocations
+- name: get_event_type
+  description: Event Type
+  category: Event Types
+  method: GET
+  path: /v1/event_types/{event_type_id}
+  source_operation: openapi/lawmatics-openapi.yml#getEventType
+- name: update_event_type
+  description: Update Event Type
+  category: Event Types
+  method: PUT
+  path: /v1/event_types/{event_type_id}
+  source_operation: openapi/lawmatics-openapi.yml#updateEventType
+- name: delete_event_type
+  description: Delete Event Type
+  category: Event Types
+  method: DELETE
+  path: /v1/event_types/{event_type_id}
+  source_operation: openapi/lawmatics-openapi.yml#deleteEventType
+- name: get_event_types
+  description: Event Types
+  category: Event Types
+  method: GET
+  path: /v1/event_types
+  source_operation: openapi/lawmatics-openapi.yml#getEventTypes
+- name: create_event_type
+  description: Create Event Type
+  category: Event Types
+  method: POST
+  path: /v1/event_types
+  source_operation: openapi/lawmatics-openapi.yml#createEventType
+- name: get_file
+  description: File
+  category: Files
+  method: GET
+  path: /v1/files/{file_id}
+  source_operation: openapi/lawmatics-openapi.yml#getFile
+- name: update_file_metadata
+  description: Update File Metadata
+  category: Files
+  method: PUT
+  path: /v1/files/{file_id}
+  source_operation: openapi/lawmatics-openapi.yml#updateFileMetadata
+- name: delete_file
+  description: Delete File
+  category: Files
+  method: DELETE
+  path: /v1/files/{file_id}
+  source_operation: openapi/lawmatics-openapi.yml#deleteFile
+- name: get_files
+  description: Files
+  category: Files
+  method: GET
+  path: /v1/files
+  source_operation: openapi/lawmatics-openapi.yml#getFiles
+- name: upload_file
+  description: Upload File
+  category: Files
+  method: POST
+  path: /v1/files
+  source_operation: openapi/lawmatics-openapi.yml#uploadFile
+- name: download_file
+  description: Download File
+  category: Files
+  method: GET
+  path: /v1/files/download/{id}
+  source_operation: openapi/lawmatics-openapi.yml#downloadFile
+- name: get_folder
+  description: Folder
+  category: Folders
+  method: GET
+  path: /v1/folders/{folder_id}
+  source_operation: openapi/lawmatics-openapi.yml#getFolder
+- name: update_folder
+  description: Update Folder
+  category: Folders
+  method: PUT
+  path: /v1/folders/{folder_id}
+  source_operation: openapi/lawmatics-openapi.yml#updateFolder
+- name: delete_folder
+  description: Delete Folder
+  category: Folders
+  method: DELETE
+  path: /v1/folders/{folder_id}
+  source_operation: openapi/lawmatics-openapi.yml#deleteFolder
+- name: get_folders
+  description: Folders
+  category: Folders
+  method: GET
+  path: /v1/folders
+  source_operation: openapi/lawmatics-openapi.yml#getFolders
+- name: create_folder
+  description: Create Folder
+  category: Folders
+  method: POST
+  path: /v1/folders
+  source_operation: openapi/lawmatics-openapi.yml#createFolder
+- name: find_matter_by_phone_number
+  description: Find Matter By Phone Number
+  category: Matters (Prospects)
+  method: GET
+  path: /v1/prospects/find_by_phone/{phone_number}
+  source_operation: openapi/lawmatics-openapi.yml#findMatterByPhoneNumber
+- name: find_matter_by_email_address
+  description: Find Matter By Email Address
+  category: Matters (Prospects)
+  method: GET
+  path: /v1/prospects/find_by_email/{email_address}
+  source_operation: openapi/lawmatics-openapi.yml#findMatterByEmailAddress
+- name: find_matter_by_name
+  description: Find Matter By Name
+  category: Matters (Prospects)
+  method: GET
+  path: /v1/prospects/find_by_name/{name}
+  source_operation: openapi/lawmatics-openapi.yml#findMatterByName
+- name: get_interaction
+  description: Interaction
+  category: Matters (Prospects)
+  method: GET
+  path: /v1/interactions/{interaction_id}
+  source_operation: openapi/lawmatics-openapi.yml#getInteraction
+- name: update_interaction
+  description: Update Interaction
+  category: Matters (Prospects)
+  method: PUT
+  path: /v1/interactions/{interaction_id}
+  source_operation: openapi/lawmatics-openapi.yml#updateInteraction
+- name: delete_interaction
+  description: Delete Interaction
+  category: Matters (Prospects)
+  method: DELETE
+  path: /v1/interactions/{interaction_id}
+  source_operation: openapi/lawmatics-openapi.yml#deleteInteraction
+- name: get_interactions
+  description: Interactions
+  category: Matters (Prospects)
+  method: GET
+  path: /v1/interactions
+  source_operation: openapi/lawmatics-openapi.yml#getInteractions
+- name: create_interaction
+  description: Create Interaction
+  category: Matters (Prospects)
+  method: POST
+  path: /v1/interactions
+  source_operation: openapi/lawmatics-openapi.yml#createInteraction
+- name: get_campaign
+  description: Campaign
+  category: Matters (Prospects)
+  method: GET
+  path: /v1/campaigns/{campaign_id}
+  source_operation: openapi/lawmatics-openapi.yml#getCampaign
+- name: get_campaigns
+  description: Campaigns
+  category: Matters (Prospects)
+  method: GET
+  path: /v1/campaigns
+  source_operation: openapi/lawmatics-openapi.yml#getCampaigns
+- name: get_source
+  description: Source
+  category: Matters (Prospects)
+  method: GET
+  path: /v1/sources/{source_id}
+  source_operation: openapi/lawmatics-openapi.yml#getSource
+- name: get_sources
+  description: Sources
+  category: Matters (Prospects)
+  method: GET
+  path: /v1/sources
+  source_operation: openapi/lawmatics-openapi.yml#getSources
+- name: get_pipeline
+  description: Pipeline
+  category: Matters (Prospects)
+  method: GET
+  path: /v1/pipelines/{pipeline_id}
+  source_operation: openapi/lawmatics-openapi.yml#getPipeline
+- name: get_pipelines
+  description: Pipelines
+  category: Matters (Prospects)
+  method: GET
+  path: /v1/pipelines
+  source_operation: openapi/lawmatics-openapi.yml#getPipelines
+- name: get_stage
+  description: Stage
+  category: Matters (Prospects)
+  method: GET
+  path: /v1/stages/{stage_id}
+  source_operation: openapi/lawmatics-openapi.yml#getStage
+- name: get_stages
+  description: Stages
+  category: Matters (Prospects)
+  method: GET
+  path: /v1/stages
+  source_operation: openapi/lawmatics-openapi.yml#getStages
+- name: get_practice_area
+  description: Practice Area
+  category: Matters (Prospects)
+  method: GET
+  path: /v1/practice_areas/{practice_area_id}
+  source_operation: openapi/lawmatics-openapi.yml#getPracticeArea
+- name: update_practice_area
+  description: Update Practice Area
+  category: Matters (Prospects)
+  method: PUT
+  path: /v1/practice_areas/{practice_area_id}
+  source_operation: openapi/lawmatics-openapi.yml#updatePracticeArea
+- name: delete_practice_area
+  description: Delete Practice Area
+  category: Matters (Prospects)
+  method: DELETE
+  path: /v1/practice_areas/{practice_area_id}
+  source_operation: openapi/lawmatics-openapi.yml#deletePracticeArea
+- name: get_practice_areas
+  description: Practice Areas
+  category: Matters (Prospects)
+  method: GET
+  path: /v1/practice_areas
+  source_operation: openapi/lawmatics-openapi.yml#getPracticeAreas
+- name: create_practice_area
+  description: Create Practice Area
+  category: Matters (Prospects)
+  method: POST
+  path: /v1/practice_areas
+  source_operation: openapi/lawmatics-openapi.yml#createPracticeArea
+- name: get_relationship
+  description: Relationship
+  category: Matters (Prospects)
+  method: GET
+  path: /v1/relationships/{relationship_id}
+  source_operation: openapi/lawmatics-openapi.yml#getRelationship
+- name: update_relationship
+  description: Update Relationship
+  category: Matters (Prospects)
+  method: PUT
+  path: /v1/relationships/{relationship_id}
+  source_operation: openapi/lawmatics-openapi.yml#updateRelationship
+- name: delete_relationship
+  description: Delete Relationship
+  category: Matters (Prospects)
+  method: DELETE
+  path: /v1/relationships/{relationship_id}
+  source_operation: openapi/lawmatics-openapi.yml#deleteRelationship
+- name: get_relationships
+  description: Relationships
+  category: Matters (Prospects)
+  method: GET
+  path: /v1/relationships
+  source_operation: openapi/lawmatics-openapi.yml#getRelationships
+- name: create_relationship
+  description: Create Relationship
+  category: Matters (Prospects)
+  method: POST
+  path: /v1/relationships
+  source_operation: openapi/lawmatics-openapi.yml#createRelationship
+- name: get_relationship_type
+  description: Relationship Type
+  category: Matters (Prospects)
+  method: GET
+  path: /v1/relationship_types/{relationship_type_id}
+  source_operation: openapi/lawmatics-openapi.yml#getRelationshipType
+- name: update_relationship_type
+  description: Update Relationship Type
+  category: Matters (Prospects)
+  method: PUT
+  path: /v1/relationship_types/{relationship_type_id}
+  source_operation: openapi/lawmatics-openapi.yml#updateRelationshipType
+- name: get_relationship_types
+  description: Relationship Types
+  category: Matters (Prospects)
+  method: GET
+  path: /v1/relationship_types
+  source_operation: openapi/lawmatics-openapi.yml#getRelationshipTypes
+- name: create_relationship_type
+  description: Create Relationship Type
+  category: Matters (Prospects)
+  method: POST
+  path: /v1/relationship_types
+  source_operation: openapi/lawmatics-openapi.yml#createRelationshipType
+- name: get_sub_status
+  description: Sub Status
+  category: Matters (Prospects)
+  method: GET
+  path: /v1/sub_statuses/{status_id}
+  source_operation: openapi/lawmatics-openapi.yml#getSubStatus
+- name: get_sub_statuses
+  description: Sub Statuses
+  category: Matters (Prospects)
+  method: GET
+  path: /v1/sub_statuses
+  source_operation: openapi/lawmatics-openapi.yml#getSubStatuses
+- name: create_sub_status
+  description: Create Sub Status
+  category: Matters (Prospects)
+  method: POST
+  path: /v1/sub_statuses
+  source_operation: openapi/lawmatics-openapi.yml#createSubStatus
+- name: update_sub_status
+  description: Update Sub Status
+  category: Matters (Prospects)
+  method: PUT
+  path: /v1/sub_statuses/{sub_status_id}
+  source_operation: openapi/lawmatics-openapi.yml#updateSubStatus
+- name: delete_sub_status
+  description: Delete Sub Status
+  category: Matters (Prospects)
+  method: DELETE
+  path: /v1/sub_statuses/{sub_status_id}
+  source_operation: openapi/lawmatics-openapi.yml#deleteSubStatus
+- name: create_matter
+  description: Create Matter
+  category: Matters (Prospects)
+  method: POST
+  path: /v1/prospects
+  source_operation: openapi/lawmatics-openapi.yml#createMatter
+- name: get_matters
+  description: Matters
+  category: Matters (Prospects)
+  method: GET
+  path: /v1/prospects
+  source_operation: openapi/lawmatics-openapi.yml#getMatters
+- name: get_matter
+  description: Matter
+  category: Matters (Prospects)
+  method: GET
+  path: /v1/prospects/{prospect_id}
+  source_operation: openapi/lawmatics-openapi.yml#getMatter
+- name: update_matter
+  description: Update Matter
+  category: Matters (Prospects)
+  method: PUT
+  path: /v1/prospects/{prospect_id}
+  source_operation: openapi/lawmatics-openapi.yml#updateMatter
+- name: delete_matter
+  description: Delete Matter
+  category: Matters (Prospects)
+  method: DELETE
+  path: /v1/prospects/{prospect_id}
+  source_operation: openapi/lawmatics-openapi.yml#deleteMatter
+- name: get_note
+  description: Note
+  category: Notes
+  method: GET
+  path: /v1/notes/{note_id}
+  source_operation: openapi/lawmatics-openapi.yml#getNote
+- name: update_note
+  description: Update Note
+  category: Notes
+  method: PUT
+  path: /v1/notes/{note_id}
+  source_operation: openapi/lawmatics-openapi.yml#updateNote
+- name: delete_note
+  description: Delete Note
+  category: Notes
+  method: DELETE
+  path: /v1/notes/{note_id}
+  source_operation: openapi/lawmatics-openapi.yml#deleteNote
+- name: get_notes
+  description: Notes
+  category: Notes
+  method: GET
+  path: /v1/notes
+  source_operation: openapi/lawmatics-openapi.yml#getNotes
+- name: create_note
+  description: Create Note
+  category: Notes
+  method: POST
+  path: /v1/notes
+  source_operation: openapi/lawmatics-openapi.yml#createNote
+- name: get_invoice
+  description: Invoice
+  category: Payment Invoices
+  method: GET
+  path: /v1/invoices/{invoice_id}
+  source_operation: openapi/lawmatics-openapi.yml#getInvoice
+- name: get_invoices
+  description: Invoices
+  category: Payment Invoices
+  method: GET
+  path: /v1/invoices
+  source_operation: openapi/lawmatics-openapi.yml#getInvoices
+- name: get_expenses
+  description: Expenses
+  category: Payment Expenses
+  method: GET
+  path: /v1/expenses
+  source_operation: openapi/lawmatics-openapi.yml#getExpenses
+- name: create_expense
+  description: Create Expense
+  category: Payment Expenses
+  method: POST
+  path: /v1/expenses
+  source_operation: openapi/lawmatics-openapi.yml#createExpense
+- name: get_expense
+  description: Expense
+  category: Payment Expenses
+  method: GET
+  path: /v1/expenses/{expense_id}
+  source_operation: openapi/lawmatics-openapi.yml#getExpense
+- name: update_expense
+  description: Update Expense
+  category: Payment Expenses
+  method: PUT
+  path: /v1/expenses/{expense_id}
+  source_operation: openapi/lawmatics-openapi.yml#updateExpense
+- name: delete_expense
+  description: Expense
+  category: Payment Expenses
+  method: DELETE
+  path: /v1/expenses/{expense_id}
+  source_operation: openapi/lawmatics-openapi.yml#deleteExpense
+- name: get_time_entries
+  description: Time Entries
+  category: Payment Time Entries
+  method: GET
+  path: /v1/time_entries
+  source_operation: openapi/lawmatics-openapi.yml#getTimeEntries
+- name: create_time_entry
+  description: Create Time Entry
+  category: Payment Time Entries
+  method: POST
+  path: /v1/time_entries
+  source_operation: openapi/lawmatics-openapi.yml#createTimeEntry
+- name: get_time_entry
+  description: Time Entry
+  category: Payment Time Entries
+  method: GET
+  path: /v1/time_entries/{time_entry_id}
+  source_operation: openapi/lawmatics-openapi.yml#getTimeEntry
+- name: update_time_entry
+  description: Update Time Entry
+  category: Payment Time Entries
+  method: PUT
+  path: /v1/time_entries/{time_entry_id}
+  source_operation: openapi/lawmatics-openapi.yml#updateTimeEntry
+- name: delete_time_entry
+  description: Time Entry
+  category: Payment Time Entries
+  method: DELETE
+  path: /v1/time_entries/{time_entry_id}
+  source_operation: openapi/lawmatics-openapi.yml#deleteTimeEntry
+- name: get_transaction
+  description: Transaction
+  category: Payment Transactions
+  method: GET
+  path: /v1/transactions/{transaction_id}
+  source_operation: openapi/lawmatics-openapi.yml#getTransaction
+- name: get_transactions
+  description: Transactions
+  category: Payment Transactions
+  method: GET
+  path: /v1/transactions
+  source_operation: openapi/lawmatics-openapi.yml#getTransactions
+- name: create_transaction
+  description: Create Transaction
+  category: Payment Transactions
+  method: POST
+  path: /v1/transactions
+  source_operation: openapi/lawmatics-openapi.yml#createTransaction
+- name: get_phone_number
+  description: Phone Number
+  category: Phone Numbers
+  method: GET
+  path: /v1/phone_numbers/{phone_number_id}
+  source_operation: openapi/lawmatics-openapi.yml#getPhoneNumber
+- name: update_phone_number
+  description: Update Phone Number
+  category: Phone Numbers
+  method: PUT
+  path: /v1/phone_numbers/{phone_number_id}
+  source_operation: openapi/lawmatics-openapi.yml#updatePhoneNumber
+- name: delete_phone_number
+  description: Delete Phone Number
+  category: Phone Numbers
+  method: DELETE
+  path: /v1/phone_numbers/{phone_number_id}
+  source_operation: openapi/lawmatics-openapi.yml#deletePhoneNumber
+- name: get_phone_numbers
+  description: Phone Numbers
+  category: Phone Numbers
+  method: GET
+  path: /v1/phone_numbers
+  source_operation: openapi/lawmatics-openapi.yml#getPhoneNumbers
+- name: create_phone_number
+  description: Create Phone Number
+  category: Phone Numbers
+  method: POST
+  path: /v1/phone_numbers
+  source_operation: openapi/lawmatics-openapi.yml#createPhoneNumber
+- name: get_tag
+  description: Tag
+  category: Tags
+  method: GET
+  path: /v1/tags/{tag_id}
+  source_operation: openapi/lawmatics-openapi.yml#getTag
+- name: update_tag
+  description: Update Tag
+  category: Tags
+  method: PUT
+  path: /v1/tags/{tag_id}
+  source_operation: openapi/lawmatics-openapi.yml#updateTag
+- name: delete_tag
+  description: Delete Tag
+  category: Tags
+  method: DELETE
+  path: /v1/tags/{tag_id}
+  source_operation: openapi/lawmatics-openapi.yml#deleteTag
+- name: get_tags
+  description: Tags
+  category: Tags
+  method: GET
+  path: /v1/tags
+  source_operation: openapi/lawmatics-openapi.yml#getTags
+- name: create_tag
+  description: Create Tag
+  category: Tags
+  method: POST
+  path: /v1/tags
+  source_operation: openapi/lawmatics-openapi.yml#createTag
+- name: attach_tag
+  description: Attach Tag
+  category: Tags
+  method: POST
+  path: /v1/tags/attach
+  source_operation: openapi/lawmatics-openapi.yml#attachTag
+- name: detach_tag
+  description: Detach Tag
+  category: Tags
+  method: POST
+  path: /v1/tags/detach
+  source_operation: openapi/lawmatics-openapi.yml#detachTag
+- name: get_task
+  description: Task
+  category: Tasks
+  method: GET
+  path: /v1/tasks/{task_id}
+  source_operation: openapi/lawmatics-openapi.yml#getTask
+- name: update_task
+  description: Update Task
+  category: Tasks
+  method: PUT
+  path: /v1/tasks/{task_id}
+  source_operation: openapi/lawmatics-openapi.yml#updateTask
+- name: delete_task
+  description: Delete Task
+  category: Tasks
+  method: DELETE
+  path: /v1/tasks/{task_id}
+  source_operation: openapi/lawmatics-openapi.yml#deleteTask
+- name: get_tasks
+  description: Tasks
+  category: Tasks
+  method: GET
+  path: /v1/tasks
+  source_operation: openapi/lawmatics-openapi.yml#getTasks
+- name: create_task
+  description: Create Task
+  category: Tasks
+  method: POST
+  path: /v1/tasks
+  source_operation: openapi/lawmatics-openapi.yml#createTask
+- name: get_subtask
+  description: Subtask
+  category: Tasks
+  method: GET
+  path: /v1/tasks/{task_id}/subtasks/{subtask_id}
+  source_operation: openapi/lawmatics-openapi.yml#getSubtask
+- name: update_subtask
+  description: Update Subtask
+  category: Tasks
+  method: PUT
+  path: /v1/tasks/{task_id}/subtasks/{subtask_id}
+  source_operation: openapi/lawmatics-openapi.yml#updateSubtask
+- name: delete_subtask
+  description: Delete Subtask
+  category: Tasks
+  method: DELETE
+  path: /v1/tasks/{task_id}/subtasks/{subtask_id}
+  source_operation: openapi/lawmatics-openapi.yml#deleteSubtask
+- name: get_subtasks
+  description: Subtasks
+  category: Tasks
+  method: GET
+  path: /v1/tasks/{task_id}/subtasks
+  source_operation: openapi/lawmatics-openapi.yml#getSubtasks
+- name: create_subtask
+  description: Create Subtask
+  category: Tasks
+  method: POST
+  path: /v1/tasks/{task_id}/subtasks
+  source_operation: openapi/lawmatics-openapi.yml#createSubtask
+- name: get_comment
+  description: Comment
+  category: Tasks
+  method: GET
+  path: /v1/tasks/{task_id}/comments/{comment_id}
+  source_operation: openapi/lawmatics-openapi.yml#getComment
+- name: update_comment
+  description: Update Comment
+  category: Tasks
+  method: PUT
+  path: /v1/tasks/{task_id}/comments/{comment_id}
+  source_operation: openapi/lawmatics-openapi.yml#updateComment
+- name: delete_comment
+  description: Delete Comment
+  category: Tasks
+  method: DELETE
+  path: /v1/tasks/{task_id}/comments/{comment_id}
+  source_operation: openapi/lawmatics-openapi.yml#deleteComment
+- name: get_comments
+  description: Comments
+  category: Tasks
+  method: GET
+  path: /v1/tasks/{task_id}/comments
+  source_operation: openapi/lawmatics-openapi.yml#getComments
+- name: create_comment
+  description: Create Comment
+  category: Tasks
+  method: POST
+  path: /v1/tasks/{task_id}/comments
+  source_operation: openapi/lawmatics-openapi.yml#createComment
+- name: get_task_status
+  description: Task Status
+  category: Task Statuses
+  method: GET
+  path: /v1/task_statuses/{task_status_id}
+  source_operation: openapi/lawmatics-openapi.yml#getTaskStatus
+- name: update_task_status
+  description: Update Task Status
+  category: Task Statuses
+  method: PUT
+  path: /v1/task_statuses/{task_status_id}
+  source_operation: openapi/lawmatics-openapi.yml#updateTaskStatus
+- name: delete_task_status
+  description: Delete Task Status
+  category: Task Statuses
+  method: DELETE
+  path: /v1/task_statuses/{task_status_id}
+  source_operation: openapi/lawmatics-openapi.yml#deleteTaskStatus
+- name: get_task_statuses
+  description: Task Statuses
+  category: Task Statuses
+  method: GET
+  path: /v1/task_statuses
+  source_operation: openapi/lawmatics-openapi.yml#getTaskStatuses
+- name: create_task_status
+  description: Create Task Status
+  category: Task Statuses
+  method: POST
+  path: /v1/task_statuses
+  source_operation: openapi/lawmatics-openapi.yml#createTaskStatus
+- name: get_activity
+  description: Activity
+  category: Timeline Activities
+  method: GET
+  path: /v1/activities/{activity_id}
+  source_operation: openapi/lawmatics-openapi.yml#getActivity
+- name: get_activities
+  description: Activities
+  category: Timeline Activities
+  method: GET
+  path: /v1/activities
+  source_operation: openapi/lawmatics-openapi.yml#getActivities
+- name: get_user
+  description: User
+  category: Users
+  method: GET
+  path: /v1/users/{user_id}
+  source_operation: openapi/lawmatics-openapi.yml#getUser
+- name: update_user
+  description: Update User
+  category: Users
+  method: PUT
+  path: /v1/users/{user_id}
+  source_operation: openapi/lawmatics-openapi.yml#updateUser
+- name: delete_user
+  description: Delete User
+  category: Users
+  method: DELETE
+  path: /v1/users/{user_id}
+  source_operation: openapi/lawmatics-openapi.yml#deleteUser
+- name: get_users
+  description: Users
+  category: Users
+  method: GET
+  path: /v1/users
+  source_operation: openapi/lawmatics-openapi.yml#getUsers
+- name: create_user
+  description: Create User
+  category: Users
+  method: POST
+  path: /v1/users
+  source_operation: openapi/lawmatics-openapi.yml#createUser
+- name: get_me
+  description: Me
+  category: Users
+  method: GET
+  path: /v1/users/me
+  source_operation: openapi/lawmatics-openapi.yml#getMe
+coverage:
+  rest_operations: 177
+  tools_derived: 177
+  tools_published_by_provider: 0

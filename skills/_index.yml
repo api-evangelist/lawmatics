@@ -1,0 +1,35 @@
+generated: '2026-08-13'
+method: generated
+source: >-
+  openapi/lawmatics-openapi.yml (derived from the Lawmatics-published Postman collection),
+  conventions/lawmatics-conventions.yml and asyncapi/lawmatics-webhooks.yml. Lawmatics publishes no
+  AGENTS.md and no agent skills of its own; these are API Evangelist packaged operating instructions.
+  Every operationId referenced was verified present in the spec.
+skills:
+  - file: lawmatics-intake-new-matter.md
+    name: Intake a new lead as a Lawmatics matter
+    api: openapi/lawmatics-openapi.yml
+    operations: [findContactByEmailAddress, findContactByPhoneNumber, getPracticeAreas, getSources, getPipelines, getStages, createMatter, getMatter]
+  - file: lawmatics-search-and-report.md
+    name: Query and report on Lawmatics matters
+    api: openapi/lawmatics-openapi.yml
+    operations: [getMatters, getContacts, getActivities, getPracticeAreas, getStages, getUsers]
+  - file: lawmatics-webform-to-matter.md
+    name: Push a website form submission into Lawmatics
+    api: openapi/lawmatics-openapi.yml
+    operations: [getCustomForms, getCustomForm, submitCustomFormEntryFormDataBody, getCustomFormEntries]
+  - file: lawmatics-consume-webhooks.md
+    name: Consume and verify Lawmatics outbound webhooks
+    api: openapi/lawmatics-openapi.yml
+    operations: [getMatter, getContact, getInvoice, getCustomFormEntries]
+  - file: lawmatics-time-and-billing.md
+    name: Record time, expenses and read billing on a Lawmatics matter
+    api: openapi/lawmatics-openapi.yml
+    operations: [getMatter, getUsers, createTimeEntry, getTimeEntries, updateTimeEntry, createExpense, getExpenses, getInvoices, getInvoice, getTransactions]
+cross_cutting_rules:
+  - The API calls a Matter a `prospect`; the endpoint is /v1/prospects and the parameter is prospect_id.
+  - No idempotency key exists on any write - deduplicate before retrying, never after.
+  - No sandbox or test mode exists - every write lands in a firm's live legal CRM and can fire client-facing automations.
+  - The OAuth token has no scopes and never expires, so a read-only intent is not enforceable by the credential.
+  - Rate limits are per firm and shared across every authorized app; 429 arrives with Retry-After and no advance warning.
+  - Use ?fields=all when verifying a write; default responses omit most attributes.

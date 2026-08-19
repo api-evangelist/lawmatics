@@ -1,0 +1,48 @@
+generated: '2026-08-13'
+method: searched
+source: https://help.lawmatics.com/en/articles/10699858-embedding-a-custom-form-on-your-website
+sources:
+  - https://help.lawmatics.com/en/articles/10699858-embedding-a-custom-form-on-your-website
+  - https://help.lawmatics.com/en/articles/10699894-form-styling-with-embed-editor
+  - https://help.lawmatics.com/en/articles/10699867-external-v-internal-custom-forms
+  - https://help.lawmatics.com/en/articles/10738569-booking-forms
+name: Lawmatics embeddable components
+description: >-
+  Lawmatics ships no published JavaScript component library. Its one client-side embeddable surface is
+  the custom-form snippet generated per form inside the application, plus the booking-form variant.
+  There is no npm package, no documented loader URL, no data- attribute contract and no versioning -
+  the snippet is copied out of the Lawmatics UI and pasted into a page.
+families:
+  - name: Custom Forms
+    kind: hosted-embed
+    description: >-
+      An intake form built in Lawmatics and embedded on a firm's own site. Submissions register as
+      form entries on the Lawmatics form and can create matters and trigger automations.
+    obtain: >-
+      Custom Forms main screen, the ... menu on the form, then "Embed Snippet" and Copy. Paste into
+      the page source (in WordPress, into the editor's Text mode).
+    styling: >-
+      The embed editor sets text and field colour, button label and other styling; changes apply
+      everywhere the form is embedded, without re-copying the snippet.
+    loader_url: null
+    package: null
+    versioning: null
+    docs: https://help.lawmatics.com/en/articles/10699858-embedding-a-custom-form-on-your-website
+  - name: Booking Forms
+    kind: hosted-embed
+    description: Scheduling/booking variant of the custom form, embedded the same way.
+    docs: https://help.lawmatics.com/en/articles/10738569-booking-forms
+alternatives:
+  - name: Forms API
+    kind: api
+    description: >-
+      Rather than embedding, a firm can post its own HTML/JSON form directly to the Lawmatics form
+      endpoint. This is the unauthenticated POST /v1/forms/{custom_form_uuid}/submit operation; the
+      form UUID and its field ids come from the "Form API Details" button on the form in the app
+      (https://app.lawmatics.com/custom-forms/:custom_form_id/api-details).
+    operation: openapi/lawmatics-openapi.yml#submitCustomFormEntryFormDataBody
+    docs: https://help.lawmatics.com/en/articles/10699870-connecting-your-webform-to-lawmatics-via-api
+gaps:
+  - No published loader script URL, CDN path or npm package for the embed.
+  - No documented data- attribute or configuration contract; the snippet is opaque and per-form.
+  - No pinned version, so an embedding site cannot tell what it is loading or when it changes.

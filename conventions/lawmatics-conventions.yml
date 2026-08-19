@@ -1,0 +1,127 @@
+generated: '2026-08-13'
+method: searched
+source: https://docs.lawmatics.com/
+sources:
+  - https://docs.lawmatics.com/
+  - https://help.lawmatics.com/en/articles/10699983-lawmatics-open-api
+  - https://help.lawmatics.com/en/articles/15438485-outbound-webhooks
+  - openapi/lawmatics-openapi.yml
+name: Lawmatics API conventions
+description: >-
+  Cross-cutting request and response semantics for the Lawmatics OAuth API, captured from the
+  provider's Getting Started With Auth and Param Guide sections and confirmed against the 177
+  operations in the derived OpenAPI.
+base_url: https://api.lawmatics.com
+authentication:
+  style: oauth2-authorization-code
+  header: 'Authorization: Bearer <access_token>'
+  authorization_url: https://app.lawmatics.com/oauth/authorize
+  token_url: https://api.lawmatics.com/oauth/token
+  token_lifetime: non-expiring
+  refresh_tokens: false
+  scopes: false
+  revocation_endpoint: false
+  onboarding_gate: >-
+    Developer settings must be enabled on a Lawmatics account by a support representative before a
+    developer app can be created at https://app.lawmatics.com/settings/developers.
+  note: >-
+    Lawmatics states directly: "We currently do not support scopes. Once a user authenticates your
+    app, they are giving you full CRUD access to their account", "We do not have a deauthorization
+    endpoint" and "We do not give you a refresh token. Access tokens do not expire so they are not
+    needed." A non-expiring, unscoped, unrevocable full-CRUD bearer token is the single most
+    consequential convention on this API.
+  exceptions:
+    - operation: submitCustomFormEntryFormDataBody
+      note: "Public custom-form submission is explicitly unauthenticated (noauth) - no developer app required."
+idempotency:
+  supported: false
+  request_header: null
+  note: >-
+    The Lawmatics REST API documents NO idempotency key. There is no Idempotency-Key header, no
+    request-deduplication window and no replay-safe retry contract on any of the 177 operations; a
+    retried POST creates a second record. Idempotency exists only on the OUTBOUND webhook side,
+    where the consumer is told to de-duplicate on the event_id / X-Lawmatics-Event-Id value because
+    Lawmatics retries delivery up to seven times. That is consumer-side de-duplication of provider
+    pushes, not an idempotency contract on API writes, so no Idempotency pointer is wired in
+    apis.yml for this provider.
+  webhook_consumer_idempotency:
+    key: event_id
+    header: X-Lawmatics-Event-Id
+    reason: at-least-once delivery with up to 7 attempts
+pagination:
+  style: page-number
+  request_params:
+    - {name: page, description: "1-based page number, e.g. ?page=3"}
+  response: >-
+    Pagination metadata is returned at the bottom of every list response. Page size is not documented
+    and is not client-controllable - there is no per_page or limit parameter.
+  defaults: "List responses are sorted by id descending when no sort is given."
+  cursor: false
+sorting:
+  params:
+    - {name: sort_by, description: "Column to sort on. id, created_at and updated_at always work, as do most fields returned by fields=all."}
+    - {name: sort_order, description: "asc or desc"}
+  note: "sort_order without sort_by defaults to sorting by id."
+filtering:
+  params:
+    - {name: filter_by, aliases: [filter_field], description: "Field name to filter on. Association attributes require an _id suffix, e.g. practice_area_id. Currency attributes filter in cents."}
+    - {name: filter_on, aliases: [filter_value], description: "Value to filter on. Required whenever filter_by is set, except for the presence operators."}
+    - {name: filter_with, aliases: [filter_operator], description: "Comparison operator. Defaults to '=' ('ilike' for string fields)."}
+  operators: ['=', '!=', '<=', '<', '>=', '>', like, ilike, 'null', not_null]
+  operator_aliases: [empty, present, blank]
+  limits:
+    - "Only one filter is supported at a time."
+    - "A field does not have to be selected via ?fields= to be filterable."
+    - "Fuzzy matchers (like/ilike) require an explicit % in the value, URL-encoded as %25."
+  errors: "filter_by without filter_on returns 422 with title 'Filter By Parameter Not Available'."
+field_expansion:
+  param: fields
+  syntax: "Comma-separated list of attributes and relationships, e.g. ?fields=first_name,last_name,source,custom_fields"
+  wildcard: "?fields=all expands every available attribute and relationship on the record"
+  depth: "One level deep only - an expanded relationship returns just the id and type of the related record, which must then be fetched from its own endpoint"
+  default: "Requests without ?fields= return a small set of commonly used default attributes"
+  ordering: "Fields are returned in the order requested"
+  availability: "Works on every endpoint unless the docs say otherwise; also available on single-object endpoints, which support field selection but none of the list-only params"
+response_envelope:
+  style: json-api-like
+  success_shape:
+    data: "object for single-record endpoints, array for list endpoints"
+    fields: [id, type, attributes, relationships]
+  error_shape:
+    errors: "array of objects"
+    fields: [status, title, detail]
+  content_type: application/json
+  rfc9457: false
+  note: >-
+    Responses use a JSON:API-shaped data/attributes/relationships envelope and an errors[] array with
+    status/title/detail. Errors are NOT RFC 9457 application/problem+json - there is no type URI and
+    the media type is application/json.
+request_tracing:
+  request_id_header: null
+  note: "No correlation or request-id header is documented on responses."
+versioning:
+  scheme: uri-path
+  current: v1
+  api_version: 1.22.0
+  note: >-
+    Every operation lives under /v1/. The 1.x version number tracks the published Postman collection,
+    not a negotiable API version - there is no version header and no date-pinned version.
+rate_limiting:
+  documented: true
+  see: rate-limits/lawmatics-rate-limits.yml
+  status_on_exhaustion: 429
+  headers_returned: [Retry-After]
+  ratelimit_headers: false
+naming:
+  resource_naming: snake_case
+  domain_note: >-
+    The product calls them Matters; the API calls them prospects. /v1/prospects is the matter
+    endpoint and every matter path parameter is prospect_id. This mismatch between product language
+    and API path is the most common source of confusion for a first integration.
+cross_links:
+  authentication: authentication/lawmatics-authentication.yml
+  errors: errors/lawmatics-problem-types.yml
+  lifecycle: lifecycle/lawmatics-lifecycle.yml
+  rate_limits: rate-limits/lawmatics-rate-limits.yml
+  webhooks: asyncapi/lawmatics-webhooks.yml
+  data_model: data-model/lawmatics-data-model.yml

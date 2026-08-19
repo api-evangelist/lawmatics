@@ -1,3 +1,14 @@
+generated: '2026-08-13'
+method: searched
+source: https://www.lawmatics.com/pricing
+plan_count: 3
+pricing_published: tiers-only
+pricing_note: >-
+  Lawmatics publishes three named tiers with their feature sets and contact allotments but
+  publishes NO prices - every tier routes to a demo request, and the Enterprise tier is
+  explicitly custom-priced. A 3-user minimum applies across all plans. API access is not a
+  plan feature: it is gated separately on Lawmatics support enabling developer settings on the
+  account, so no tier here can be read as "the plan that includes the API".
 specificationVersion: '0.1'
 name: Lawmatics Plans and Pricing
 description: Pricing plans for Lawmatics legal CRM and automation platform, designed

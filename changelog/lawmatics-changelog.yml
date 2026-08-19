@@ -1,0 +1,83 @@
+generated: '2026-08-13'
+method: searched
+source: https://docs.lawmatics.com/
+source_detail: >-
+  The CHANGELOG section of the collection description in the Lawmatics-published Postman
+  documentation, read from
+  https://docs.lawmatics.com/api/collections/26379991/2sA3JM7gbw?segregateAuth=true&versionTag=latest
+name: Lawmatics OAuth API changelog
+url: https://docs.lawmatics.com/
+scheme: semver
+current_version: 1.22.0
+current_version_date: '2026-05-26'
+location: >-
+  There is no standalone changelog page. The dated changelog lives inside the description of the
+  published Postman collection, so it renders at the top of docs.lawmatics.com and is versioned with
+  the collection (currently "Lawmatics OAuth API v1.22.0"). It is human-readable prose, not a feed -
+  there is no RSS/Atom, no JSON, and no per-entry anchor.
+breaking_change_policy: >-
+  None published. Every recorded entry is additive (new endpoints, new fields, new filter operators)
+  or a bug fix; the changelog records no removals, no deprecations and no sunset dates across its
+  full history from 2019 to 2026.
+cadence_note: >-
+  Release cadence has slowed markedly. Fourteen versions shipped between 2022-04 and 2023-10, then
+  nothing until 1.22.0 on 2026-05-26 - a gap of roughly 19 months between 1.21.0 and 1.22.0.
+entries:
+  - version: 1.22.0
+    date: '2026-05-26'
+    breaking: false
+    highlights:
+      - Added Collections endpoints (GET list, GET, POST, PUT, DELETE)
+      - Added Collection Items endpoints (GET list, GET, POST, PUT, DELETE)
+  - version: 1.21.0
+    date: '2023-03-04'
+    breaking: false
+    highlights:
+      - Added POST and PUT Time Entry
+      - Added the Expenses resource (GET list, GET, POST, PUT, DELETE)
+  - version: 1.20.0
+    date: '2023-10-04'
+    breaking: false
+    highlights:
+      - Added GET Time Entry, GET Time Entries and DELETE Time Entry
+  - version: 1.19.0
+    date: '2023-09-29'
+    breaking: false
+    highlights:
+      - Added Company finder endpoints (find by name, email, phone), mirroring the Contact finders
+      - Added presence filter operators "null" and "not_null"
+  - version: 1.18.0
+    date: '2023-09-27'
+    breaking: false
+    highlights:
+      - Added POST, PUT and DELETE Matter Sub Status
+  - version: 1.17.0
+    date: '2023-09-21'
+    breaking: false
+    highlights:
+      - Added the Custom Contact Type resource (GET list, GET, POST, PUT, DELETE)
+  - version: 1.16.0
+    date: '2023-07-07'
+    breaking: false
+    highlights:
+      - Added GET Email Campaign, GET Email Campaigns and GET Email Campaign Stats
+  - version: 1.15.0
+    date: '2023-07-07'
+    breaking: false
+    highlights:
+      - Added the Folders resource (GET list, GET, POST, PUT, DELETE)
+      - Added Task Statuses, Subtasks and Comments resources
+      - Task endpoints gained recurrence_rule support and exposed assigned_by_id
+  - version: 1.14.1
+    date: '2023-03-23'
+    breaking: false
+    highlights:
+      - Tag endpoints can attach to, detach from and filter by Tasks
+  - version: 1.14.0
+    date: '2022-11-11'
+    breaking: false
+    highlights:
+      - Added POST, PUT and DELETE User
+history_note: >-
+  The published changelog runs back to 1.4.1 (2019-03-31). Only the recent window is captured here;
+  docs.lawmatics.com remains the source of truth.

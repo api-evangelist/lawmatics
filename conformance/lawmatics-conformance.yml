@@ -1,0 +1,108 @@
+generated: '2026-08-13'
+method: searched
+source: https://www.lawmatics.com/security
+sources:
+  - https://www.lawmatics.com/security
+  - https://docs.lawmatics.com/
+  - openapi/lawmatics-openapi.yml
+standards:
+  - id: oauth2
+    conforms: true
+    evidence: >-
+      OAuth 2.0 authorization code grant; authorize at https://app.lawmatics.com/oauth/authorize,
+      token at https://api.lawmatics.com/oauth/token. Declared as an oauth2 securityScheme in
+      openapi/lawmatics-openapi.yml.
+  - id: oauth2-scopes
+    conforms: false
+    evidence: >-
+      Lawmatics states "We currently do not support scopes. Once a user authenticates your app, they
+      are giving you full CRUD access to their account."
+  - id: oauth2-refresh-tokens
+    conforms: false
+    evidence: '"We do not give you a refresh token. Access tokens do not expire so they are not needed."'
+  - id: oauth2-token-revocation
+    conforms: false
+    evidence: '"We do not have a deauthorization endpoint."'
+  - id: rfc8414-oauth-authorization-server-metadata
+    conforms: false
+    evidence: /.well-known/oauth-authorization-server returns 404 on every Lawmatics host (see well-known/lawmatics-well-known.yml)
+  - id: oidc
+    conforms: false
+    evidence: /.well-known/openid-configuration returns 404 on every Lawmatics host
+  - id: rfc9457-problem-details
+    conforms: false
+    evidence: >-
+      Errors return application/json with a top-level errors[] array of status/title/detail; no
+      application/problem+json media type and no type URI.
+  - id: json-api
+    conforms: partial
+    evidence: >-
+      Responses use a JSON:API-shaped data / id / type / attributes / relationships envelope and an
+      errors[] array, but the media type is application/json rather than application/vnd.api+json and
+      the query grammar (fields, filter_by/filter_on/filter_with, page, sort_by/sort_order) is
+      Lawmatics' own rather than JSON:API's.
+  - id: rfc9116-security-txt
+    conforms: false
+    evidence: /.well-known/security.txt returns 404 on every Lawmatics host
+  - id: rfc8594-sunset-header
+    conforms: false
+    evidence: No deprecation policy or Sunset/Deprecation header support is published
+  - id: openapi
+    conforms: false
+    evidence: >-
+      Lawmatics publishes no OpenAPI. Its machine-readable contract is a Postman collection at
+      docs.lawmatics.com; openapi/lawmatics-openapi.yml in this repo is API Evangelist's derivation
+      of that collection, not a provider artifact.
+  - id: asyncapi
+    conforms: false
+    evidence: >-
+      Webhooks are documented in prose (13 event types, HMAC-SHA256 signing) but no AsyncAPI document
+      is published. See asyncapi/lawmatics-webhooks.yml.
+  - id: hmac-sha256-webhook-signing
+    conforms: true
+    evidence: >-
+      X-Lawmatics-Signature carries sha256= plus an HMAC-SHA256 digest over "<timestamp>.<raw body>";
+      constant-time comparison and a 5-minute replay window are documented.
+  - id: idempotency-keys
+    conforms: false
+    evidence: No idempotency key or request-deduplication contract is documented on any write operation.
+  - id: hipaa
+    conforms: true
+    evidence: >-
+      "Lawmatics has achieved SOC 2 Type 2 and HIPAA compliance, verified by AssuranceLab" -
+      https://www.lawmatics.com/security
+  - id: soc2-type-2
+    conforms: true
+    evidence: >-
+      SOC 2 Type 2, independently verified by AssuranceLab against AICPA standards -
+      https://www.lawmatics.com/security
+  - id: iso-27001
+    conforms: unknown
+    evidence: Not named on the published security page.
+  - id: pci-dss
+    conforms: unknown
+    evidence: >-
+      Not named on the published security page, despite the API exposing invoices, transactions and
+      payment endpoints.
+compliance_program:
+  published: true
+  url: https://www.lawmatics.com/security
+  http_status: 200
+  certifications:
+    - SOC 2 Type 2
+    - HIPAA
+  auditor: AssuranceLab
+  controls_published:
+    - 256-bit AES encryption at rest
+    - 128-bit SSL encryption in transit
+    - Multi-factor authentication required for all users
+    - AWS-hosted infrastructure
+    - Nightly backups to redundant Amazon S3
+  trust_center: false
+  vulnerability_disclosure: false
+  note: >-
+    Certifications are published as prose on the marketing security page. There is no trust centre,
+    no downloadable report portal, no subprocessor list and no responsible-disclosure or bug-bounty
+    contact - probe-security-programs.py found neither a VDP nor a trust centre on 2026-08-13, so
+    neither a Security nor a TrustCenter pointer is wired. The Compliance pointer IS wired, because
+    named, independently-audited certifications are genuinely published.
