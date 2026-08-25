@@ -6,11 +6,17 @@
       "feed_url": "https://docs.lawmatics.com/",
       "title": "",
       "saved": 0,
-      "method": "none",
-      "error": "parse_failed"
+      "method": "none"
+    },
+    {
+      "source": "https://www.lawmatics.com/privacy-policy",
+      "feed_url": "https://www.lawmatics.com/privacy-policy",
+      "title": "",
+      "saved": 0,
+      "method": "none"
     }
   ],
   "post_count": 1,
-  "fetched": "2026-08-15T12:11:08Z",
+  "fetched": "2026-08-22T20:20:02Z",
   "agent_pulled": "2026-07-04"
 }
