@@ -58,40 +58,415 @@ tags_raw:
   - Webhooks
   - OAuth
 apis:
-  - name: Lawmatics OAuth API
-    description: RESTful OAuth API for managing leads, matters, contacts, intake forms,
-      pipelines, and automated client follow-ups within the Lawmatics legal CRM platform.
-      177 operations over 95 paths, all under /v1, using a JSON:API-shaped data/attributes/relationships
-      envelope and a shared query grammar for field selection, pagination, sorting
-      and single-field filtering.
-    image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
-    humanURL: https://docs.lawmatics.com/
-    baseURL: https://api.lawmatics.com
-    tags:
-      - Legal CRM
-      - Leads
-      - Matters
-      - Contacts
-      - Intake Forms
-      - Pipelines
-      - Automation
-    properties:
-      - type: Documentation
-        url: https://docs.lawmatics.com/
-      - type: OpenAPI
-        url: openapi/lawmatics-openapi.yml
-      - type: Postman
-        url: postman/lawmatics-oauth-api.postman_collection.json
-    x-evidence:
-      verified: '2026-08-13'
-      base_url_correction: https://app.lawmatics.com/api was recorded as the base and
-        is wrong — it returns HTTP 403 AccessDenied from S3. Every curl example in
-        the Lawmatics Param Guide and the OAuth token endpoint use https://api.lawmatics.com,
-        and GET https://api.lawmatics.com/v1/contacts returned HTTP 401 unauthenticated
-        on 2026-08-13, confirming the host serves the documented API.
-      contract: https://docs.lawmatics.com/ publishes the "Lawmatics OAuth API v1.22.0"
-        Postman collection (186 requests, 216 saved response examples) as its official
-        API documentation. Saved verbatim to postman/ and converted to openapi/.
+- aid: lawmatics:lawmatics-addresses-api
+  name: Lawmatics Addresses API
+  description: An Address belongs to a Firm, a Contact, or Company.
+  humanURL: https://docs.lawmatics.com/
+  baseURL: https://api.lawmatics.com
+  tags:
+  - Addresses
+  properties:
+  - type: OpenAPI
+    url: openapi/lawmatics-addresses-api-openapi.yml
+  - type: Documentation
+    url: https://docs.lawmatics.com/
+  - type: Postman
+    url: postman/lawmatics-oauth-api.postman_collection.json
+- aid: lawmatics:lawmatics-collections-api
+  name: Lawmatics Collections API
+  description: The Collections API from Lawmatics — 4 operation(s) for collections.
+  humanURL: https://docs.lawmatics.com/
+  baseURL: https://api.lawmatics.com
+  tags:
+  - Collections
+  properties:
+  - type: OpenAPI
+    url: openapi/lawmatics-collections-api-openapi.yml
+  - type: Documentation
+    url: https://docs.lawmatics.com/
+  - type: Postman
+    url: postman/lawmatics-oauth-api.postman_collection.json
+- aid: lawmatics:lawmatics-companies-api
+  name: Lawmatics Companies API
+  description: The Companies API from Lawmatics — 5 operation(s) for companies.
+  humanURL: https://docs.lawmatics.com/
+  baseURL: https://api.lawmatics.com
+  tags:
+  - Companies
+  properties:
+  - type: OpenAPI
+    url: openapi/lawmatics-companies-api-openapi.yml
+  - type: Documentation
+    url: https://docs.lawmatics.com/
+  - type: Postman
+    url: postman/lawmatics-oauth-api.postman_collection.json
+- aid: lawmatics:lawmatics-contacts-api
+  name: Lawmatics Contacts API
+  description: >-
+    A Contact can be thought of as a collection of data about a "Person".
+
+
+    A Contact record is the base for all Contactables (Matters, Clients, and Companies).
+
+
+    Since Contact data reflects a person, and is a base record, it is shared via any Contactable associated
+    with the Contact.
+
+
+    For Example:
+
+
+    You be
+  humanURL: https://docs.lawmatics.com/
+  baseURL: https://api.lawmatics.com
+  tags:
+  - Contacts
+  properties:
+  - type: OpenAPI
+    url: openapi/lawmatics-contacts-api-openapi.yml
+  - type: Documentation
+    url: https://docs.lawmatics.com/
+  - type: Postman
+    url: postman/lawmatics-oauth-api.postman_collection.json
+- aid: lawmatics:lawmatics-custom-emails-api
+  name: Lawmatics Custom Emails API
+  description: The Custom Emails API from Lawmatics — 2 operation(s) for custom emails.
+  humanURL: https://docs.lawmatics.com/
+  baseURL: https://api.lawmatics.com
+  tags:
+  - Custom Emails
+  properties:
+  - type: OpenAPI
+    url: openapi/lawmatics-custom-emails-api-openapi.yml
+  - type: Documentation
+    url: https://docs.lawmatics.com/
+  - type: Postman
+    url: postman/lawmatics-oauth-api.postman_collection.json
+- aid: lawmatics:lawmatics-custom-fields-api
+  name: Lawmatics Custom Fields API
+  description: The Custom Fields API from Lawmatics — 2 operation(s) for custom fields.
+  humanURL: https://docs.lawmatics.com/
+  baseURL: https://api.lawmatics.com
+  tags:
+  - Custom Fields
+  properties:
+  - type: OpenAPI
+    url: openapi/lawmatics-custom-fields-api-openapi.yml
+  - type: Documentation
+    url: https://docs.lawmatics.com/
+  - type: Postman
+    url: postman/lawmatics-oauth-api.postman_collection.json
+- aid: lawmatics:lawmatics-custom-forms-api
+  name: Lawmatics Custom Forms API
+  description: >-
+    NOTE: Field IDs for fields that are not considered "Standard", such as General fields, and Custom
+    fields, are referred to by special long-form uuids that are enumerated on the API details page of
+    the Custom Form in Lawmatics. (E.g. https://app.lawmatics.com/custom-forms/:custom_form_id/api-details).
+  humanURL: https://docs.lawmatics.com/
+  baseURL: https://api.lawmatics.com
+  tags:
+  - Custom Forms
+  properties:
+  - type: OpenAPI
+    url: openapi/lawmatics-custom-forms-api-openapi.yml
+  - type: Documentation
+    url: https://docs.lawmatics.com/
+  - type: Postman
+    url: postman/lawmatics-oauth-api.postman_collection.json
+- aid: lawmatics:lawmatics-email-addresses-api
+  name: Lawmatics Email Addresses API
+  description: A Email Address is contact information that belongs to a Firm, Contact, or Company.
+  humanURL: https://docs.lawmatics.com/
+  baseURL: https://api.lawmatics.com
+  tags:
+  - Email Addresses
+  properties:
+  - type: OpenAPI
+    url: openapi/lawmatics-email-addresses-api-openapi.yml
+  - type: Documentation
+    url: https://docs.lawmatics.com/
+  - type: Postman
+    url: postman/lawmatics-oauth-api.postman_collection.json
+- aid: lawmatics:lawmatics-email-campaign-stats-api
+  name: Lawmatics Email Campaign Stats API
+  description: The Email Campaign Stats API from Lawmatics — 1 operation(s) for email campaign stats.
+  humanURL: https://docs.lawmatics.com/
+  baseURL: https://api.lawmatics.com
+  tags:
+  - Email Campaign Stats
+  properties:
+  - type: OpenAPI
+    url: openapi/lawmatics-email-campaign-stats-api-openapi.yml
+  - type: Documentation
+    url: https://docs.lawmatics.com/
+  - type: Postman
+    url: postman/lawmatics-oauth-api.postman_collection.json
+- aid: lawmatics:lawmatics-email-campaigns-api
+  name: Lawmatics Email Campaigns API
+  description: The Email Campaigns API from Lawmatics — 2 operation(s) for email campaigns.
+  humanURL: https://docs.lawmatics.com/
+  baseURL: https://api.lawmatics.com
+  tags:
+  - Email Campaigns
+  properties:
+  - type: OpenAPI
+    url: openapi/lawmatics-email-campaigns-api-openapi.yml
+  - type: Documentation
+    url: https://docs.lawmatics.com/
+  - type: Postman
+    url: postman/lawmatics-oauth-api.postman_collection.json
+- aid: lawmatics:lawmatics-event-locations-api
+  name: Lawmatics Event Locations API
+  description: These are Firm related Locations (for events) that can be configured in Firm settings.
+  humanURL: https://docs.lawmatics.com/
+  baseURL: https://api.lawmatics.com
+  tags:
+  - Event Locations
+  properties:
+  - type: OpenAPI
+    url: openapi/lawmatics-event-locations-api-openapi.yml
+  - type: Documentation
+    url: https://docs.lawmatics.com/
+  - type: Postman
+    url: postman/lawmatics-oauth-api.postman_collection.json
+- aid: lawmatics:lawmatics-event-types-api
+  name: Lawmatics Event Types API
+  description: >-
+    Event Types define Event defaults, and can trigger automations, for common types of Events created
+    in Lawmatics.
+
+
+    Configuring Calendar Availability defaults is not currently supported by the API. Go to Settings ->
+    Event Settings to configure the Event Type in more detail.
+  humanURL: https://docs.lawmatics.com/
+  baseURL: https://api.lawmatics.com
+  tags:
+  - Event Types
+  properties:
+  - type: OpenAPI
+    url: openapi/lawmatics-event-types-api-openapi.yml
+  - type: Documentation
+    url: https://docs.lawmatics.com/
+  - type: Postman
+    url: postman/lawmatics-oauth-api.postman_collection.json
+- aid: lawmatics:lawmatics-events-appointments-api
+  name: Lawmatics Events (Appointments) API
+  description: Events are also referred to in the app as "Appointments"
+  humanURL: https://docs.lawmatics.com/
+  baseURL: https://api.lawmatics.com
+  tags:
+  - Events (Appointments)
+  properties:
+  - type: OpenAPI
+    url: openapi/lawmatics-events-appointments-api-openapi.yml
+  - type: Documentation
+    url: https://docs.lawmatics.com/
+  - type: Postman
+    url: postman/lawmatics-oauth-api.postman_collection.json
+- aid: lawmatics:lawmatics-files-api
+  name: Lawmatics Files API
+  description: The Files API from Lawmatics — 3 operation(s) for files.
+  humanURL: https://docs.lawmatics.com/
+  baseURL: https://api.lawmatics.com
+  tags:
+  - Files
+  properties:
+  - type: OpenAPI
+    url: openapi/lawmatics-files-api-openapi.yml
+  - type: Documentation
+    url: https://docs.lawmatics.com/
+  - type: Postman
+    url: postman/lawmatics-oauth-api.postman_collection.json
+- aid: lawmatics:lawmatics-folders-api
+  name: Lawmatics Folders API
+  description: The Folders API from Lawmatics — 2 operation(s) for folders.
+  humanURL: https://docs.lawmatics.com/
+  baseURL: https://api.lawmatics.com
+  tags:
+  - Folders
+  properties:
+  - type: OpenAPI
+    url: openapi/lawmatics-folders-api-openapi.yml
+  - type: Documentation
+    url: https://docs.lawmatics.com/
+  - type: Postman
+    url: postman/lawmatics-oauth-api.postman_collection.json
+- aid: lawmatics:lawmatics-matters-prospects-api
+  name: Lawmatics Matters (Prospects) API
+  description: >-
+    A Matter is a legal case, and the primary object in Lawmatics.
+
+
+    NOTE: You may see Matters referenced as "Prospects" or "PNCs". This is for legacy reasons, and we
+    are working to migrate away from these names internally.
+
+
+    When creating a new Matter it will be in status PNC. This stands for Potential N
+  humanURL: https://docs.lawmatics.com/
+  baseURL: https://api.lawmatics.com
+  tags:
+  - Matters (Prospects)
+  properties:
+  - type: OpenAPI
+    url: openapi/lawmatics-matters-prospects-api-openapi.yml
+  - type: Documentation
+    url: https://docs.lawmatics.com/
+  - type: Postman
+    url: postman/lawmatics-oauth-api.postman_collection.json
+- aid: lawmatics:lawmatics-notes-api
+  name: Lawmatics Notes API
+  description: The Notes API from Lawmatics — 2 operation(s) for notes.
+  humanURL: https://docs.lawmatics.com/
+  baseURL: https://api.lawmatics.com
+  tags:
+  - Notes
+  properties:
+  - type: OpenAPI
+    url: openapi/lawmatics-notes-api-openapi.yml
+  - type: Documentation
+    url: https://docs.lawmatics.com/
+  - type: Postman
+    url: postman/lawmatics-oauth-api.postman_collection.json
+- aid: lawmatics:lawmatics-payment-expenses-api
+  name: Lawmatics Payment Expenses API
+  description: The Payment Expenses API from Lawmatics — 2 operation(s) for payment expenses.
+  humanURL: https://docs.lawmatics.com/
+  baseURL: https://api.lawmatics.com
+  tags:
+  - Payment Expenses
+  properties:
+  - type: OpenAPI
+    url: openapi/lawmatics-payment-expenses-api-openapi.yml
+  - type: Documentation
+    url: https://docs.lawmatics.com/
+  - type: Postman
+    url: postman/lawmatics-oauth-api.postman_collection.json
+- aid: lawmatics:lawmatics-payment-invoices-api
+  name: Lawmatics Payment Invoices API
+  description: The Payment Invoices API from Lawmatics — 2 operation(s) for payment invoices.
+  humanURL: https://docs.lawmatics.com/
+  baseURL: https://api.lawmatics.com
+  tags:
+  - Payment Invoices
+  properties:
+  - type: OpenAPI
+    url: openapi/lawmatics-payment-invoices-api-openapi.yml
+  - type: Documentation
+    url: https://docs.lawmatics.com/
+  - type: Postman
+    url: postman/lawmatics-oauth-api.postman_collection.json
+- aid: lawmatics:lawmatics-payment-time-entries-api
+  name: Lawmatics Payment Time Entries API
+  description: The Payment Time Entries API from Lawmatics — 2 operation(s) for payment time entries.
+  humanURL: https://docs.lawmatics.com/
+  baseURL: https://api.lawmatics.com
+  tags:
+  - Payment Time Entries
+  properties:
+  - type: OpenAPI
+    url: openapi/lawmatics-payment-time-entries-api-openapi.yml
+  - type: Documentation
+    url: https://docs.lawmatics.com/
+  - type: Postman
+    url: postman/lawmatics-oauth-api.postman_collection.json
+- aid: lawmatics:lawmatics-payment-transactions-api
+  name: Lawmatics Payment Transactions API
+  description: The Payment Transactions API from Lawmatics — 2 operation(s) for payment transactions.
+  humanURL: https://docs.lawmatics.com/
+  baseURL: https://api.lawmatics.com
+  tags:
+  - Payment Transactions
+  properties:
+  - type: OpenAPI
+    url: openapi/lawmatics-payment-transactions-api-openapi.yml
+  - type: Documentation
+    url: https://docs.lawmatics.com/
+  - type: Postman
+    url: postman/lawmatics-oauth-api.postman_collection.json
+- aid: lawmatics:lawmatics-phone-numbers-api
+  name: Lawmatics Phone Numbers API
+  description: A Phone Number is contact information that belongs to a Firm, Contact, or Company.
+  humanURL: https://docs.lawmatics.com/
+  baseURL: https://api.lawmatics.com
+  tags:
+  - Phone Numbers
+  properties:
+  - type: OpenAPI
+    url: openapi/lawmatics-phone-numbers-api-openapi.yml
+  - type: Documentation
+    url: https://docs.lawmatics.com/
+  - type: Postman
+    url: postman/lawmatics-oauth-api.postman_collection.json
+- aid: lawmatics:lawmatics-tags-api
+  name: Lawmatics Tags API
+  description: The Tags API from Lawmatics — 4 operation(s) for tags.
+  humanURL: https://docs.lawmatics.com/
+  baseURL: https://api.lawmatics.com
+  tags:
+  - Tags
+  properties:
+  - type: OpenAPI
+    url: openapi/lawmatics-tags-api-openapi.yml
+  - type: Documentation
+    url: https://docs.lawmatics.com/
+  - type: Postman
+    url: postman/lawmatics-oauth-api.postman_collection.json
+- aid: lawmatics:lawmatics-task-statuses-api
+  name: Lawmatics Task Statuses API
+  description: The Task Statuses API from Lawmatics — 2 operation(s) for task statuses.
+  humanURL: https://docs.lawmatics.com/
+  baseURL: https://api.lawmatics.com
+  tags:
+  - Task Statuses
+  properties:
+  - type: OpenAPI
+    url: openapi/lawmatics-task-statuses-api-openapi.yml
+  - type: Documentation
+    url: https://docs.lawmatics.com/
+  - type: Postman
+    url: postman/lawmatics-oauth-api.postman_collection.json
+- aid: lawmatics:lawmatics-tasks-api
+  name: Lawmatics Tasks API
+  description: The Tasks API from Lawmatics — 6 operation(s) for tasks.
+  humanURL: https://docs.lawmatics.com/
+  baseURL: https://api.lawmatics.com
+  tags:
+  - Tasks
+  properties:
+  - type: OpenAPI
+    url: openapi/lawmatics-tasks-api-openapi.yml
+  - type: Documentation
+    url: https://docs.lawmatics.com/
+  - type: Postman
+    url: postman/lawmatics-oauth-api.postman_collection.json
+- aid: lawmatics:lawmatics-timeline-activities-api
+  name: Lawmatics Timeline Activities API
+  description: The Timeline Activities API from Lawmatics — 2 operation(s) for timeline activities.
+  humanURL: https://docs.lawmatics.com/
+  baseURL: https://api.lawmatics.com
+  tags:
+  - Timeline Activities
+  properties:
+  - type: OpenAPI
+    url: openapi/lawmatics-timeline-activities-api-openapi.yml
+  - type: Documentation
+    url: https://docs.lawmatics.com/
+  - type: Postman
+    url: postman/lawmatics-oauth-api.postman_collection.json
+- aid: lawmatics:lawmatics-users-api
+  name: Lawmatics Users API
+  description: The Users API from Lawmatics — 3 operation(s) for users.
+  humanURL: https://docs.lawmatics.com/
+  baseURL: https://api.lawmatics.com
+  tags:
+  - Users
+  properties:
+  - type: OpenAPI
+    url: openapi/lawmatics-users-api-openapi.yml
+  - type: Documentation
+    url: https://docs.lawmatics.com/
+  - type: Postman
+    url: postman/lawmatics-oauth-api.postman_collection.json
 common:
   - type: AgenticAccess
     url: agentic-access/lawmatics-agentic-access.yml
