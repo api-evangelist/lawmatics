@@ -9,6 +9,18 @@ description: Lawmatics is a legal CRM, client-intake and marketing-automation pl
   2.0 authorization code, gated on a Lawmatics support representative enabling developer
   settings on the account, and the resulting access token is non-expiring, unscoped
   and grants full CRUD over the firm.
+deliveryModel:
+  model: saas
+  open_source: false
+  commercial: true
+  callable_host: true
+  label: Hosted service · you call their endpoint
+  confidence: high
+  source:
+  - openapi
+  - pricing
+  generated: '2026-08-28'
+  method: derived
 accessModel:
   pricing: paid
   onboarding: request
