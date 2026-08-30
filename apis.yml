@@ -90,6 +90,8 @@ apis:
   humanURL: https://docs.lawmatics.com/
   baseURL: https://api.lawmatics.com
   tags:
+  - Collection
+  tags_raw:
   - Collections
   properties:
   - type: OpenAPI
@@ -281,6 +283,8 @@ apis:
   humanURL: https://docs.lawmatics.com/
   baseURL: https://api.lawmatics.com
   tags:
+  - File
+  tags_raw:
   - Files
   properties:
   - type: OpenAPI
@@ -443,6 +447,8 @@ apis:
   humanURL: https://docs.lawmatics.com/
   baseURL: https://api.lawmatics.com
   tags:
+  - Task
+  tags_raw:
   - Tasks
   properties:
   - type: OpenAPI
@@ -471,6 +477,8 @@ apis:
   humanURL: https://docs.lawmatics.com/
   baseURL: https://api.lawmatics.com
   tags:
+  - User
+  tags_raw:
   - Users
   properties:
   - type: OpenAPI
