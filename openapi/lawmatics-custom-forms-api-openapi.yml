@@ -1,0 +1,808 @@
+openapi: 3.2.0
+info:
+  title: Lawmatics OAuth Custom Forms API
+  version: 1.22.0
+  description: 'The official Lawmatics REST API for legal CRM, client intake and law firm automation. Manage matters (prospects), contacts, companies, custom forms and form entries, custom fields, events and appointments, tasks, notes, files, tags, users, time entries, expenses, invoices and transactions.
+
+
+    Authentication is OAuth 2.0 authorization code grant; access tokens do not expire, there are no refresh tokens, and Lawmatics does not currently support scopes - an authorized app receives full CRUD access to the granted account.
+
+
+    All list endpoints support the shared query-parameter grammar documented in the Param Guide: `fields` (field selection, one level deep, `fields=all` to expand), `page` (pagination), `sort_by`/`sort_order`, and `filter_by`/`filter_on`/`filter_with` (one filter at a time; operators `=`, `!=`, `<=`, `<`, `>=`, `>`, `like`, `ilike`, `null`, `not_null`).
+
+
+    Responses follow a JSON:API-style `data` / `attributes` / `relationships` envelope.'
+  contact:
+    name: Lawmatics API Support
+    email: api@lawmatics.com
+    url: https://docs.lawmatics.com/
+  termsOfService: https://www.lawmatics.com/terms-of-use
+servers:
+- url: https://api.lawmatics.com
+  description: Lawmatics production API
+security:
+- oauth2: []
+- bearerAuth: []
+tags:
+- name: Custom Forms
+  description: 'NOTE: Field IDs for fields that are not considered "Standard", such as General fields, and Custom fields, are referred to by special long-form uuids that are enumerated on the API details page of the Custom Form in Lawmatics. (E.g. https://app.lawmatics.com/custom-forms/:custom_form_id/api-details).'
+paths:
+  /v1/forms/{custom_form_uuid}:
+    get:
+      operationId: getCustomForm
+      summary: Custom Form
+      description: 'This Unauthenticated endpoint takes a Custom Form id and returns metadata about that Custom Form. This metadata can be used to recreate a Lawmatics Custom Form to be filled using your own html code.
+
+
+        This endpoint is marked `noauth` in the published collection: public custom-form submission does not require an OAuth access token.'
+      tags:
+      - Custom Forms
+      parameters:
+      - name: custom_form_uuid
+        in: path
+        required: true
+        description: The custom form uuid
+        schema:
+          type: string
+      - name: fields
+        in: query
+        required: false
+        schema:
+          type: string
+        example: all
+      security: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+              examples:
+                getCustomForm:
+                  summary: GET Custom Form
+                  value:
+                    data:
+                      id: 31a81c7b-378f-4d5f-8d03-57c2fb43fe3c
+                      type: custom_form
+                      attributes:
+                        name: Lawmatics Intake Form
+                        type: Prospect
+                        created_at: '2018-09-12T16:42:41.024-07:00'
+                        updated_at: '2018-10-12T15:16:53.787-07:00'
+                        rows:
+                        - components:
+                          - id: first_name
+                            field_type: string
+                            label: First Name
+                            component_type: field
+                            required: true
+                          - id: last_name
+                            field_type: string
+                            label: Last Name
+                            component_type: field
+                            required: true
+                        - components:
+                          - id: Q3VzdG9tRm9ybUNvbXBvbmVudDo6QWR2YW5jZWQtZ2VuZXJhbF9maWVsZC0yMDE4LTA4LTI3VDE3OjMxOjU5LjE0NVo=
+                            field_type: list
+                            label: General Field
+                            component_type: general_field
+                            required: false
+                            list_options:
+                            - label: '1'
+                              value: 0
+                            - label: '2'
+                              value: 1
+                        - components:
+                          - id: Q3VzdG9tRm9ybUNvbXBvbmVudDo6QWR2YW5jZWQtaG9yaXpvbnRhbF9kaXZpZGVyLTIwMTgtMDgtMjdUMjA6Mzk6MTAuNjMzWg==
+                            component_type: horizontal_divider
+                        - components:
+                          - id: Q3VzdG9tRm9ybUNvbXBvbmVudDo6QWR2YW5jZWQtaW5zdHJ1Y3Rpb25zLTIwMTgtMDgtMjdUMjA6Mzk6MDIuNDUxWg==
+                            label: <p>Instructions text</p>
+                            component_type: instructions
+                        - components:
+                          - id: Q3VzdG9tRm9ybUNvbXBvbmVudDo6QWR2YW5jZWQtZ2VuZXJhbF9maWVsZC0yMDE4LTA4LTI3VDE4OjI2OjAzLjI5Mlo=
+                            field_type: boolean
+                            label: Is Lawmatics Awesome?
+                            component_type: general_field
+                            required: false
+                          - id: RmllbGRzOjpTdGFuZGFyZEZpZWxkLUNvbnRhY3QtbGFzdF9uYW1l
+                            field_type: integer
+                            label: Integer Custom Field
+                            component_type: field
+                            required: false
+                          - id: birthdate
+                            field_type: date
+                            label: Birthdate
+                            component_type: field
+                            required: false
+        '429':
+          description: Too Many Requests - the per-firm rate limit was exceeded; a Retry-After header is returned
+          headers:
+            Retry-After:
+              description: Seconds to wait before retrying
+              schema:
+                type: integer
+  /v1/forms:
+    get:
+      operationId: getCustomForms
+      summary: Custom Forms
+      description: A paginated list of all Custom Forms in Lawmatics
+      tags:
+      - Custom Forms
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+              examples:
+                getCustomForms:
+                  summary: GET Custom Forms
+                  value:
+                    data:
+                    - id: ad79c099-6c37-47d0-9452-cdbeb297559f
+                      type: custom_form
+                      attributes:
+                        name: Test Prospect Intake Form
+                        type: Prospect
+                        created_at: '2018-09-12T16:42:41.024-07:00'
+                        updated_at: '2018-10-12T15:16:53.787-07:00'
+                        rows:
+                        - components:
+                          - id: first_name
+                            field_type: string
+                            label: First name
+                            component_type: field
+                            required: true
+                          - id: last_name
+                            field_type: string
+                            label: Last name
+                            component_type: field
+                            required: true
+                        - components:
+                          - id: RmllbGRzOjpDdXN0b21GaWVsZC1DdXN0b21GaWVsZDo6UHJhY3RpY2VBcmVhLTU=
+                            field_type: text
+                            label: Test Practice Area Text
+                            component_type: field
+                            required: false
+                        - components:
+                          - id: Q3VzdG9tRm9ybUNvbXBvbmVudDo6QWR2YW5jZWQtaW5zdHJ1Y3Rpb25zLTIwMTgtMDktMTJUMjM6NDI6NDUuNjMxWg==
+                            label: <p><mark class="marker-blue">Instructions</mark></p><figure class="image"><img src="https://35010.cdn.cke-cs.com/xYsJJYSdHzfBDI20OIec/animations/140d1fdb22a2b76c73a2cbc080472d798c0f1e6e28720cf9_tumblr_obenjvTUOK1qzn6p7o1_400.gif" srcset="https://35010.cdn.cke-cs.com/xYsJJYSdHzfBDI20OIec/animations/140d1fdb22a2b76c73a2cbc080472d798c0f1e6e28720cf9_tumblr_obenjvTUOK1qzn6p7o1_400.gif/w_135 135w, https://35010.cdn.cke-cs.com/xYsJJYSdHzfBDI20OIec/animations/140d1fdb22a2b76c73a2cbc080472d798c0f1e6e28720cf9_tumblr_obenjvTUOK1qzn6p7o1_400.gif/w_215 215w, https://35010.cdn.cke-cs.com/xYsJJYSdHzfBDI20OIec/animations/140d1fdb22a2b76c73a2cbc080472d798c0f1e6e28720cf9_tumblr_obenjvTUOK1qzn6p7o1_400.gif/w_295 295w, https://35010.cdn.cke-cs.com/xYsJJYSdHzfBDI20OIec/animations/140d1fdb22a2b76c73a2cbc080472d798c0f1e6e28720cf9_tumblr_obenjvTUOK1qzn6p7o1_400.gif/w_375 375w" sizes="100vw" width="375"></figure>
+                            required: false
+                            component_type: instructions
+        '401':
+          description: Unauthorized - missing or invalid OAuth 2.0 bearer token
+        '429':
+          description: Too Many Requests - the per-firm rate limit was exceeded; a Retry-After header is returned
+          headers:
+            Retry-After:
+              description: Seconds to wait before retrying
+              schema:
+                type: integer
+  /v1/forms/{custom_form_uuid}/entries:
+    get:
+      operationId: getCustomFormEntries
+      summary: Custom Form Entries
+      description: A paginated list of all Custom Form Entries in Lawmatics by Custom Form uuid
+      tags:
+      - Custom Forms
+      parameters:
+      - name: custom_form_uuid
+        in: path
+        required: true
+        description: The custom form uuid
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+              examples:
+                getCustomFormEntries:
+                  summary: GET Custom Form Entries
+                  value:
+                    data:
+                    - id: '91'
+                      type: custom_form_entry
+                      attributes:
+                        body:
+                        - label: First name
+                          value: Bob
+                        - label: Last name
+                          value: test
+                        created_at: '2018-10-17T12:30:48.711-07:00'
+                        updated_at: '2018-10-17T12:30:48.711-07:00'
+                      relationships:
+                        custom_form:
+                          data:
+                            id: '4'
+                            type: custom_form
+                        contactable:
+                          data:
+                            id: '41869'
+                            type: prospect
+                    - id: '90'
+                      type: custom_form_entry
+                      attributes:
+                        body:
+                        - label: First name
+                          value: Bob
+                        - label: Last name
+                          value: test
+                        created_at: '2018-10-17T12:30:43.194-07:00'
+                        updated_at: '2018-10-17T12:30:43.194-07:00'
+                      relationships:
+                        custom_form:
+                          data:
+                            id: '4'
+                            type: custom_form
+                        contactable:
+                          data:
+                            id: '41868'
+                            type: prospect
+                    - id: '89'
+                      type: custom_form_entry
+                      attributes:
+                        body:
+                        - label: First name
+                          value: Bob
+                        - label: Last name
+                          value: test
+                        created_at: '2018-10-17T12:30:36.721-07:00'
+                        updated_at: '2018-10-17T12:30:36.721-07:00'
+                      relationships:
+                        custom_form:
+                          data:
+                            id: '4'
+                            type: custom_form
+                        contactable:
+                          data:
+                            id: '41867'
+                            type: prospect
+                    - id: '88'
+                      type: custom_form_entry
+                      attributes:
+                        body:
+                        - label: First name
+                          value: Bob
+                        - label: Last name
+                          value: test
+                        created_at: '2018-10-17T12:30:32.522-07:00'
+                        updated_at: '2018-10-17T12:30:32.522-07:00'
+                      relationships:
+                        custom_form:
+                          data:
+                            id: '4'
+                            type: custom_form
+                        contactable:
+                          data:
+                            id: '41866'
+                            type: prospect
+                    - id: '87'
+                      type: custom_form_entry
+                      attributes:
+                        body:
+                        - label: First name
+                          value: Bob
+                        - label: Last name
+                          value: test
+                        created_at: '2018-10-17T12:29:55.684-07:00'
+                        updated_at: '2018-10-17T12:29:55.684-07:00'
+                      relationships:
+                        custom_form:
+                          data:
+                            id: '4'
+                            type: custom_form
+                        contactable:
+                          data:
+                            id: '41865'
+                            type: prospect
+                    - id: '86'
+                      type: custom_form_entry
+                      attributes:
+                        body:
+                        - label: First name
+                          value: Bob
+                        - label: Last name
+                          value: test
+                        created_at: '2018-10-17T12:29:22.859-07:00'
+                        updated_at: '2018-10-17T12:29:22.859-07:00'
+                      relationships:
+                        custom_form:
+                          data:
+                            id: '4'
+                            type: custom_form
+                        contactable:
+                          data:
+                            id: '41864'
+                            type: prospect
+                    - id: '85'
+                      type: custom_form_entry
+                      attributes:
+                        body:
+                        - label: First name
+                          value: Bob
+                        - label: Last name
+                          value: test
+                        created_at: '2018-10-17T12:29:16.213-07:00'
+                        updated_at: '2018-10-17T12:29:16.213-07:00'
+                      relationships:
+                        custom_form:
+                          data:
+                            id: '4'
+                            type: custom_form
+                        contactable:
+                          data:
+                            id: '41863'
+                            type: prospect
+                    - id: '84'
+                      type: custom_form_entry
+                      attributes:
+                        body:
+                        - label: First name
+                          value: Bob
+                        - label: Last name
+                          value: test
+                        created_at: '2018-10-17T12:28:56.803-07:00'
+                        updated_at: '2018-10-17T12:28:56.803-07:00'
+                      relationships:
+                        custom_form:
+                          data:
+                            id: '4'
+                            type: custom_form
+                        contactable:
+                          data:
+                            id: '41862'
+                            type: prospect
+                    - id: '83'
+                      type: custom_form_entry
+                      attributes:
+                        body:
+                        - label: First name
+                          value: Bob
+                        - label: Last name
+                          value: test
+                        created_at: '2018-10-17T12:25:34.196-07:00'
+                        updated_at: '2018-10-17T12:25:34.196-07:00'
+                      relationships:
+                        custom_form:
+                          data:
+                            id: '4'
+                            type: custom_form
+                        contactable:
+                          data:
+                            id: '41861'
+                            type: prospect
+                    - id: '82'
+                      type: custom_form_entry
+                      attributes:
+                        body:
+                        - label: First name
+                          value: Bob
+                        - label: Last name
+                          value: test
+                        created_at: '2018-10-17T12:24:22.712-07:00'
+                        updated_at: '2018-10-17T12:24:22.712-07:00'
+                      relationships:
+                        custom_form:
+                          data:
+                            id: '4'
+                            type: custom_form
+                        contactable:
+                          data:
+                            id: '41860'
+                            type: prospect
+                    - id: '81'
+                      type: custom_form_entry
+                      attributes:
+                        body:
+                        - label: First name
+                          value: Bob
+                        - label: Last name
+                          value: test
+                        created_at: '2018-10-17T12:24:04.170-07:00'
+                        updated_at: '2018-10-17T12:24:04.170-07:00'
+                      relationships:
+                        custom_form:
+                          data:
+                            id: '4'
+                            type: custom_form
+                        contactable:
+                          data:
+                            id: '41859'
+                            type: prospect
+                    - id: '80'
+                      type: custom_form_entry
+                      attributes:
+                        body:
+                        - label: First name
+                          value: Bob
+                        - label: Last name
+                          value: test
+                        created_at: '2018-10-17T12:15:01.416-07:00'
+                        updated_at: '2018-10-17T12:15:01.416-07:00'
+                      relationships:
+                        custom_form:
+                          data:
+                            id: '4'
+                            type: custom_form
+                        contactable:
+                          data:
+                            id: '41858'
+                            type: prospect
+                    - id: '79'
+                      type: custom_form_entry
+                      attributes:
+                        body:
+                        - label: First name
+                          value: Bob
+                        - label: Last name
+                          value: test
+                        created_at: '2018-10-17T12:14:35.492-07:00'
+                        updated_at: '2018-10-17T12:14:35.492-07:00'
+                      relationships:
+                        custom_form:
+                          data:
+                            id: '4'
+                            type: custom_form
+                        contactable:
+                          data:
+                            id: '41857'
+                            type: prospect
+                    - id: '78'
+                      type: custom_form_entry
+                      attributes:
+                        body:
+                        - label: First name
+                          value: Bob
+                        - label: Last name
+                          value: test
+                        created_at: '2018-10-17T12:11:51.273-07:00'
+                        updated_at: '2018-10-17T12:11:51.273-07:00'
+                      relationships:
+                        custom_form:
+                          data:
+                            id: '4'
+                            type: custom_form
+                        contactable:
+                          data:
+                            id: '41856'
+                            type: prospect
+                    - id: '77'
+                      type: custom_form_entry
+                      attributes:
+                        body:
+                        - label: First name
+                          value: Bob
+                        - label: Last name
+                          value: test
+                        created_at: '2018-10-17T12:10:33.065-07:00'
+                        updated_at: '2018-10-17T12:10:33.065-07:00'
+                      relationships:
+                        custom_form:
+                          data:
+                            id: '4'
+                            type: custom_form
+                        contactable:
+                          data:
+                            id: '41855'
+                            type: prospect
+                    - id: '76'
+                      type: custom_form_entry
+                      attributes:
+                        body:
+                        - label: First name
+                          value: Bob
+                        - label: Last name
+                          value: test
+                        created_at: '2018-10-17T12:10:08.431-07:00'
+                        updated_at: '2018-10-17T12:10:08.431-07:00'
+                      relationships:
+                        custom_form:
+                          data:
+                            id: '4'
+                            type: custom_form
+                        contactable:
+                          data:
+                            id: '41854'
+                            type: prospect
+                    - id: '75'
+                      type: custom_form_entry
+                      attributes:
+                        body:
+                        - label: First name
+                          value: Bob
+                        - label: Last name
+                          value: test
+                        created_at: '2018-10-17T12:09:46.031-07:00'
+                        updated_at: '2018-10-17T12:09:46.031-07:00'
+                      relationships:
+                        custom_form:
+                          data:
+                            id: '4'
+                            type: custom_form
+                        contactable:
+                          data:
+                            id: '41853'
+                            type: prospect
+                    - id: '74'
+                      type: custom_form_entry
+                      attributes:
+                        body:
+                        - label: First name
+                          value: Bob
+                        - label: Last name
+                          value: test
+                        created_at: '2018-10-17T12:07:42.642-07:00'
+                        updated_at: '2018-10-17T12:07:42.642-07:00'
+                      relationships:
+                        custom_form:
+                          data:
+                            id: '4'
+                            type: custom_form
+                        contactable:
+                          data:
+                            id: '41852'
+                            type: prospect
+                    - id: '73'
+                      type: custom_form_entry
+                      attributes:
+                        body:
+                        - label: First name
+                          value: Bob
+                        - label: Last name
+                          value: test
+                        created_at: '2018-10-17T12:06:47.744-07:00'
+                        updated_at: '2018-10-17T12:06:47.744-07:00'
+                      relationships:
+                        custom_form:
+                          data:
+                            id: '4'
+                            type: custom_form
+                        contactable:
+                          data:
+                            id: '41851'
+                            type: prospect
+                    - id: '72'
+                      type: custom_form_entry
+                      attributes:
+                        body:
+                        - label: First name
+                          value: Bob
+                        - label: Last name
+                          value: test
+                        created_at: '2018-10-17T12:05:59.377-07:00'
+                        updated_at: '2018-10-17T12:05:59.377-07:00'
+                      relationships:
+                        custom_form:
+                          data:
+                            id: '4'
+                            type: custom_form
+                        contactable:
+                          data:
+                            id: '41850'
+                            type: prospect
+                    - id: '71'
+                      type: custom_form_entry
+                      attributes:
+                        body:
+                        - label: First name
+                          value: Bob
+                        - label: Last name
+                          value: test
+                        created_at: '2018-10-17T12:03:15.314-07:00'
+                        updated_at: '2018-10-17T12:03:15.314-07:00'
+                      relationships:
+                        custom_form:
+                          data:
+                            id: '4'
+                            type: custom_form
+                        contactable:
+                          data:
+                            id: '41849'
+                            type: prospect
+                    - id: '70'
+                      type: custom_form_entry
+                      attributes:
+                        body:
+                        - label: First name
+                          value: Bob
+                        - label: Last name
+                          value: test
+                        created_at: '2018-10-17T12:02:59.496-07:00'
+                        updated_at: '2018-10-17T12:02:59.496-07:00'
+                      relationships:
+                        custom_form:
+                          data:
+                            id: '4'
+                            type: custom_form
+                        contactable:
+                          data:
+                            id: '41848'
+                            type: prospect
+                    - id: '69'
+                      type: custom_form_entry
+                      attributes:
+                        body:
+                        - label: First name
+                          value: Bob
+                        - label: Last name
+                          value: test
+                        created_at: '2018-10-17T12:00:52.386-07:00'
+                        updated_at: '2018-10-17T12:00:52.386-07:00'
+                      relationships:
+                        custom_form:
+                          data:
+                            id: '4'
+                            type: custom_form
+                        contactable:
+                          data:
+                            id: '41847'
+                            type: prospect
+                    - id: '63'
+                      type: custom_form_entry
+                      attributes:
+                        body:
+                        - label: First name
+                          value: Bob
+                        - label: Last name
+                          value: Loblaw
+                        created_at: '2018-10-14T17:46:21.572-07:00'
+                        updated_at: '2018-10-14T17:46:21.572-07:00'
+                      relationships:
+                        custom_form:
+                          data:
+                            id: '4'
+                            type: custom_form
+                        contactable:
+                          data:
+                            id: '41811'
+                            type: prospect
+                    - id: '62'
+                      type: custom_form_entry
+                      attributes:
+                        body:
+                        - label: First name
+                          value: Bob
+                        - label: Last name
+                          value: Loblaw
+                        created_at: '2018-10-14T17:45:12.742-07:00'
+                        updated_at: '2018-10-14T17:45:12.742-07:00'
+                      relationships:
+                        custom_form:
+                          data:
+                            id: '4'
+                            type: custom_form
+                        contactable:
+                          data:
+                            id: '41810'
+                            type: prospect
+                    meta:
+                      total_pages: 2
+                      limit_per_page: 25
+                      total_entries: 50
+                    links:
+                      self: /v1/custom_form_entry?page=1
+                      next: /v1/custom_form_entry?page=2
+        '401':
+          description: Unauthorized - missing or invalid OAuth 2.0 bearer token
+        '429':
+          description: Too Many Requests - the per-firm rate limit was exceeded; a Retry-After header is returned
+          headers:
+            Retry-After:
+              description: Seconds to wait before retrying
+              schema:
+                type: integer
+  /v1/forms/{custom_form_uuid}/submit:
+    post:
+      operationId: submitCustomFormEntryFormDataBody
+      summary: Submit Custom Form Entry  (Form Data Body)
+      description: 'This Unauthenticated (YOU DO NOT NEED A DEVELOPER APP) endpoint submits Custom Form values. Keys for the values use the Custom Form field ids found in Lawmatics, or found via the GET endpoint.
+
+
+        Data should be serialized via form-data (plain html5 forms) or JSON body (shown in next example)
+
+
+        Any automations will trigger as expected when this Custom Form is submitted via the API.
+
+
+        This endpoint is marked `noauth` in the published collection: public custom-form submission does not require an OAuth access token.'
+      tags:
+      - Custom Forms
+      parameters:
+      - name: custom_form_uuid
+        in: path
+        required: true
+        description: The custom form uuid
+        schema:
+          type: string
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                first_name:
+                  type: string
+                last_name:
+                  type: string
+                utm_source:
+                  type: string
+                utm_campaign:
+                  type: string
+                referring_url:
+                  type: string
+                RmllbGRzOjpDdXN0b21GaWVsZC1DdXN0b21GaWVsZDo6UHJvc3BlY3QtMTAyNw==:
+                  type: string
+                custom_field_2263:
+                  type: string
+          application/json:
+            schema:
+              type: object
+            example:
+              first_name: Another
+              last_name: Test
+              utm_source: facebook
+              utm_campaign: test1
+              RmllbGRzOjpDdXN0b21GaWVsZC1DdXN0b21GaWVsZDo6UHJvc3BlY3QtMTAyNw==: An important case
+              custom_field_2263: FILL ME IN
+      security: []
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                type: object
+              examples:
+                postSubmitCustomFormFormDataBody:
+                  summary: POST Submit Custom Form (Form Data Body)
+                  value:
+                    data:
+                      id: '58956'
+                      type: contact
+                      attributes:
+                        first_name: Bob
+                        last_name: Loblaw
+                        email: bob@loblaw.com
+                        created_at: '2018-10-17T12:43:21.570-07:00'
+                        updated_at: '2018-10-17T12:43:21.570-07:00'
+                      relationships: {}
+        '429':
+          description: Too Many Requests - the per-firm rate limit was exceeded; a Retry-After header is returned
+          headers:
+            Retry-After:
+              description: Seconds to wait before retrying
+              schema:
+                type: integer
+components:
+  securitySchemes:
+    oauth2:
+      type: oauth2
+      description: OAuth 2.0 authorization code grant. Register a developer app at https://app.lawmatics.com/settings/developers (developer settings must be enabled by Lawmatics support). Access tokens are non-expiring; no refresh tokens are issued and scopes are not supported.
+      flows:
+        authorizationCode:
+          authorizationUrl: https://app.lawmatics.com/oauth/authorize
+          tokenUrl: https://api.lawmatics.com/oauth/token
+          scopes: {}
+    bearerAuth:
+      type: http
+      scheme: bearer
+      description: 'The OAuth 2.0 access token is sent as `Authorization: Bearer <access_token>`.'
+externalDocs:
+  description: Official Lawmatics RESTful API documentation (Postman)
+  url: https://docs.lawmatics.com/
+x-provenance:
+  generated: '2026-08-13'
+  method: derived
+  publisher: API Evangelist
+  source: https://docs.lawmatics.com/api/collections/26379991/2sA3JM7gbw?segregateAuth=true&versionTag=latest
+  source_type: Postman collection published by Lawmatics as its official API documentation
+  source_file: postman/lawmatics-oauth-api.postman_collection.json
+  note: 'NOT published by Lawmatics. Lawmatics publishes no OpenAPI. Every path, method, parameter, request example and response example in this document was converted mechanically from the provider-published Postman collection "Lawmatics OAuth API v1.22.0"; nothing was invented. Schemas are typed as generic objects because the collection carries examples, not JSON Schema. The server URL is the base documented in the collection Param Guide (https://api.lawmatics.com), not the collection''s disabled {{host}} placeholder. The 401 and 429 responses added to every authenticated operation are the provider-documented, globally applicable responses: the collection''s auth guide states a per-firm rate limit applies to all endpoints and returns 429 with a Retry-After header, and https://api.lawmatics.com/v1/contacts was observed returning 401 unauthenticated on 2026-08-13.'

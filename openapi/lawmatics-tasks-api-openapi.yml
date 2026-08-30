@@ -1,0 +1,1234 @@
+openapi: 3.2.0
+info:
+  title: Lawmatics OAuth Tasks API
+  version: 1.22.0
+  description: 'The official Lawmatics REST API for legal CRM, client intake and law firm automation. Manage matters (prospects), contacts, companies, custom forms and form entries, custom fields, events and appointments, tasks, notes, files, tags, users, time entries, expenses, invoices and transactions.
+
+
+    Authentication is OAuth 2.0 authorization code grant; access tokens do not expire, there are no refresh tokens, and Lawmatics does not currently support scopes - an authorized app receives full CRUD access to the granted account.
+
+
+    All list endpoints support the shared query-parameter grammar documented in the Param Guide: `fields` (field selection, one level deep, `fields=all` to expand), `page` (pagination), `sort_by`/`sort_order`, and `filter_by`/`filter_on`/`filter_with` (one filter at a time; operators `=`, `!=`, `<=`, `<`, `>=`, `>`, `like`, `ilike`, `null`, `not_null`).
+
+
+    Responses follow a JSON:API-style `data` / `attributes` / `relationships` envelope.'
+  contact:
+    name: Lawmatics API Support
+    email: api@lawmatics.com
+    url: https://docs.lawmatics.com/
+  termsOfService: https://www.lawmatics.com/terms-of-use
+servers:
+- url: https://api.lawmatics.com
+  description: Lawmatics production API
+security:
+- oauth2: []
+- bearerAuth: []
+tags:
+- name: Tasks
+paths:
+  /v1/tasks/{task_id}:
+    get:
+      operationId: getTask
+      summary: Task
+      description: A specific Task in Lawmatics
+      tags:
+      - Tasks
+      parameters:
+      - name: task_id
+        in: path
+        required: true
+        description: The task id
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+              examples:
+                getTask:
+                  summary: GET Task
+                  value:
+                    data:
+                      id: '117'
+                      type: task
+                      attributes:
+                        name: Brand new updated task
+                        description: The updated new description
+                        due_date: '2023-08-25T00:00:00.000-07:00'
+                        done: false
+                        status: No Status
+                        priority: high
+                        tags:
+                        - id: 2
+                          firm_id: 1
+                          name: nevermindd
+                          key: nevermindd
+                          description: null
+                          color: null
+                          created_at: '2023-04-24T16:11:25.082-07:00'
+                          updated_at: '2023-04-24T21:48:51.112-07:00'
+                        assigned_by_id: 2
+                        recurrence_rule:
+                          type: weekly
+                          end_date: 08/30/2023
+                          wednesday: true
+                        created_at: '2023-07-05T10:49:06.424-07:00'
+                        updated_at: '2023-07-05T10:51:40.650-07:00'
+                      relationships:
+                        users:
+                          data:
+                          - id: '2'
+                            type: user
+                        taskable:
+                          data:
+                            id: '471'
+                            type: prospect
+        '401':
+          description: Unauthorized - missing or invalid OAuth 2.0 bearer token
+        '429':
+          description: Too Many Requests - the per-firm rate limit was exceeded; a Retry-After header is returned
+          headers:
+            Retry-After:
+              description: Seconds to wait before retrying
+              schema:
+                type: integer
+    put:
+      operationId: updateTask
+      summary: Update Task
+      description: "Updates a Task\n\nOptional Fields: user_ids, priority, done, taskable, tag_ids, assigned_by_id, recurrence_rule\n\ndue_date: Task due date (iso8601 datetime)\n\nuser_ids: The Firm User ids that will be assigned to this Task.\n\npriority: high, medium, low (default)\n\ndone: true or false (default)\n\ntaskable_type, taskable_id: Record type, ID the Task is associated with (Prospect (Matter), Contact, Company, Client).\n\ntag_ids: Tags to associate to this **Task.  \n\nassigned_by_id:** The user id the task is assigned by.\n\nrecurrence_rule: Json object. Following are the fields with which we can create a recurrence_rule.\nRecurrenceType options are the following = 'daily' or 'weekly' or monthly' or 'yearly';\n\nfields of the json object you can choose from:\ntype: RecurrenceType;\nendOption?: boolean;\nendDate?: Date;\n\n// If you choose type to be daily\n\nfrequency?: number;\n\n// If you choose type to be weekly\n\nsunday?: boolean;\nmonday?: boolean;\ntuesday?: boolean;\nwednesday?: boolean;\nthursday?: boolean;\nfriday?: boolean;\nsaturday?: boolean;\n\n// If you choose type to be monthly\nmonthlyFrequency?: number;\ndayOfMonth?: number;\n\n// If you choose type to be yearly\nmonth?: string;\ndayOfMonthYear?: number;"
+      tags:
+      - Tasks
+      parameters:
+      - name: task_id
+        in: path
+        required: true
+        description: The task id
+        schema:
+          type: string
+      - name: fields
+        in: query
+        required: false
+        schema:
+          type: string
+        example: all
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                type: object
+              examples:
+                putUpdateTask:
+                  summary: PUT Update Task
+                  value:
+                    data:
+                      id: '117'
+                      type: task
+                      attributes:
+                        name: Brand new updated task
+                        description: The updated new description
+                        due_date: '2023-08-25T00:00:00.000-07:00'
+                        done: false
+                        priority: high
+                        status: No Status
+                        tags:
+                        - id: 2
+                          firm_id: 1
+                          name: nevermindd
+                          key: nevermindd
+                          description: null
+                          color: null
+                          created_at: '2023-04-24T16:11:25.082-07:00'
+                          updated_at: '2023-04-24T21:48:51.112-07:00'
+                        recurrence_rule:
+                          type: weekly
+                          wednesday: true
+                          end_date: 08/30/2023
+                        assigned_by_id: 2
+                        created_at: '2023-07-05T10:49:06.424-07:00'
+                        updated_at: '2023-07-05T10:51:40.650-07:00'
+                      relationships:
+                        users:
+                          data:
+                          - id: '2'
+                            type: user
+                        documents:
+                          data: []
+                        taskable:
+                          data:
+                            id: '471'
+                            type: prospect
+                        subtasks:
+                          data: []
+                        comments:
+                          data: []
+        '401':
+          description: Unauthorized - missing or invalid OAuth 2.0 bearer token
+        '429':
+          description: Too Many Requests - the per-firm rate limit was exceeded; a Retry-After header is returned
+          headers:
+            Retry-After:
+              description: Seconds to wait before retrying
+              schema:
+                type: integer
+    delete:
+      operationId: deleteTask
+      summary: Delete Task
+      description: Delete a Task
+      tags:
+      - Tasks
+      parameters:
+      - name: task_id
+        in: path
+        required: true
+        description: The task id
+        schema:
+          type: string
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                type: object
+              examples:
+                deleteDeleteTask:
+                  summary: DELETE Delete Task
+                  value:
+                    data:
+                      id: '13'
+                      type: task
+                      attributes:
+                        name: Updated Task
+                        description: The updated tag description
+                        due_date: '2022-06-30T00:00:00.000-07:00'
+                        done: false
+                        priority: high
+                        tags: []
+                        created_at: '2022-06-21T12:53:05.939-07:00'
+                        updated_at: '2022-06-21T12:57:27.416-07:00'
+                      relationships:
+                        users:
+                          data:
+                          - id: '2'
+                            type: user
+                        taskable:
+                          data:
+                            id: '37'
+                            type: contact
+        '401':
+          description: Unauthorized - missing or invalid OAuth 2.0 bearer token
+        '429':
+          description: Too Many Requests - the per-firm rate limit was exceeded; a Retry-After header is returned
+          headers:
+            Retry-After:
+              description: Seconds to wait before retrying
+              schema:
+                type: integer
+  /v1/tasks:
+    get:
+      operationId: getTasks
+      summary: Tasks
+      description: 'A paginated list of all Tasks in Lawmatics
+
+
+        Can be filtered by matter_id, prospect_id, contact_id, company_id, client_id, anduser_id
+
+
+        as well as all the regular fields as referenced by our Param Guide (most fields returned by?fields=all).'
+      tags:
+      - Tasks
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+              examples:
+                getTasks:
+                  summary: GET Tasks
+                  value:
+                    data:
+                    - id: '3'
+                      type: task
+                      attributes:
+                        name: Pinky
+                        description: Think of a plan
+                        due_date: '2022-06-28T00:00:00.000-07:00'
+                        done: false
+                        priority: low
+                        tags:
+                        - id: 2
+                          firm_id: 2
+                          name: test
+                          key: test
+                          description: null
+                          color: '#8fc1d8'
+                          created_at: '2022-06-07T14:28:31.081-07:00'
+                          updated_at: '2022-06-07T14:47:13.127-07:00'
+                        created_at: '2022-06-17T18:05:05.702-07:00'
+                        updated_at: '2022-06-17T18:05:49.602-07:00'
+                      relationships:
+                        users:
+                          data:
+                          - id: '2'
+                            type: user
+                        taskable:
+                          data: null
+                    - id: '2'
+                      type: task
+                      attributes:
+                        name: The Brain
+                        description: Take over the world
+                        due_date: '2022-06-30T00:00:00.000-07:00'
+                        done: false
+                        priority: low
+                        tags: []
+                        created_at: '2022-06-17T17:26:45.659-07:00'
+                        updated_at: '2022-06-17T18:01:56.394-07:00'
+                      relationships:
+                        users:
+                          data:
+                          - id: '2'
+                            type: user
+                        taskable:
+                          data:
+                            id: '9'
+                            type: contact
+                    meta:
+                      total_pages: 1
+                      limit_per_page: 25
+                      total_entries: 2
+                    links:
+                      self: /v1/tasks?page=1
+                getTasksByMatter:
+                  summary: GET Tasks by Matter
+                  value:
+                    data:
+                    - id: '5'
+                      type: task
+                      attributes:
+                        name: another task
+                        description: last one
+                        due_date: '2022-07-02T00:00:00.000-07:00'
+                        done: false
+                        priority: low
+                        tags: []
+                        created_at: '2022-06-17T18:14:03.977-07:00'
+                        updated_at: '2022-06-17T18:14:04.022-07:00'
+                      relationships:
+                        users:
+                          data:
+                          - id: '2'
+                            type: user
+                        taskable:
+                          data:
+                            id: '68'
+                            type: prospect
+                    - id: '4'
+                      type: task
+                      attributes:
+                        name: test
+                        description: test task for matter
+                        due_date: '2022-06-27T00:00:00.000-07:00'
+                        done: false
+                        priority: low
+                        tags: []
+                        created_at: '2022-06-17T18:12:44.753-07:00'
+                        updated_at: '2022-06-17T18:12:44.781-07:00'
+                      relationships:
+                        users:
+                          data:
+                          - id: '2'
+                            type: user
+                        taskable:
+                          data:
+                            id: '68'
+                            type: prospect
+                    meta:
+                      total_pages: 1
+                      limit_per_page: 25
+                      total_entries: 2
+                    links:
+                      self: /v1/tasks?page=1
+                getTasksByContact:
+                  summary: GET Tasks by Contact
+                  value:
+                    data:
+                    - id: '7'
+                      type: task
+                      attributes:
+                        name: Fundraiser
+                        description: ''
+                        due_date: '2022-07-14T00:00:00.000-07:00'
+                        done: false
+                        priority: low
+                        tags: []
+                        created_at: '2022-06-17T18:18:34.852-07:00'
+                        updated_at: '2022-06-17T18:18:34.881-07:00'
+                      relationships:
+                        users:
+                          data:
+                          - id: '2'
+                            type: user
+                        taskable:
+                          data:
+                            id: '100'
+                            type: contact
+                    - id: '6'
+                      type: task
+                      attributes:
+                        name: Bake Sale
+                        description: Bake cookies
+                        due_date: '2022-07-09T00:00:00.000-07:00'
+                        done: false
+                        priority: low
+                        tags: []
+                        created_at: '2022-06-17T18:17:25.939-07:00'
+                        updated_at: '2022-06-17T18:17:25.966-07:00'
+                      relationships:
+                        users:
+                          data:
+                          - id: '2'
+                            type: user
+                        taskable:
+                          data:
+                            id: '100'
+                            type: contact
+                    meta:
+                      total_pages: 1
+                      limit_per_page: 25
+                      total_entries: 2
+                    links:
+                      self: /v1/tasks?page=1
+                getTasksByClient:
+                  summary: GET Tasks by Client
+                  value:
+                    data:
+                    - id: '8'
+                      type: task
+                      attributes:
+                        name: Test
+                        description: ''
+                        due_date: '2022-07-14T00:00:00.000-07:00'
+                        done: false
+                        priority: low
+                        tags: []
+                        created_at: '2022-06-17T18:18:34.852-07:00'
+                        updated_at: '2022-06-17T18:18:34.881-07:00'
+                      relationships:
+                        users:
+                          data:
+                          - id: '2'
+                            type: user
+                        taskable:
+                          data:
+                            id: '12'
+                            type: client
+                    - id: '9'
+                      type: task
+                      attributes:
+                        name: Test task
+                        description: Task description
+                        due_date: '2022-07-09T00:00:00.000-07:00'
+                        done: false
+                        priority: low
+                        tags: []
+                        created_at: '2022-06-17T18:17:25.939-07:00'
+                        updated_at: '2022-06-17T18:17:25.966-07:00'
+                      relationships:
+                        users:
+                          data:
+                          - id: '2'
+                            type: user
+                        taskable:
+                          data:
+                            id: '12'
+                            type: client
+                    meta:
+                      total_pages: 1
+                      limit_per_page: 25
+                      total_entries: 2
+                    links:
+                      self: /v1/tasks?page=1
+                getTasksByCompany:
+                  summary: GET Tasks by Company
+                  value:
+                    data:
+                    - id: '10'
+                      type: task
+                      attributes:
+                        name: New Task
+                        description: An important piece of work to be made until it's due date
+                        due_date: '2022-05-30T00:00:00.000-07:00'
+                        done: false
+                        priority: low
+                        tags: []
+                        created_at: '2022-06-17T18:23:22.428-07:00'
+                        updated_at: '2022-06-17T18:23:22.428-07:00'
+                      relationships:
+                        users:
+                          data:
+                          - id: '2'
+                            type: user
+                        taskable:
+                          data:
+                            id: '1'
+                            type: company
+                    meta:
+                      total_pages: 1
+                      limit_per_page: 25
+                      total_entries: 1
+                    links:
+                      self: /v1/tasks?page=1
+                getTasksByUser:
+                  summary: GET Tasks by User
+                  value:
+                    data:
+                    - id: '209'
+                      type: task
+                      attributes:
+                        name: Task 1
+                        description: ''
+                        due_date: '2022-05-11T20:00:00.000-07:00'
+                        done: false
+                        priority: low
+                        tags: []
+                        taskable_type: User
+                        taskable_id: 17
+                        created_at: '2022-05-06T12:00:57.968-07:00'
+                        updated_at: '2022-05-06T12:38:17.337-07:00'
+                      relationships:
+                        users:
+                          data:
+                          - id: '2'
+                            type: user
+                    - id: '9'
+                      type: task
+                      attributes:
+                        name: Task 2
+                        description: null
+                        due_date: '2022-05-03T08:02:14.045-07:00'
+                        done: false
+                        priority: low
+                        tags: []
+                        taskable_type: User
+                        taskable_id: 17
+                        created_at: '2022-05-03T08:02:14.076-07:00'
+                        updated_at: '2022-05-03T08:02:14.076-07:00'
+                      relationships:
+                        users:
+                          data:
+                          - id: '3'
+                            type: user
+                    meta:
+                      total_pages: 1
+                      limit_per_page: 25
+                      total_entries: 2
+                    links:
+                      self: /v1/tasks?page=1
+        '401':
+          description: Unauthorized - missing or invalid OAuth 2.0 bearer token
+        '429':
+          description: Too Many Requests - the per-firm rate limit was exceeded; a Retry-After header is returned
+          headers:
+            Retry-After:
+              description: Seconds to wait before retrying
+              schema:
+                type: integer
+    post:
+      operationId: createTask
+      summary: Create Task
+      description: 'Create a new Task
+
+
+        Optional Fields: user_ids, priority, done, taskable, tag_ids, assigned_by_id, recurrence_rule
+
+
+        due_date: Task''s due date (iso8601 datetime)
+
+
+        user_ids: The Firm User ids assigned to this Task.
+
+
+        priority: high, medium, low (default)
+
+
+        done: true or false (default)
+
+
+        taskable_type, taskable_id: Record type, ID the Task is associated with (Prospect (Matter), Contact, Company, Client)
+
+
+        tag_ids: Tags to associate to this Task
+
+
+        assigned_by_id: The user id the task is assigned by.
+
+
+        recurrence_rule: Json object. Following are the fields with which we can create a recurrence_rule.
+
+        RecurrenceType options are the following = ''daily'' or ''weekly'' or monthly'' or ''yearly'';
+
+
+        fields of the json object you can choose from:
+
+        type: RecurrenceType;
+
+        endOption?: boolean;
+
+        endDate?: Date;
+
+
+        // If you choose type to be daily
+
+
+        frequency?: number;
+
+
+        // If you choose type to be weekly
+
+
+        sunday?: boolean;
+
+        monday?: boolean;
+
+        tuesday?: boolean;
+
+        wednesday?: boolean;
+
+        thursday?: boolean;
+
+        friday?: boolean;
+
+        saturday?: boolean;
+
+
+        // If you choose type to be monthly
+
+        monthlyFrequency?: number;
+
+        dayOfMonth?: number;
+
+
+        // If you choose type to be yearly
+
+        month?: string;
+
+        dayOfMonthYear?: number;'
+      tags:
+      - Tasks
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                type: object
+              examples:
+                postCreateTask:
+                  summary: POST Create Task
+                  value:
+                    data:
+                      id: '117'
+                      type: task
+                      attributes:
+                        name: A brand new task
+                        description: An important piece of work to be made until it's due date
+                        due_date: '2023-07-30T00:00:00.000-07:00'
+                        done: false
+                        status: No Status
+                        priority: low
+                        tags:
+                        - id: 1
+                          firm_id: 1
+                          name: mytag
+                          key: mytag
+                          description: null
+                          color: null
+                          created_at: '2023-04-24T15:51:53.352-07:00'
+                          updated_at: '2023-04-24T15:51:53.352-07:00'
+                        assigned_by_id: 1
+                        recurrence_rule:
+                          type: daily
+                          frequency: 2
+                          endDate: 08/15/2023
+                        created_at: '2023-07-05T10:49:06.424-07:00'
+                        updated_at: '2023-07-05T10:49:06.450-07:00'
+                      relationships:
+                        users:
+                          data: []
+                        taskable:
+                          data:
+                            id: '471'
+                            type: prospect
+        '401':
+          description: Unauthorized - missing or invalid OAuth 2.0 bearer token
+        '429':
+          description: Too Many Requests - the per-firm rate limit was exceeded; a Retry-After header is returned
+          headers:
+            Retry-After:
+              description: Seconds to wait before retrying
+              schema:
+                type: integer
+  /v1/tasks/{task_id}/subtasks/{subtask_id}:
+    get:
+      operationId: getSubtask
+      summary: Subtask
+      description: A specific subtask in tasks in Lawmatics.
+      tags:
+      - Tasks
+      parameters:
+      - name: task_id
+        in: path
+        required: true
+        description: The task id
+        schema:
+          type: string
+      - name: subtask_id
+        in: path
+        required: true
+        description: The subtask id
+        schema:
+          type: string
+      responses:
+        default:
+          description: Example response captured in the source Postman collection; the HTTP status code was not recorded by the publisher.
+          content:
+            application/json:
+              schema:
+                type: object
+              examples:
+                subtask:
+                  summary: Subtask
+                  value:
+                    id: 10
+                    body: kab?
+                    order: 0
+                    done: false
+                    task_id: 47
+                    created_at: '2023-02-09T14:34:02.173-08:00'
+                    updated_at: '2023-02-09T14:34:02.173-08:00'
+                    deleted_at: null
+        '401':
+          description: Unauthorized - missing or invalid OAuth 2.0 bearer token
+        '429':
+          description: Too Many Requests - the per-firm rate limit was exceeded; a Retry-After header is returned
+          headers:
+            Retry-After:
+              description: Seconds to wait before retrying
+              schema:
+                type: integer
+    put:
+      operationId: updateSubtask
+      summary: Update Subtask
+      description: Updates a subtask on a task.
+      tags:
+      - Tasks
+      parameters:
+      - name: task_id
+        in: path
+        required: true
+        description: The task id
+        schema:
+          type: string
+      - name: subtask_id
+        in: path
+        required: true
+        description: The subtask id
+        schema:
+          type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+            example:
+              body: you are awesome number 1
+              done: 'false'
+      responses:
+        default:
+          description: Example response captured in the source Postman collection; the HTTP status code was not recorded by the publisher.
+          content:
+            application/json:
+              schema:
+                type: object
+              examples:
+                updateSubtask:
+                  summary: Update Subtask
+                  value:
+                    data:
+                      id: '26'
+                      type: subtask
+                      attributes:
+                        body: you are awesome number 1
+                        done: false
+                        order: 1
+                        created_at: '2023-06-29T12:11:42.971-07:00'
+                        updated_at: '2023-06-29T15:37:15.140-07:00'
+                      relationships:
+                        task:
+                          data:
+                            id: '46'
+                            type: task
+        '401':
+          description: Unauthorized - missing or invalid OAuth 2.0 bearer token
+        '429':
+          description: Too Many Requests - the per-firm rate limit was exceeded; a Retry-After header is returned
+          headers:
+            Retry-After:
+              description: Seconds to wait before retrying
+              schema:
+                type: integer
+    delete:
+      operationId: deleteSubtask
+      summary: Delete Subtask
+      description: Deletes a subtask from a task.
+      tags:
+      - Tasks
+      parameters:
+      - name: task_id
+        in: path
+        required: true
+        description: The task id
+        schema:
+          type: string
+      - name: subtask_id
+        in: path
+        required: true
+        description: The subtask id
+        schema:
+          type: string
+      responses:
+        default:
+          description: Example response captured in the source Postman collection; the HTTP status code was not recorded by the publisher.
+          content:
+            application/json:
+              schema:
+                type: object
+              examples:
+                deleteSubtask:
+                  summary: Delete Subtask
+                  value:
+                    data:
+                      id: '46'
+                      type: subtask
+                      attributes:
+                        body: hamne
+                        done: true
+                        order: 0
+                        created_at: '2023-02-09T14:31:31.631-08:00'
+                        updated_at: '2023-06-29T14:12:37.048-07:00'
+                      relationships:
+                        task:
+                          data:
+                            id: '46'
+                            type: task
+        '401':
+          description: Unauthorized - missing or invalid OAuth 2.0 bearer token
+        '429':
+          description: Too Many Requests - the per-firm rate limit was exceeded; a Retry-After header is returned
+          headers:
+            Retry-After:
+              description: Seconds to wait before retrying
+              schema:
+                type: integer
+  /v1/tasks/{task_id}/subtasks:
+    get:
+      operationId: getSubtasks
+      summary: Subtasks
+      description: All the subtasks that belong to a task in Lawmatics.
+      tags:
+      - Tasks
+      parameters:
+      - name: task_id
+        in: path
+        required: true
+        description: The task id
+        schema:
+          type: string
+      responses:
+        default:
+          description: Example response captured in the source Postman collection; the HTTP status code was not recorded by the publisher.
+          content:
+            application/json:
+              schema:
+                type: object
+              examples:
+                getSubtasks:
+                  summary: GET Subtasks
+                  value:
+                  - id: 10
+                    body: kab?
+                    order: 0
+                    done: false
+                    task_id: 47
+                    created_at: '2023-02-09T14:34:02.173-08:00'
+                    updated_at: '2023-02-09T14:34:02.173-08:00'
+                    deleted_at: null
+                  - id: 11
+                    body: schi nu
+                    order: 1
+                    done: false
+                    task_id: 47
+                    created_at: '2023-06-28T16:04:39.451-07:00'
+                    updated_at: '2023-06-28T16:04:39.451-07:00'
+                    deleted_at: null
+        '401':
+          description: Unauthorized - missing or invalid OAuth 2.0 bearer token
+        '429':
+          description: Too Many Requests - the per-firm rate limit was exceeded; a Retry-After header is returned
+          headers:
+            Retry-After:
+              description: Seconds to wait before retrying
+              schema:
+                type: integer
+    post:
+      operationId: createSubtask
+      summary: Create Subtask
+      description: Creates a new subtask on a task.
+      tags:
+      - Tasks
+      parameters:
+      - name: task_id
+        in: path
+        required: true
+        description: The task id
+        schema:
+          type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+            example:
+              body: first one
+              done: false
+      responses:
+        default:
+          description: Example response captured in the source Postman collection; the HTTP status code was not recorded by the publisher.
+          content:
+            application/json:
+              schema:
+                type: object
+              examples:
+                createSubtask:
+                  summary: Create Subtask
+                  value:
+                    data:
+                      id: '35'
+                      type: subtask
+                      attributes:
+                        body: first one
+                        done: false
+                        order: 0
+                        created_at: '2023-06-29T15:11:07.442-07:00'
+                        updated_at: '2023-06-29T15:11:07.442-07:00'
+                      relationships:
+                        task:
+                          data:
+                            id: '50'
+                            type: task
+        '401':
+          description: Unauthorized - missing or invalid OAuth 2.0 bearer token
+        '429':
+          description: Too Many Requests - the per-firm rate limit was exceeded; a Retry-After header is returned
+          headers:
+            Retry-After:
+              description: Seconds to wait before retrying
+              schema:
+                type: integer
+  /v1/tasks/{task_id}/comments/{comment_id}:
+    get:
+      operationId: getComment
+      summary: Comment
+      description: A specific comment on a task in Lawmatics.
+      tags:
+      - Tasks
+      parameters:
+      - name: task_id
+        in: path
+        required: true
+        description: The task id
+        schema:
+          type: string
+      - name: comment_id
+        in: path
+        required: true
+        description: The comment id
+        schema:
+          type: string
+      responses:
+        default:
+          description: Example response captured in the source Postman collection; the HTTP status code was not recorded by the publisher.
+          content:
+            application/json:
+              schema:
+                type: object
+              examples:
+                comment:
+                  summary: Comment
+                  value:
+                    data:
+                      id: '1'
+                      type: comment
+                      attributes:
+                        body: <p>eda fer <span class="mention" style="font-weight:bold;" data-mention="@Westeros User" data-user-id="1">@Westeros User</span>&nbsp;</p>
+                        commentable_type: Task
+                        commentable_id: 45
+                        mentioned_user_ids: []
+                        created_at: '2023-02-13T18:07:02.962-08:00'
+                        updated_at: '2023-06-30T10:36:03.283-07:00'
+                      relationships:
+                        commentable:
+                          data:
+                            id: '45'
+                            type: task
+                        comment_mentions:
+                          data: []
+        '401':
+          description: Unauthorized - missing or invalid OAuth 2.0 bearer token
+        '429':
+          description: Too Many Requests - the per-firm rate limit was exceeded; a Retry-After header is returned
+          headers:
+            Retry-After:
+              description: Seconds to wait before retrying
+              schema:
+                type: integer
+    put:
+      operationId: updateComment
+      summary: Update Comment
+      description: 'Updates a specific comment on a task in Lawmatics.
+
+
+        optional field: mentioned_user_ids
+
+
+        mentioned_user_ids: list of user ids.'
+      tags:
+      - Tasks
+      parameters:
+      - name: task_id
+        in: path
+        required: true
+        description: The task id
+        schema:
+          type: string
+      - name: comment_id
+        in: path
+        required: true
+        description: The comment id
+        schema:
+          type: string
+      responses:
+        default:
+          description: Example response captured in the source Postman collection; the HTTP status code was not recorded by the publisher.
+          content:
+            application/json:
+              schema:
+                type: object
+              examples:
+                updateComment:
+                  summary: Update Comment
+                  value:
+                    data:
+                      id: '45'
+                      type: comment
+                      attributes:
+                        body: A new comment on task updated
+                        commentable_type: Task
+                        commentable_id: 45
+                        mentioned_user_ids:
+                        - 1
+                        - 5
+                        - 6
+                        created_at: '2023-07-05T11:14:44.974-07:00'
+                        updated_at: '2023-07-05T11:15:58.840-07:00'
+                      relationships:
+                        commentable:
+                          data:
+                            id: '45'
+                            type: task
+                        comment_mentions:
+                          data:
+                          - id: '11'
+                            type: comment_mention
+                          - id: '12'
+                            type: comment_mention
+                          - id: '13'
+                            type: comment_mention
+        '401':
+          description: Unauthorized - missing or invalid OAuth 2.0 bearer token
+        '429':
+          description: Too Many Requests - the per-firm rate limit was exceeded; a Retry-After header is returned
+          headers:
+            Retry-After:
+              description: Seconds to wait before retrying
+              schema:
+                type: integer
+    delete:
+      operationId: deleteComment
+      summary: Delete Comment
+      description: Deletes a specific comment on a task in Lawmatics.
+      tags:
+      - Tasks
+      parameters:
+      - name: task_id
+        in: path
+        required: true
+        description: The task id
+        schema:
+          type: string
+      - name: comment_id
+        in: path
+        required: true
+        description: The comment id
+        schema:
+          type: string
+      responses:
+        default:
+          description: Example response captured in the source Postman collection; the HTTP status code was not recorded by the publisher.
+          content:
+            application/json:
+              schema:
+                type: object
+              examples:
+                deleteComment:
+                  summary: Delete Comment
+                  value:
+                    data:
+                      id: '31'
+                      type: comment
+                      attributes:
+                        body: hello love
+                        commentable_type: Task
+                        commentable_id: 45
+                        created_at: '2023-06-30T12:53:17.586-07:00'
+                        updated_at: '2023-06-30T13:10:40.829-07:00'
+                      relationships:
+                        commentable:
+                          data:
+                            id: '45'
+                            type: task
+                        comment_mentions:
+                          data: []
+        '401':
+          description: Unauthorized - missing or invalid OAuth 2.0 bearer token
+        '429':
+          description: Too Many Requests - the per-firm rate limit was exceeded; a Retry-After header is returned
+          headers:
+            Retry-After:
+              description: Seconds to wait before retrying
+              schema:
+                type: integer
+  /v1/tasks/{task_id}/comments:
+    get:
+      operationId: getComments
+      summary: Comments
+      description: Retrieves all the comments on a task in Lawmatics.
+      tags:
+      - Tasks
+      parameters:
+      - name: task_id
+        in: path
+        required: true
+        description: The task id
+        schema:
+          type: string
+      responses:
+        default:
+          description: Example response captured in the source Postman collection; the HTTP status code was not recorded by the publisher.
+        '401':
+          description: Unauthorized - missing or invalid OAuth 2.0 bearer token
+        '429':
+          description: Too Many Requests - the per-firm rate limit was exceeded; a Retry-After header is returned
+          headers:
+            Retry-After:
+              description: Seconds to wait before retrying
+              schema:
+                type: integer
+    post:
+      operationId: createComment
+      summary: Create Comment
+      description: "Creates a comment on a task in Lawmatics.\noptional field: mentioned_user_ids\n\nmentioned_user_ids: list of user ids.\n\nFeel free to add HTML tags to format your comments.\n\nFollowing is a simple comment with formatting example using bold italic etc.  \n\nThis is a simple comment with formatting example using bold italics\n\nAnother example of comment with mentioned users.  \n\nHi its a new comment on task 45 @Jasmine Rattan"
+      tags:
+      - Tasks
+      parameters:
+      - name: task_id
+        in: path
+        required: true
+        description: The task id
+        schema:
+          type: string
+      responses:
+        default:
+          description: Example response captured in the source Postman collection; the HTTP status code was not recorded by the publisher.
+          content:
+            application/json:
+              schema:
+                type: object
+              examples:
+                createComment:
+                  summary: Create Comment
+                  value:
+                    data:
+                      id: '45'
+                      type: comment
+                      attributes:
+                        body: A new comment on task
+                        commentable_type: Task
+                        commentable_id: 45
+                        mentioned_user_ids:
+                        - 1
+                        created_at: '2023-07-05T11:14:44.974-07:00'
+                        updated_at: '2023-07-05T11:14:44.974-07:00'
+                      relationships:
+                        commentable:
+                          data:
+                            id: '45'
+                            type: task
+                        comment_mentions:
+                          data:
+                          - id: '11'
+                            type: comment_mention
+        '401':
+          description: Unauthorized - missing or invalid OAuth 2.0 bearer token
+        '429':
+          description: Too Many Requests - the per-firm rate limit was exceeded; a Retry-After header is returned
+          headers:
+            Retry-After:
+              description: Seconds to wait before retrying
+              schema:
+                type: integer
+components:
+  securitySchemes:
+    oauth2:
+      type: oauth2
+      description: OAuth 2.0 authorization code grant. Register a developer app at https://app.lawmatics.com/settings/developers (developer settings must be enabled by Lawmatics support). Access tokens are non-expiring; no refresh tokens are issued and scopes are not supported.
+      flows:
+        authorizationCode:
+          authorizationUrl: https://app.lawmatics.com/oauth/authorize
+          tokenUrl: https://api.lawmatics.com/oauth/token
+          scopes: {}
+    bearerAuth:
+      type: http
+      scheme: bearer
+      description: 'The OAuth 2.0 access token is sent as `Authorization: Bearer <access_token>`.'
+externalDocs:
+  description: Official Lawmatics RESTful API documentation (Postman)
+  url: https://docs.lawmatics.com/
+x-provenance:
+  generated: '2026-08-13'
+  method: derived
+  publisher: API Evangelist
+  source: https://docs.lawmatics.com/api/collections/26379991/2sA3JM7gbw?segregateAuth=true&versionTag=latest
+  source_type: Postman collection published by Lawmatics as its official API documentation
+  source_file: postman/lawmatics-oauth-api.postman_collection.json
+  note: 'NOT published by Lawmatics. Lawmatics publishes no OpenAPI. Every path, method, parameter, request example and response example in this document was converted mechanically from the provider-published Postman collection "Lawmatics OAuth API v1.22.0"; nothing was invented. Schemas are typed as generic objects because the collection carries examples, not JSON Schema. The server URL is the base documented in the collection Param Guide (https://api.lawmatics.com), not the collection''s disabled {{host}} placeholder. The 401 and 429 responses added to every authenticated operation are the provider-documented, globally applicable responses: the collection''s auth guide states a per-firm rate limit applies to all endpoints and returns 429 with a Retry-After header, and https://api.lawmatics.com/v1/contacts was observed returning 401 unauthenticated on 2026-08-13.'

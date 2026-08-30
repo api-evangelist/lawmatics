@@ -1,0 +1,736 @@
+openapi: 3.2.0
+info:
+  title: Lawmatics OAuth Companies API
+  version: 1.22.0
+  description: 'The official Lawmatics REST API for legal CRM, client intake and law firm automation. Manage matters (prospects), contacts, companies, custom forms and form entries, custom fields, events and appointments, tasks, notes, files, tags, users, time entries, expenses, invoices and transactions.
+
+
+    Authentication is OAuth 2.0 authorization code grant; access tokens do not expire, there are no refresh tokens, and Lawmatics does not currently support scopes - an authorized app receives full CRUD access to the granted account.
+
+
+    All list endpoints support the shared query-parameter grammar documented in the Param Guide: `fields` (field selection, one level deep, `fields=all` to expand), `page` (pagination), `sort_by`/`sort_order`, and `filter_by`/`filter_on`/`filter_with` (one filter at a time; operators `=`, `!=`, `<=`, `<`, `>=`, `>`, `like`, `ilike`, `null`, `not_null`).
+
+
+    Responses follow a JSON:API-style `data` / `attributes` / `relationships` envelope.'
+  contact:
+    name: Lawmatics API Support
+    email: api@lawmatics.com
+    url: https://docs.lawmatics.com/
+  termsOfService: https://www.lawmatics.com/terms-of-use
+servers:
+- url: https://api.lawmatics.com
+  description: Lawmatics production API
+security:
+- oauth2: []
+- bearerAuth: []
+tags:
+- name: Companies
+paths:
+  /v1/companies/find_by_phone/{phone_number}:
+    get:
+      operationId: findCompanyByPhoneNumber
+      summary: Find Company By Phone Number
+      description: Fuzzy find a specific Company by Phone Number. Will look for the Company Phone Number, then fallback to search though associated Contacts.
+      tags:
+      - Companies
+      parameters:
+      - name: phone_number
+        in: path
+        required: true
+        description: Any valid phone number. We strip all non digits when matching, and try with and without the leading 1 for US country codes.
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+              examples:
+                getFindCompanyByPhoneNumber:
+                  summary: GET Find Company By Phone Number
+                  value:
+                    data:
+                      id: '1'
+                      type: company
+                      attributes:
+                        name: Lawmatics
+                        email: roey+lame@lawmatics.com
+                        address: null
+                        city: null
+                        state: null
+                        zipcode: null
+                        country: null
+                        addresses: []
+                        phone_number: (707) 986-0756
+                        created_at: '2023-07-24T17:49:13.738-07:00'
+                        updated_at: '2023-07-28T15:00:40.321-07:00'
+                      relationships:
+                        addresses:
+                          data: []
+                        emails:
+                          data: []
+                        created_by:
+                          data:
+                            id: '1'
+                            type: user
+        '401':
+          description: Unauthorized - missing or invalid OAuth 2.0 bearer token
+        '429':
+          description: Too Many Requests - the per-firm rate limit was exceeded; a Retry-After header is returned
+          headers:
+            Retry-After:
+              description: Seconds to wait before retrying
+              schema:
+                type: integer
+  /v1/companies/find_by_email/{email_address}:
+    get:
+      operationId: findCompanyByEmailAddress
+      summary: Find Company By Email Address
+      description: Fuzzy find a specific Company by Email Address. Will look for the Company Email Address, then fallback to search though associated Contacts.
+      tags:
+      - Companies
+      parameters:
+      - name: email_address
+        in: path
+        required: true
+        description: A valid email address
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+              examples:
+                getFindCompanyByEmailAddress:
+                  summary: GET Find Company By Email Address
+                  value:
+                    data:
+                      id: '2'
+                      type: company
+                      attributes:
+                        name: Nike
+                        email: roey+lame@lawmatics.com
+                        address: 4250 Executive Square, Suite 101, La Jolla, CA 92130, United States
+                        city: La Jolla
+                        state: CA
+                        zipcode: '92130'
+                        country: United States
+                        addresses:
+                        - id: 2
+                          street: 4250 Executive Square
+                          street2: Suite 101
+                          city: La Jolla
+                          state: CA
+                          zipcode: '92130'
+                          country: United States
+                          created_at: '2023-08-23T16:16:49.043-07:00'
+                          updated_at: '2023-08-23T16:16:49.043-07:00'
+                          label: Primary
+                          addressable_type: Company
+                          addressable_id: 2
+                          firm_id: 2
+                          deleted_at: null
+                        phone_number: (707) 986-0756
+                        created_at: '2023-08-23T16:16:48.974-07:00'
+                        updated_at: '2023-09-15T15:14:25.499-07:00'
+                      relationships:
+                        addresses:
+                          data:
+                          - id: '2'
+                            type: address
+                        emails:
+                          data:
+                          - id: '3'
+                            type: email_address
+                        created_by:
+                          data:
+                            id: '1'
+                            type: user
+        '401':
+          description: Unauthorized - missing or invalid OAuth 2.0 bearer token
+        '429':
+          description: Too Many Requests - the per-firm rate limit was exceeded; a Retry-After header is returned
+          headers:
+            Retry-After:
+              description: Seconds to wait before retrying
+              schema:
+                type: integer
+  /v1/companies/find_by_name/{name}:
+    get:
+      operationId: findCompanyByName
+      summary: Find Company By Name
+      description: Fuzzy find (case-insensitive) a specific Company by Name
+      tags:
+      - Companies
+      parameters:
+      - name: name
+        in: path
+        required: true
+        description: We return the closest match.
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+              examples:
+                getFindCompanyByName:
+                  summary: GET Find Company By Name
+                  value:
+                    data:
+                      id: '2'
+                      type: company
+                      attributes:
+                        name: Nike
+                        email: roey+lame@lawmatics.com
+                        address: 4250 Executive Square, Suite 101, La Jolla, CA 92130, United States
+                        city: La Jolla
+                        state: CA
+                        zipcode: '92130'
+                        country: United States
+                        addresses:
+                        - id: 2
+                          street: 4250 Executive Square
+                          street2: Suite 101
+                          city: La Jolla
+                          state: CA
+                          zipcode: '92130'
+                          country: United States
+                          created_at: '2023-08-23T16:16:49.043-07:00'
+                          updated_at: '2023-08-23T16:16:49.043-07:00'
+                          label: Primary
+                          addressable_type: Company
+                          addressable_id: 2
+                          firm_id: 2
+                          deleted_at: null
+                        phone_number: (707) 986-0756
+                        created_at: '2023-08-23T16:16:48.974-07:00'
+                        updated_at: '2023-09-15T15:14:25.499-07:00'
+                      relationships:
+                        addresses:
+                          data:
+                          - id: '2'
+                            type: address
+                        emails:
+                          data:
+                          - id: '3'
+                            type: email_address
+                        created_by:
+                          data:
+                            id: '1'
+                            type: user
+        '401':
+          description: Unauthorized - missing or invalid OAuth 2.0 bearer token
+        '429':
+          description: Too Many Requests - the per-firm rate limit was exceeded; a Retry-After header is returned
+          headers:
+            Retry-After:
+              description: Seconds to wait before retrying
+              schema:
+                type: integer
+  /v1/companies/{company_id}:
+    get:
+      operationId: getCompany
+      summary: Company
+      description: A specific Company by id
+      tags:
+      - Companies
+      parameters:
+      - name: company_id
+        in: path
+        required: true
+        description: The company id
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+              examples:
+                getCompany:
+                  summary: GET Company
+                  value:
+                    data:
+                      id: '2'
+                      type: company
+                      attributes:
+                        name: Company 3
+                        email: company@limited.com
+                        address: Street Av, New York, NY 123456, United States
+                        city: New York
+                        state: NY
+                        zipcode: '123456'
+                        country: United States
+                        addresses:
+                        - id: 133
+                          street: Street Av
+                          street2: null
+                          city: New York
+                          state: NY
+                          zipcode: '123456'
+                          country: United States
+                          created_at: '2022-08-11T11:29:33.157-07:00'
+                          updated_at: '2022-08-11T11:29:33.157-07:00'
+                          label: Primary
+                          addressable_type: Company
+                          addressable_id: 2
+                          firm_id: 2
+                          deleted_at: null
+                        phone_number: 555 555 555
+                        created_at: '2022-07-28T08:46:47.470-07:00'
+                        updated_at: '2022-08-11T11:29:33.529-07:00'
+                      relationships:
+                        created_by:
+                          data:
+                            id: '23'
+                            type: user
+        '401':
+          description: Unauthorized - missing or invalid OAuth 2.0 bearer token
+        '429':
+          description: Too Many Requests - the per-firm rate limit was exceeded; a Retry-After header is returned
+          headers:
+            Retry-After:
+              description: Seconds to wait before retrying
+              schema:
+                type: integer
+    put:
+      operationId: updateCompany
+      summary: Update Company
+      description: 'Update an existing Company by ID.
+
+
+        Passing Custom Field id and value, will set the custom field value on the Company, and overwrite any existing value. Passing null as the value will clear it out.'
+      tags:
+      - Companies
+      parameters:
+      - name: company_id
+        in: path
+        required: true
+        description: The company id
+        schema:
+          type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+            example:
+              name: Lawmatics Company
+              email: primary_email_2@lawmatics.com
+              emails_attributes:
+              - info: jasmine+3@lawmatics.com
+              - label: Home
+                info: jasmine+4@lawmatics.com
+              phone: 800-555-4321
+              phone_numbers_attributes:
+              - info: 916-235-5678
+              - label: Home
+                info: 916-234-5674
+              street: 100 Black Water
+              street2: Street
+              city: San Diego
+              state: CA
+              country: United States
+              zipcode: '55123'
+              addresses_attributes:
+              - label: test
+                street: 7190 White Water
+                street2: Way
+                city: Sacramento
+                state: CA
+                country: United States
+                zipcode: '23422'
+      responses:
+        default:
+          description: Example response captured in the source Postman collection; the HTTP status code was not recorded by the publisher.
+          content:
+            application/json:
+              schema:
+                type: object
+              examples:
+                putPATCHUpdateCompany:
+                  summary: PUT/PATCH Update Company
+                  value:
+                    data:
+                      id: '28'
+                      type: company
+                      attributes:
+                        name: Lawmatics Company
+                        email: david1@example.com
+                        address: 128 White Water, Way, Elk Grove, CA 23422, United States
+                        city: Elk Grove
+                        state: CA
+                        zipcode: '23422'
+                        country: United States
+                        addresses:
+                        - addressable_id: 28
+                          label: test
+                          city: Sacramento
+                          country: United States
+                          state: CA
+                          street: 7190 White Water
+                          street2: Way
+                          zipcode: '23422'
+                          addressable_type: Company
+                          firm_id: 2
+                          id: 267
+                          created_at: '2022-08-23T16:51:11.778-07:00'
+                          updated_at: '2022-08-23T17:03:08.444-07:00'
+                          deleted_at: null
+                        - id: 266
+                          street: 128 White Water
+                          street2: Way
+                          city: Elk Grove
+                          state: CA
+                          zipcode: '23422'
+                          country: United States
+                          created_at: '2022-08-23T16:51:11.769-07:00'
+                          updated_at: '2022-08-23T16:51:11.769-07:00'
+                          label: Primary
+                          addressable_type: Company
+                          addressable_id: 28
+                          firm_id: 2
+                          deleted_at: null
+                        phone_number: 619-555-2855
+                        created_at: '2022-08-23T16:51:11.755-07:00'
+                        updated_at: '2022-08-23T17:03:08.856-07:00'
+                      relationships:
+                        created_by:
+                          data:
+                            id: '2'
+                            type: user
+        '401':
+          description: Unauthorized - missing or invalid OAuth 2.0 bearer token
+        '429':
+          description: Too Many Requests - the per-firm rate limit was exceeded; a Retry-After header is returned
+          headers:
+            Retry-After:
+              description: Seconds to wait before retrying
+              schema:
+                type: integer
+    delete:
+      operationId: deleteCompany
+      summary: Delete Company
+      description: 'Delete an existing Company by ID.
+
+
+        Warning: This is irreversible!'
+      tags:
+      - Companies
+      parameters:
+      - name: company_id
+        in: path
+        required: true
+        description: The company id
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+              examples:
+                deleteCompany:
+                  summary: Delete Company
+                  value:
+                    data:
+                      id: '27'
+                      type: company
+                      attributes:
+                        name: Lawmatics Company
+                        email: david1@example.com
+                        address: null
+                        city: null
+                        state: null
+                        zipcode: null
+                        country: null
+                        addresses: []
+                        phone_number: 619-555-2855
+                        created_at: '2022-08-23T15:38:24.009-07:00'
+                        updated_at: '2022-08-23T16:50:37.867-07:00'
+                      relationships:
+                        created_by:
+                          data:
+                            id: '2'
+                            type: user
+        '401':
+          description: Unauthorized - missing or invalid OAuth 2.0 bearer token
+        '429':
+          description: Too Many Requests - the per-firm rate limit was exceeded; a Retry-After header is returned
+          headers:
+            Retry-After:
+              description: Seconds to wait before retrying
+              schema:
+                type: integer
+  /v1/companies:
+    get:
+      operationId: getCompanies
+      summary: Companies
+      description: A paginated list of all Companies in Lawmatics
+      tags:
+      - Companies
+      responses:
+        default:
+          description: Example response captured in the source Postman collection; the HTTP status code was not recorded by the publisher.
+          content:
+            application/json:
+              schema:
+                type: object
+              examples:
+                getCompanies:
+                  summary: GET Companies
+                  value:
+                    data:
+                    - id: '7'
+                      type: company
+                      attributes:
+                        name: Lawmatics Company
+                        email: jasmine+1@lawmatics.com
+                        address: 128 White Water, Way, Elk Grove, CA 23422, United States
+                        city: Elk Grove
+                        state: CA
+                        zipcode: '23422'
+                        country: United States
+                        addresses:
+                        - id: 129
+                          street: 128 White Water
+                          street2: Way
+                          city: Elk Grove
+                          state: CA
+                          zipcode: '23422'
+                          country: United States
+                          created_at: '2022-09-01T14:43:10.307-07:00'
+                          updated_at: '2022-09-01T14:43:10.307-07:00'
+                          label: Primary
+                          addressable_type: Company
+                          addressable_id: 7
+                          firm_id: 1
+                          deleted_at: null
+                        - id: 130
+                          street: 7190 White Water
+                          street2: Way
+                          city: Sacramento
+                          state: CA
+                          zipcode: '23422'
+                          country: United States
+                          created_at: '2022-09-01T14:43:10.319-07:00'
+                          updated_at: '2022-09-01T14:43:10.319-07:00'
+                          label: Home
+                          addressable_type: Company
+                          addressable_id: 7
+                          firm_id: 1
+                          deleted_at: null
+                        phone_number: 916-235-5678
+                        created_at: '2022-09-01T14:43:10.254-07:00'
+                        updated_at: '2022-09-01T15:53:10.038-07:00'
+                      relationships:
+                        created_by:
+                          data:
+                            id: '1'
+                            type: user
+                    - id: '2'
+                      type: company
+                      attributes:
+                        name: Client Company
+                        email: client@example.com
+                        address: 879 F St, Newman, CA 30291, United States
+                        city: Newman
+                        state: CA
+                        zipcode: '30291'
+                        country: United States
+                        addresses:
+                        - id: 137
+                          street: 879 F St
+                          street2: null
+                          city: Newman
+                          state: CA
+                          zipcode: '30291'
+                          country: United States
+                          created_at: '2022-09-07T10:26:46.349-07:00'
+                          updated_at: '2022-09-07T10:26:46.349-07:00'
+                          label: Primary
+                          addressable_type: Company
+                          addressable_id: 2
+                          firm_id: 1
+                          deleted_at: null
+                        phone_number: '5551235432'
+                        created_at: '2022-07-29T11:12:33.207-07:00'
+                        updated_at: '2022-09-07T10:26:46.421-07:00'
+                      relationships:
+                        created_by:
+                          data:
+                            id: '1'
+                            type: user
+                    meta:
+                      total_pages: 1
+                      limit_per_page: 25
+                      total_entries: 2
+                    links:
+                      self: /v1/companies?page=1
+        '401':
+          description: Unauthorized - missing or invalid OAuth 2.0 bearer token
+        '429':
+          description: Too Many Requests - the per-firm rate limit was exceeded; a Retry-After header is returned
+          headers:
+            Retry-After:
+              description: Seconds to wait before retrying
+              schema:
+                type: integer
+    post:
+      operationId: createCompany
+      summary: Create Company
+      description: Create a new Company
+      tags:
+      - Companies
+      parameters:
+      - name: fields
+        in: query
+        required: false
+        schema:
+          type: string
+        example: all
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+            example:
+              name: Lawmatics Company
+              email: primary_email@lawmatics.com
+              emails_attributes:
+              - info: jasmine+1@lawmatics.com
+              - label: Home
+                info: jasmine+2@lawmatics.com
+              phone: 800-555-1234
+              phone_numbers_attributes:
+              - info: 916-235-5678
+              - label: Home
+                info: 916-234-5677
+              street: 999 Black Water
+              street2: Road
+              city: San Diego
+              state: CA
+              country: United States
+              zipcode: '99999'
+              addresses_attributes:
+              - street: 128 White Water
+                street2: Way
+                city: Elk Grove
+                state: CA
+                country: United States
+                zipcode: '23422'
+              - label: Home
+                street: 7190 White Water
+                street2: Way
+                city: Sacramento
+                state: CA
+                country: United States
+                zipcode: '23422'
+      responses:
+        default:
+          description: Example response captured in the source Postman collection; the HTTP status code was not recorded by the publisher.
+          content:
+            application/json:
+              schema:
+                type: object
+              examples:
+                postCreateCompany:
+                  summary: POST Create Company
+                  value:
+                    data:
+                      id: '28'
+                      type: company
+                      attributes:
+                        name: Lawmatics Company
+                        email: david1@example.com
+                        address: 128 White Water, Way, Elk Grove, CA 23422, United States
+                        city: Elk Grove
+                        state: CA
+                        zipcode: '23422'
+                        country: United States
+                        addresses:
+                        - id: 266
+                          street: 128 White Water
+                          street2: Way
+                          city: Elk Grove
+                          state: CA
+                          zipcode: '23422'
+                          country: United States
+                          created_at: '2022-08-23T16:51:11.769-07:00'
+                          updated_at: '2022-08-23T16:51:11.769-07:00'
+                          label: Primary
+                          addressable_type: Company
+                          addressable_id: 28
+                          firm_id: 2
+                          deleted_at: null
+                        - id: 267
+                          street: 7190 White Water
+                          street2: Way
+                          city: Sacramento
+                          state: CA
+                          zipcode: '23422'
+                          country: United States
+                          created_at: '2022-08-23T16:51:11.778-07:00'
+                          updated_at: '2022-08-23T16:51:11.778-07:00'
+                          label: Home
+                          addressable_type: Company
+                          addressable_id: 28
+                          firm_id: 2
+                          deleted_at: null
+                        phone_number: 619-555-2855
+                        created_at: '2022-08-23T16:51:11.755-07:00'
+                        updated_at: '2022-08-23T16:51:11.809-07:00'
+                      relationships:
+                        created_by:
+                          data:
+                            id: '2'
+                            type: user
+        '401':
+          description: Unauthorized - missing or invalid OAuth 2.0 bearer token
+        '429':
+          description: Too Many Requests - the per-firm rate limit was exceeded; a Retry-After header is returned
+          headers:
+            Retry-After:
+              description: Seconds to wait before retrying
+              schema:
+                type: integer
+components:
+  securitySchemes:
+    oauth2:
+      type: oauth2
+      description: OAuth 2.0 authorization code grant. Register a developer app at https://app.lawmatics.com/settings/developers (developer settings must be enabled by Lawmatics support). Access tokens are non-expiring; no refresh tokens are issued and scopes are not supported.
+      flows:
+        authorizationCode:
+          authorizationUrl: https://app.lawmatics.com/oauth/authorize
+          tokenUrl: https://api.lawmatics.com/oauth/token
+          scopes: {}
+    bearerAuth:
+      type: http
+      scheme: bearer
+      description: 'The OAuth 2.0 access token is sent as `Authorization: Bearer <access_token>`.'
+externalDocs:
+  description: Official Lawmatics RESTful API documentation (Postman)
+  url: https://docs.lawmatics.com/
+x-provenance:
+  generated: '2026-08-13'
+  method: derived
+  publisher: API Evangelist
+  source: https://docs.lawmatics.com/api/collections/26379991/2sA3JM7gbw?segregateAuth=true&versionTag=latest
+  source_type: Postman collection published by Lawmatics as its official API documentation
+  source_file: postman/lawmatics-oauth-api.postman_collection.json
+  note: 'NOT published by Lawmatics. Lawmatics publishes no OpenAPI. Every path, method, parameter, request example and response example in this document was converted mechanically from the provider-published Postman collection "Lawmatics OAuth API v1.22.0"; nothing was invented. Schemas are typed as generic objects because the collection carries examples, not JSON Schema. The server URL is the base documented in the collection Param Guide (https://api.lawmatics.com), not the collection''s disabled {{host}} placeholder. The 401 and 429 responses added to every authenticated operation are the provider-documented, globally applicable responses: the collection''s auth guide states a per-firm rate limit applies to all endpoints and returns 429 with a Retry-After header, and https://api.lawmatics.com/v1/contacts was observed returning 401 unauthenticated on 2026-08-13.'

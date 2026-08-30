@@ -1,0 +1,833 @@
+openapi: 3.2.0
+info:
+  title: Lawmatics OAuth Files API
+  version: 1.22.0
+  description: 'The official Lawmatics REST API for legal CRM, client intake and law firm automation. Manage matters (prospects), contacts, companies, custom forms and form entries, custom fields, events and appointments, tasks, notes, files, tags, users, time entries, expenses, invoices and transactions.
+
+
+    Authentication is OAuth 2.0 authorization code grant; access tokens do not expire, there are no refresh tokens, and Lawmatics does not currently support scopes - an authorized app receives full CRUD access to the granted account.
+
+
+    All list endpoints support the shared query-parameter grammar documented in the Param Guide: `fields` (field selection, one level deep, `fields=all` to expand), `page` (pagination), `sort_by`/`sort_order`, and `filter_by`/`filter_on`/`filter_with` (one filter at a time; operators `=`, `!=`, `<=`, `<`, `>=`, `>`, `like`, `ilike`, `null`, `not_null`).
+
+
+    Responses follow a JSON:API-style `data` / `attributes` / `relationships` envelope.'
+  contact:
+    name: Lawmatics API Support
+    email: api@lawmatics.com
+    url: https://docs.lawmatics.com/
+  termsOfService: https://www.lawmatics.com/terms-of-use
+servers:
+- url: https://api.lawmatics.com
+  description: Lawmatics production API
+security:
+- oauth2: []
+- bearerAuth: []
+tags:
+- name: Files
+paths:
+  /v1/files/{file_id}:
+    get:
+      operationId: getFile
+      summary: File
+      description: A specific File's metadata in Lawmatics
+      tags:
+      - Files
+      parameters:
+      - name: file_id
+        in: path
+        required: true
+        description: The file id
+        schema:
+          type: string
+      responses:
+        default:
+          description: Example response captured in the source Postman collection; the HTTP status code was not recorded by the publisher.
+          content:
+            application/json:
+              schema:
+                type: object
+              examples:
+                getFile:
+                  summary: GET File
+                  value:
+                    data:
+                      id: '2'
+                      type: file
+                      attributes:
+                        name: unnamed.png
+                        file_size: 8833
+                        file_url: https://api.lawmatics.com/attachments/962626ca7818b57e20da04a9ededcfa3dbe240dc/store/1d5cd6d1a447ec549b8dc91f584050c8f625c29b376a39f9e531a0d0b666/unnamed.png
+                        file_name: unnamed.png
+                        file_type: image/png
+                        created_at: '2022-06-14T16:59:22.915-07:00'
+                        updated_at: '2022-06-14T16:59:22.915-07:00'
+                      relationships:
+                        documentable:
+                          data:
+                            id: '2'
+                            type: firm
+        '401':
+          description: Unauthorized - missing or invalid OAuth 2.0 bearer token
+        '429':
+          description: Too Many Requests - the per-firm rate limit was exceeded; a Retry-After header is returned
+          headers:
+            Retry-After:
+              description: Seconds to wait before retrying
+              schema:
+                type: integer
+    put:
+      operationId: updateFileMetadata
+      summary: Update File Metadata
+      description: 'Updates an File by ID
+
+
+        documentable_type: One of ["firm", "client", "matter", "contact"]
+
+
+        documentable_id: The record ID, not needed for Firm documentable_type.
+
+
+        file: File to upload
+
+
+        folder_id: the Folder ID the file should be located in
+
+
+        name: name for the File. Defaults to uploaded file name
+
+
+        path: String Array. e.g. ["Root", "Folder 1", "Folder 2"]. Finds folder with name or creates it if it doesn''t exist. Path overrides folder_id if both given.'
+      tags:
+      - Files
+      parameters:
+      - name: file_id
+        in: path
+        required: true
+        description: The file id
+        schema:
+          type: string
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                documentable_type:
+                  type: string
+                documentable_id:
+                  type: string
+                name:
+                  type: string
+                file_name:
+                  type: string
+                folder_id:
+                  type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+              examples:
+                putUpdateFileMetadata:
+                  summary: PUT Update File Metadata
+                  value:
+                    data:
+                      id: '48'
+                      type: file
+                      attributes:
+                        name: Changed Name.jpg
+                        file_url: https://bucket.s3.us-west-1.amazonaws.com/store/d494fe46a2bae430671b8de9e2e0d00720d4bf80a5f3e6d4d870c1579803?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=XXX%2F20220804%2Fus-west-1%2Fs3%2Faws4_request&X-Amz-Date=20220804T223323Z&X-Amz-Expires=3600&X-Amz-SignedHeaders=host&X-Amz-Signature=58ca60aa950be962522f7d59d1cbc3cc4bed1918984202d27d846a2e9936c301
+                        file_size: 0
+                        file_name: Wow.jpg
+                        file_type: image/jpeg
+                        folder_id: 456
+                        created_at: '2022-08-04T14:55:13.759-07:00'
+                        updated_at: '2022-08-04T15:33:22.647-07:00'
+                      relationships:
+                        documentable:
+                          data:
+                            id: '3'
+                            type: prospect
+                putMoveFileToFilePath:
+                  summary: PUT Move file to file path
+                  value:
+                    data:
+                      id: '48'
+                      type: file
+                      attributes:
+                        name: Changed Name.jpg
+                        file_url: https://bucket.s3.us-west-1.amazonaws.com/store/d494fe46a2bae430671b8de9e2e0d00720d4bf80a5f3e6d4d870c1579803?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=XXX%2F20220804%2Fus-west-1%2Fs3%2Faws4_request&X-Amz-Date=20220804T223323Z&X-Amz-Expires=3600&X-Amz-SignedHeaders=host&X-Amz-Signature=58ca60aa950be962522f7d59d1cbc3cc4bed1918984202d27d846a2e9936c301
+                        file_size: 0
+                        file_name: Wow.jpg
+                        file_type: image/jpeg
+                        folder_id: 789
+                        created_at: '2022-08-04T14:55:13.759-07:00'
+                        updated_at: '2022-08-04T15:33:22.647-07:00'
+                      relationships:
+                        documentable:
+                          data:
+                            id: '3'
+                            type: prospect
+        '401':
+          description: Unauthorized - missing or invalid OAuth 2.0 bearer token
+        '429':
+          description: Too Many Requests - the per-firm rate limit was exceeded; a Retry-After header is returned
+          headers:
+            Retry-After:
+              description: Seconds to wait before retrying
+              schema:
+                type: integer
+    delete:
+      operationId: deleteFile
+      summary: Delete File
+      description: Deletes a File by ID
+      tags:
+      - Files
+      parameters:
+      - name: file_id
+        in: path
+        required: true
+        description: The file id
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+              examples:
+                deleteDeleteFile:
+                  summary: DELETE Delete File
+                  value:
+                    data:
+                      id: '48'
+                      type: file
+                      attributes:
+                        name: Changed Name
+                        file_url: https://bucket.s3.us-west-1.amazonaws.com/store/d494fe46a2bae430671b8de9e2e0d00720d4bf80a5f3e6d4d870c1579803?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=XXX%2F20220804%2Fus-west-1%2Fs3%2Faws4_request&X-Amz-Date=20220804T223345Z&X-Amz-Expires=3600&X-Amz-SignedHeaders=host&X-Amz-Signature=0d2ef50d2036f61041bad3cd7fd4ff83dc79ddd3e42b3baf2630fa30361201ec
+                        file_size: 0
+                        file_name: Wow.jpg
+                        file_type: image/jpeg
+                        created_at: '2022-08-04T14:55:13.759-07:00'
+                        updated_at: '2022-08-04T15:33:45.619-07:00'
+                      relationships:
+                        documentable:
+                          data:
+                            id: '3'
+                            type: prospect
+        '401':
+          description: Unauthorized - missing or invalid OAuth 2.0 bearer token
+        '429':
+          description: Too Many Requests - the per-firm rate limit was exceeded; a Retry-After header is returned
+          headers:
+            Retry-After:
+              description: Seconds to wait before retrying
+              schema:
+                type: integer
+  /v1/files:
+    get:
+      operationId: getFiles
+      summary: Files
+      description: 'A paginated list of all File metadata in Lawmatics
+
+
+        Can be filtered by matter_id , prospect_id , contact_id , client_id and firm
+
+
+        as well as all the regular fields as referenced by our Param Guide (most fields returned by?fields=all).'
+      tags:
+      - Files
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+              examples:
+                getFiles:
+                  summary: GET Files
+                  value:
+                    data:
+                    - id: '48'
+                      type: file
+                      attributes:
+                        name: Lawmatics_LinkedIn_Header.jpg
+                        file_url: https://bucket.s3.us-west-1.amazonaws.com/store/d494fe46a2bae430671b8de9e2e0d00720d4bf80a5f3e6d4d870c1579803?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=XXX%2F20220804%2Fus-west-1%2Fs3%2Faws4_request&X-Amz-Date=20220804T223139Z&X-Amz-Expires=3600&X-Amz-SignedHeaders=host&X-Amz-Signature=f861eb81cb5e418a8a0d8553f47fdba3796dd8c0fdf7589784147fc322a06c9a
+                        file_size: 0
+                        file_name: Lawmatics_LinkedIn_Header.jpg
+                        file_type: image/jpeg
+                        created_at: '2022-08-04T14:55:13.759-07:00'
+                        updated_at: '2022-08-04T14:55:13.759-07:00'
+                      relationships:
+                        documentable:
+                          data:
+                            id: '2'
+                            type: firm
+                    - id: '45'
+                      type: file
+                      attributes:
+                        name: spaceroey.png
+                        file_url: https://bucket.s3.us-west-1.amazonaws.com/store/d8638a97af376bbfe4c37a02b58bdc00be27412ba3df2c827ac2ef43c83d?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=XXX%2F20220804%2Fus-west-1%2Fs3%2Faws4_request&X-Amz-Date=20220804T223139Z&X-Amz-Expires=3600&X-Amz-SignedHeaders=host&X-Amz-Signature=d999a7c1f3826190e3b562fd60d7aa776503d8dbe540e7c51e043679e6cceb74
+                        file_size: 0
+                        file_name: spaceroey.png
+                        file_type: image/png
+                        created_at: '2022-08-04T09:54:25.820-07:00'
+                        updated_at: '2022-08-04T09:54:25.820-07:00'
+                      relationships:
+                        documentable:
+                          data:
+                            id: '231'
+                            type: contact
+                    - id: '44'
+                      type: file
+                      attributes:
+                        name: Bob Man - Form Submission 07/25/2022 03:28pm PDT - Internal Form.pdf
+                        file_url: https://bucket.s3.us-west-1.amazonaws.com/store/14ec6afab06c33e4380cabf1afae1e1d010a70d9ea15b18bbb6beaabe1ea?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=XXX%2F20220804%2Fus-west-1%2Fs3%2Faws4_request&X-Amz-Date=20220804T223139Z&X-Amz-Expires=3600&X-Amz-SignedHeaders=host&X-Amz-Signature=a70b8170ae975cdb5a6f9e02d0e678336c07f58fc12246070662088efbb1581b
+                        file_size: 0
+                        file_name: bob_man_form_submission_1658788088_internal_form.pdf
+                        file_type: application/pdf
+                        created_at: '2022-07-25T15:28:12.293-07:00'
+                        updated_at: '2022-07-25T15:28:12.293-07:00'
+                      relationships:
+                        documentable:
+                          data:
+                            id: '191'
+                            type: prospect
+                    - id: '43'
+                      type: file
+                      attributes:
+                        name: Bob Man - Form Submission 07/25/2022 03:27pm PDT - Internal Form.pdf
+                        file_url: https://bucket.s3.us-west-1.amazonaws.com/store/027bfa7a400265118a10f0bb5b7ba5f628c3a822f931c7bec272a46ba84f?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=XXX%2F20220804%2Fus-west-1%2Fs3%2Faws4_request&X-Amz-Date=20220804T223139Z&X-Amz-Expires=3600&X-Amz-SignedHeaders=host&X-Amz-Signature=977832ca88970c3201a4cef9ccbb135260db161aa8e30d3d78691ba447e49f8a
+                        file_size: 0
+                        file_name: bob_man_form_submission_1658788029_internal_form.pdf
+                        file_type: application/pdf
+                        created_at: '2022-07-25T15:27:12.733-07:00'
+                        updated_at: '2022-07-25T15:27:12.733-07:00'
+                      relationships:
+                        documentable:
+                          data:
+                            id: '190'
+                            type: prospect
+                    - id: '42'
+                      type: file
+                      attributes:
+                        name: Lisa Williams - Form Submission 07/25/2022 03:24pm PDT - Internal Form.pdf
+                        file_url: https://bucket.s3.us-west-1.amazonaws.com/store/e0dae1bf5bc8525a493b0095ac3cbb968ecb26288792a190f5cec10fdf7a?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=XXX%2F20220804%2Fus-west-1%2Fs3%2Faws4_request&X-Amz-Date=20220804T223139Z&X-Amz-Expires=3600&X-Amz-SignedHeaders=host&X-Amz-Signature=b871cf316e75f16e3efa502a3aa00a863f06dc645de2d1a01b5906d11806c204
+                        file_size: 0
+                        file_name: lisa_williams_form_submission_1658787883_internal_form.pdf
+                        file_type: application/pdf
+                        created_at: '2022-07-25T15:24:51.675-07:00'
+                        updated_at: '2022-07-25T15:24:51.675-07:00'
+                      relationships:
+                        documentable:
+                          data:
+                            id: '189'
+                            type: prospect
+                    - id: '41'
+                      type: file
+                      attributes:
+                        name: Cool!!asdasdasd.png.jpg
+                        file_url: https://bucket.s3.us-west-1.amazonaws.com/store/4ff0aeabc979f59d118a0c809c51533b0bf04305376d565aa820c364e924?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=XXX%2F20220804%2Fus-west-1%2Fs3%2Faws4_request&X-Amz-Date=20220804T223139Z&X-Amz-Expires=3600&X-Amz-SignedHeaders=host&X-Amz-Signature=02919ec93a8cdb656b2d35840733642e9b98bbee0d4e392b46748d082ae44720
+                        file_size: 0
+                        file_name: Cool!!asdasdasd.png.jpg
+                        file_type: image/jpeg
+                        created_at: '2022-07-25T10:35:42.954-07:00'
+                        updated_at: '2022-07-27T11:24:44.621-07:00'
+                      relationships:
+                        documentable:
+                          data:
+                            id: '2'
+                            type: firm
+                    - id: '40'
+                      type: file
+                      attributes:
+                        name: cool story.csv
+                        file_url: https://bucket.s3.us-west-1.amazonaws.com/store/2807232cdaa3d43e2089347172dbc5d123025e2ceb76439f9b0cc340ad66?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=XXX%2F20220804%2Fus-west-1%2Fs3%2Faws4_request&X-Amz-Date=20220804T223140Z&X-Amz-Expires=3600&X-Amz-SignedHeaders=host&X-Amz-Signature=fe592825976776b6998a547d2109ea3161636b8c0373b2229accf3431281928c
+                        file_size: 0
+                        file_name: cool story.csv
+                        file_type: text/csv
+                        created_at: '2022-07-12T13:11:14.184-07:00'
+                        updated_at: '2022-07-12T17:01:17.287-07:00'
+                      relationships:
+                        documentable:
+                          data:
+                            id: '168'
+                            type: prospect
+                    - id: '39'
+                      type: file
+                      attributes:
+                        name: 'Invoice #1.pdf'
+                        file_url: https://bucket.s3.us-west-1.amazonaws.com/store/a6c745e68adfc23759b2456c8bc09ac9d98d527c98cf4ff740c33198413e?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=XXX%2F20220804%2Fus-west-1%2Fs3%2Faws4_request&X-Amz-Date=20220804T223140Z&X-Amz-Expires=3600&X-Amz-SignedHeaders=host&X-Amz-Signature=74798bd6e7f7619577c7d34a970b581f0f9f5627a929fa8ba140b71ddfe77ede
+                        file_size: 0
+                        file_name: 'Invoice #1.pdf'
+                        file_type: application/pdf
+                        created_at: '2022-07-06T18:56:55.603-07:00'
+                        updated_at: '2022-07-06T18:56:55.603-07:00'
+                      relationships:
+                        documentable:
+                          data:
+                            id: '1'
+                            type: invoice
+                    - id: '38'
+                      type: file
+                      attributes:
+                        name: test - Form Submission 07/04/2022 05:48pm PDT - Rel Block.pdf
+                        file_url: https://bucket.s3.us-west-1.amazonaws.com/store/eae6f302adda6078a79fe611ffc5afccba774a4b3738b6c8a97026911c83?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=XXX%2F20220804%2Fus-west-1%2Fs3%2Faws4_request&X-Amz-Date=20220804T223140Z&X-Amz-Expires=3600&X-Amz-SignedHeaders=host&X-Amz-Signature=fd5d85259985e2d9a8c06adb59c7438144d2ed98ee1d6784c708a48f00d84530
+                        file_size: 0
+                        file_name: test_form_submission_1656982120_rel_block.pdf
+                        file_type: application/pdf
+                        created_at: '2022-07-04T17:48:43.286-07:00'
+                        updated_at: '2022-07-04T17:48:43.286-07:00'
+                      relationships:
+                        documentable:
+                          data:
+                            id: '168'
+                            type: prospect
+                    - id: '37'
+                      type: file
+                      attributes:
+                        name: Test Hello.pdf
+                        file_url: https://bucket.s3.us-west-1.amazonaws.com/store/5e1a9d6f5e98f728d178f4bc70555db8ba1ad9c9ef952b30bd9492ca3d2b?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=XXX%2F20220804%2Fus-west-1%2Fs3%2Faws4_request&X-Amz-Date=20220804T223140Z&X-Amz-Expires=3600&X-Amz-SignedHeaders=host&X-Amz-Signature=c5f3592ad48e309d92e11cb5a654105c7124ba43bc1de8e4d39413ac32023233
+                        file_size: 0
+                        file_name: Test Hello.pdf
+                        file_type: application/pdf
+                        created_at: '2022-07-03T18:19:29.673-07:00'
+                        updated_at: '2022-07-12T13:09:19.042-07:00'
+                      relationships:
+                        documentable:
+                          data:
+                            id: '168'
+                            type: prospect
+                    - id: '36'
+                      type: file
+                      attributes:
+                        name: test - Form Submission 07/03/2022 06:16pm PDT - Internal Form.pdf
+                        file_url: https://bucket.s3.us-west-1.amazonaws.com/store/c3e44f8bb947e82c1e8cb3959e3c34eac7dec8757684fa5f86067642cfbf?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=XXX%2F20220804%2Fus-west-1%2Fs3%2Faws4_request&X-Amz-Date=20220804T223140Z&X-Amz-Expires=3600&X-Amz-SignedHeaders=host&X-Amz-Signature=7708eb3345e86ebfaf233cab40b3fd157d2e8bb7227564c663142e2ac6cdf62a
+                        file_size: 0
+                        file_name: test_form_submission_1656897411_internal_form.pdf
+                        file_type: application/pdf
+                        created_at: '2022-07-03T18:16:58.807-07:00'
+                        updated_at: '2022-07-03T18:16:58.807-07:00'
+                      relationships:
+                        documentable:
+                          data:
+                            id: '167'
+                            type: prospect
+                    - id: '35'
+                      type: file
+                      attributes:
+                        name: Lawmatics_LinkedIn_Header.jpg
+                        file_url: https://bucket.s3.us-west-1.amazonaws.com/store/5ff972883ad42adbbe87a7cef1d5ce1cd5d31ccf1d7e702c8a724b24fef8?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=XXX%2F20220804%2Fus-west-1%2Fs3%2Faws4_request&X-Amz-Date=20220804T223140Z&X-Amz-Expires=3600&X-Amz-SignedHeaders=host&X-Amz-Signature=6627d0e5484239b97241f9e89de69b0aa723d370025d34e7071a8733ccdf99c5
+                        file_size: 0
+                        file_name: Lawmatics_LinkedIn_Header.jpg
+                        file_type: image/jpeg
+                        created_at: '2022-07-03T16:00:00.571-07:00'
+                        updated_at: '2022-07-03T16:00:00.571-07:00'
+                      relationships:
+                        documentable:
+                          data:
+                            id: '2'
+                            type: firm
+                    - id: '34'
+                      type: file
+                      attributes:
+                        name: stones.jpg
+                        file_url: https://bucket.s3.us-west-1.amazonaws.com/store/203d0529a67d9abf75f69733714a15a3f634f907b60082e4030c3e81bc2f?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=XXX%2F20220804%2Fus-west-1%2Fs3%2Faws4_request&X-Amz-Date=20220804T223140Z&X-Amz-Expires=3600&X-Amz-SignedHeaders=host&X-Amz-Signature=ff98e4c5fa2d418e608c61efbbc413b16ac2d070fd747fb04774daf147cae876
+                        file_size: 0
+                        file_name: stones.jpg
+                        file_type: image/jpeg
+                        created_at: '2022-07-01T10:28:01.073-07:00'
+                        updated_at: '2022-07-01T10:28:01.073-07:00'
+                      relationships:
+                        documentable:
+                          data:
+                            id: '189'
+                            type: contact
+                    - id: '33'
+                      type: file
+                      attributes:
+                        name: Folder.jpg
+                        file_url: https://bucket.s3.us-west-1.amazonaws.com/store/a83e5e0c6936fe3f0dc5421782dbc79ce8c6c7ecba3854a40e1ea67491b8?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=XXX%2F20220804%2Fus-west-1%2Fs3%2Faws4_request&X-Amz-Date=20220804T223140Z&X-Amz-Expires=3600&X-Amz-SignedHeaders=host&X-Amz-Signature=ffdd44a278b0bc912203a54ec73a117f9cb8f13bf95776cc8131fa785c16a594
+                        file_size: 0
+                        file_name: Folder.jpg
+                        file_type: image/jpeg
+                        created_at: '2022-07-01T10:20:23.803-07:00'
+                        updated_at: '2022-07-01T10:20:23.803-07:00'
+                      relationships:
+                        documentable:
+                          data:
+                            id: '189'
+                            type: contact
+                    - id: '32'
+                      type: file
+                      attributes:
+                        name: Lawmatics_LinkedIn_Header.jpg
+                        file_url: https://bucket.s3.us-west-1.amazonaws.com/store/095ab26b896eea101eab5a9c778607738f10ede4833a735886a7d1bd4bc2?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=XXX%2F20220804%2Fus-west-1%2Fs3%2Faws4_request&X-Amz-Date=20220804T223140Z&X-Amz-Expires=3600&X-Amz-SignedHeaders=host&X-Amz-Signature=8261cf5387a1b8d12e23f6a10aab78f25c21f80c3a45a7f85d43edb1de7bb4ad
+                        file_size: 0
+                        file_name: Lawmatics_LinkedIn_Header.jpg
+                        file_type: image/jpeg
+                        created_at: '2022-06-26T15:31:41.098-07:00'
+                        updated_at: '2022-06-26T15:31:41.098-07:00'
+                      relationships:
+                        documentable:
+                          data:
+                            id: '2'
+                            type: firm
+                    - id: '31'
+                      type: file
+                      attributes:
+                        name: Lawmatics_LinkedIn_Header.jpg
+                        file_url: https://bucket.s3.us-west-1.amazonaws.com/store/9900cf727fb296b32d96c1db7247152cc9a131ba4300fee9b5c7979f203c?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=XXX%2F20220804%2Fus-west-1%2Fs3%2Faws4_request&X-Amz-Date=20220804T223141Z&X-Amz-Expires=3600&X-Amz-SignedHeaders=host&X-Amz-Signature=196b87bb17c4f8259b1ce8861c2dbfe207d56b34842cfdad5d4d5db81d4cc19e
+                        file_size: 0
+                        file_name: Lawmatics_LinkedIn_Header.jpg
+                        file_type: image/jpeg
+                        created_at: '2022-06-26T15:30:53.907-07:00'
+                        updated_at: '2022-06-26T15:30:53.907-07:00'
+                      relationships:
+                        documentable:
+                          data:
+                            id: '1'
+                            type: prospect
+                    - id: '30'
+                      type: file
+                      attributes:
+                        name: Lawmatics_LinkedIn_Header.jpg
+                        file_url: https://bucket.s3.us-west-1.amazonaws.com/store/fade18ead85043c48ae4a4d1eb369f8a1a161ab828c0884d1b85a0abc7d4?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=XXX%2F20220804%2Fus-west-1%2Fs3%2Faws4_request&X-Amz-Date=20220804T223141Z&X-Amz-Expires=3600&X-Amz-SignedHeaders=host&X-Amz-Signature=b7cd060b822570ec7a5a543fdb6713f0642c794070b354e450609e28406f8b36
+                        file_size: 0
+                        file_name: Lawmatics_LinkedIn_Header.jpg
+                        file_type: image/jpeg
+                        created_at: '2022-06-25T17:18:40.392-07:00'
+                        updated_at: '2022-06-25T17:18:40.392-07:00'
+                      relationships:
+                        documentable:
+                          data:
+                            id: '1'
+                            type: prospect
+                    - id: '29'
+                      type: file
+                      attributes:
+                        name: Lawmatics_LinkedIn_Header.jpg
+                        file_url: https://bucket.s3.us-west-1.amazonaws.com/store/be01f4136fc22d0d0ad721d4e8f622fab1b53f18bba33c5d4813784fad00?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=XXX%2F20220804%2Fus-west-1%2Fs3%2Faws4_request&X-Amz-Date=20220804T223141Z&X-Amz-Expires=3600&X-Amz-SignedHeaders=host&X-Amz-Signature=9543b444af2e36af1855d9c1e95e74aaa21320fedcabc3e5e0815a9d47942844
+                        file_size: 0
+                        file_name: Lawmatics_LinkedIn_Header.jpg
+                        file_type: image/jpeg
+                        created_at: '2022-06-25T10:02:41.453-07:00'
+                        updated_at: '2022-06-25T10:02:41.453-07:00'
+                      relationships:
+                        documentable:
+                          data:
+                            id: '1'
+                            type: prospect
+                    - id: '28'
+                      type: file
+                      attributes:
+                        name: Lawmatics_LinkedIn_Header.jpg
+                        file_url: https://bucket.s3.us-west-1.amazonaws.com/store/d5d211a740262b977e34de50464f050f2760e93f8a10c1403ba79a47f1b4?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=XXX%2F20220804%2Fus-west-1%2Fs3%2Faws4_request&X-Amz-Date=20220804T223141Z&X-Amz-Expires=3600&X-Amz-SignedHeaders=host&X-Amz-Signature=7e50202a183abcb05e61ba8d4f9c625de56047e3e4048b6402214324b5489856
+                        file_size: 0
+                        file_name: Lawmatics_LinkedIn_Header.jpg
+                        file_type: image/jpeg
+                        created_at: '2022-06-25T10:01:20.655-07:00'
+                        updated_at: '2022-06-25T10:01:20.655-07:00'
+                      relationships:
+                        documentable:
+                          data:
+                            id: '1'
+                            type: prospect
+                    - id: '27'
+                      type: file
+                      attributes:
+                        name: Lawmatics_LinkedIn_Header.jpg
+                        file_url: https://bucket.s3.us-west-1.amazonaws.com/store/23e3f75eda7a156633835c9bb138da3b033879878e0117616d89dcaf0378?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=XXX%2F20220804%2Fus-west-1%2Fs3%2Faws4_request&X-Amz-Date=20220804T223141Z&X-Amz-Expires=3600&X-Amz-SignedHeaders=host&X-Amz-Signature=c406ffd1f797bfe849af963781bb8e4c9558c408e58d3cd85abe32063f6facd3
+                        file_size: 0
+                        file_name: Lawmatics_LinkedIn_Header.jpg
+                        file_type: image/jpeg
+                        created_at: '2022-06-24T19:25:43.550-07:00'
+                        updated_at: '2022-06-24T19:25:43.550-07:00'
+                      relationships:
+                        documentable:
+                          data:
+                            id: '1'
+                            type: prospect
+                    - id: '26'
+                      type: file
+                      attributes:
+                        name: Lawmatics_LinkedIn_Header.jpg
+                        file_url: https://bucket.s3.us-west-1.amazonaws.com/store/7f5fee8fa2873b2150d672f1be983d08286c0d5751618ead58a38ee630ff?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=XXX%2F20220804%2Fus-west-1%2Fs3%2Faws4_request&X-Amz-Date=20220804T223141Z&X-Amz-Expires=3600&X-Amz-SignedHeaders=host&X-Amz-Signature=4b3504f50db9cd2a50d2599d198bd95133a868761bc7d34f9fdbf141fc9c5d68
+                        file_size: 0
+                        file_name: Lawmatics_LinkedIn_Header.jpg
+                        file_type: image/jpeg
+                        created_at: '2022-06-24T19:25:00.768-07:00'
+                        updated_at: '2022-06-24T19:25:00.768-07:00'
+                      relationships:
+                        documentable:
+                          data:
+                            id: '2'
+                            type: firm
+                    - id: '25'
+                      type: file
+                      attributes:
+                        name: stones.jpg
+                        file_url: https://bucket.s3.us-west-1.amazonaws.com/store/ba1b760b74e7110cf64b8e1aec353a2a36678cd263ab79231912e0686a14?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=XXX%2F20220804%2Fus-west-1%2Fs3%2Faws4_request&X-Amz-Date=20220804T223141Z&X-Amz-Expires=3600&X-Amz-SignedHeaders=host&X-Amz-Signature=04b459f6d6de1e747aad63f3373d156080974b2ddc48c236e32042c107a58c73
+                        file_size: 0
+                        file_name: stones.jpg
+                        file_type: image/jpeg
+                        created_at: '2022-06-20T18:03:45.722-07:00'
+                        updated_at: '2022-06-20T18:03:45.722-07:00'
+                      relationships:
+                        documentable:
+                          data:
+                            id: '162'
+                            type: prospect
+                    - id: '24'
+                      type: file
+                      attributes:
+                        name: (opening title) Forsaken.mp3
+                        file_url: https://bucket.s3.us-west-1.amazonaws.com/store/dd24455f01dd651fe073afaf1edfd995624f5b65f1cbba74a21fd83d4a34?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=XXX%2F20220804%2Fus-west-1%2Fs3%2Faws4_request&X-Amz-Date=20220804T223141Z&X-Amz-Expires=3600&X-Amz-SignedHeaders=host&X-Amz-Signature=d28d8755301fd9781d2b99bad2056540dddecf76d158c45629ad648c5deb481d
+                        file_size: 0
+                        file_name: (opening title) Forsaken.mp3
+                        file_type: audio/mpeg
+                        created_at: '2022-06-20T01:05:23.906-07:00'
+                        updated_at: '2022-06-20T01:05:23.906-07:00'
+                      relationships:
+                        documentable:
+                          data:
+                            id: '150'
+                            type: prospect
+                    - id: '23'
+                      type: file
+                      attributes:
+                        name: LM_Matter_import3 (1).csv
+                        file_url: https://bucket.s3.us-west-1.amazonaws.com/store/a1f4a97561c339a1f54d547b70a57c98226f0b5b554f088a035d79b3a34e?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=XXX%2F20220804%2Fus-west-1%2Fs3%2Faws4_request&X-Amz-Date=20220804T223141Z&X-Amz-Expires=3600&X-Amz-SignedHeaders=host&X-Amz-Signature=e8e1b5f45f41eed3d74f8a7ab82cd23d9208b5dcfa570a4b2e86003f2986e25c
+                        file_size: 0
+                        file_name: LM_Matter_import3 (1).csv
+                        file_type: text/csv
+                        created_at: '2022-06-19T23:25:01.629-07:00'
+                        updated_at: '2022-06-19T23:46:30.803-07:00'
+                      relationships:
+                        documentable:
+                          data:
+                            id: '150'
+                            type: prospect
+                    - id: '22'
+                      type: file
+                      attributes:
+                        name: goosby_res_sdf-13.pdf
+                        file_url: https://bucket.s3.us-west-1.amazonaws.com/store/c31f89fa03259249fd13b037f2fbbb5cf1163099491c2b409a5af3c4e706?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=XXX%2F20220804%2Fus-west-1%2Fs3%2Faws4_request&X-Amz-Date=20220804T223142Z&X-Amz-Expires=3600&X-Amz-SignedHeaders=host&X-Amz-Signature=0f4baaf819aead8e88b6c09fbb0f77902987953557a2d7d7fd053195cfda9d29
+                        file_size: 0
+                        file_name: goosby_res_sdf-13.pdf
+                        file_type: application/pdf
+                        created_at: '2022-06-19T23:15:31.597-07:00'
+                        updated_at: '2022-06-19T23:15:31.597-07:00'
+                      relationships:
+                        documentable:
+                          data:
+                            id: '150'
+                            type: prospect
+                    meta:
+                      total_pages: 2
+                      limit_per_page: 25
+                      total_entries: 45
+                    links:
+                      self: /v1/documents?page=1
+                      next: /v1/documents?page=2
+        default:
+          description: Example response captured in the source Postman collection; the HTTP status code was not recorded by the publisher.
+        '401':
+          description: Unauthorized - missing or invalid OAuth 2.0 bearer token
+        '429':
+          description: Too Many Requests - the per-firm rate limit was exceeded; a Retry-After header is returned
+          headers:
+            Retry-After:
+              description: Seconds to wait before retrying
+              schema:
+                type: integer
+    post:
+      operationId: uploadFile
+      summary: Upload File
+      description: 'Uploads a file to a Firm, Matter, Contact or Client
+
+
+        Max allowed file size is 1GB. However, we recommend to avoid files greater than 100MB.
+
+
+        documentable_type: One of ["firm", "client", "matter", "contact"]
+
+
+        documentable_id: The record ID, not needed for Firm documentable_type.
+
+
+        file: File to upload
+
+
+        folder_id: the Folder ID the file should be located in
+
+
+        name: name for the File. Defaults to uploaded file name
+
+
+        path: String Array. e.g. ["Root", "Folder 1", "Folder 2"]. Finds folder with name or creates it if it doesn''t exist. Path overrides folder_id if both given.'
+      tags:
+      - Files
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                documentable_type:
+                  type: string
+                file:
+                  type: string
+                  format: binary
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                type: object
+              examples:
+                postUploadFile:
+                  summary: POST Upload File
+                  value:
+                    data:
+                      id: '48'
+                      type: file
+                      attributes:
+                        name: Lawmatics_LinkedIn_Header.jpg
+                        file_size: 504210
+                        file_url: https://bucket.s3.us-west-1.amazonaws.com/store/d494fe46a2bae430671b8de9e2e0d00720d4bf80a5f3e6d4d870c1579803?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=XXX%2F20220804%2Fus-west-1%2Fs3%2Faws4_request&X-Amz-Date=20220804T215513Z&X-Amz-Expires=3600&X-Amz-SignedHeaders=host&X-Amz-Signature=bf5c169514e8ac883b0240e019c2adf3390d03368db9580393499e89015bc49f
+                        file_name: Lawmatics_LinkedIn_Header.jpg
+                        file_type: image/jpeg
+                        created_at: '2022-08-04T14:55:13.759-07:00'
+                        updated_at: '2022-08-04T14:55:13.759-07:00'
+                      relationships:
+                        documentable:
+                          data:
+                            id: '2'
+                            type: firm
+                postUploadFileToAFilePath:
+                  summary: POST Upload File to a file path
+                  value:
+                    data:
+                      id: '48'
+                      type: file
+                      attributes:
+                        name: Lawmatics_LinkedIn_Header.jpg
+                        file_size: 504210
+                        file_url: https://bucket.s3.us-west-1.amazonaws.com/store/d494fe46a2bae430671b8de9e2e0d00720d4bf80a5f3e6d4d870c1579803?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=XXX%2F20220804%2Fus-west-1%2Fs3%2Faws4_request&X-Amz-Date=20220804T215513Z&X-Amz-Expires=3600&X-Amz-SignedHeaders=host&X-Amz-Signature=bf5c169514e8ac883b0240e019c2adf3390d03368db9580393499e89015bc49f
+                        file_name: Lawmatics_LinkedIn_Header.jpg
+                        file_type: image/jpeg
+                        folder_id: 234
+                        created_at: '2022-08-04T14:55:13.759-07:00'
+                        updated_at: '2022-08-04T14:55:13.759-07:00'
+                      relationships:
+                        documentable:
+                          data:
+                            id: '2'
+                            type: firm
+                postUploadFileToASpecificFolder:
+                  summary: POST Upload File to a specific folder
+                  value:
+                    data:
+                      id: '48'
+                      type: file
+                      attributes:
+                        name: Lawmatics_LinkedIn_Header.jpg
+                        file_size: 504210
+                        file_url: https://bucket.s3.us-west-1.amazonaws.com/store/d494fe46a2bae430671b8de9e2e0d00720d4bf80a5f3e6d4d870c1579803?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=XXX%2F20220804%2Fus-west-1%2Fs3%2Faws4_request&X-Amz-Date=20220804T215513Z&X-Amz-Expires=3600&X-Amz-SignedHeaders=host&X-Amz-Signature=bf5c169514e8ac883b0240e019c2adf3390d03368db9580393499e89015bc49f
+                        file_name: Lawmatics_LinkedIn_Header.jpg
+                        folder_id: 123
+                        file_type: image/jpeg
+                        created_at: '2022-08-04T14:55:13.759-07:00'
+                        updated_at: '2022-08-04T14:55:13.759-07:00'
+                      relationships:
+                        documentable:
+                          data:
+                            id: '2'
+                            type: firm
+        '401':
+          description: Unauthorized - missing or invalid OAuth 2.0 bearer token
+        '429':
+          description: Too Many Requests - the per-firm rate limit was exceeded; a Retry-After header is returned
+          headers:
+            Retry-After:
+              description: Seconds to wait before retrying
+              schema:
+                type: integer
+  /v1/files/download/{id}:
+    get:
+      operationId: downloadFile
+      summary: Download File
+      description: '- When testing from Postman please click on ''Send and download'' option instead of ''Send''.
+
+
+        - a 404 can be sent case the file isn''t found.'
+      tags:
+      - Files
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: The id
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                type: object
+              examples:
+                fileNotFound:
+                  summary: File Not Found
+                  value:
+                    errors:
+                    - status: 404
+                      title: Not found
+                      detail: File with id invalidId was not found.
+        '401':
+          description: Unauthorized - missing or invalid OAuth 2.0 bearer token
+        '429':
+          description: Too Many Requests - the per-firm rate limit was exceeded; a Retry-After header is returned
+          headers:
+            Retry-After:
+              description: Seconds to wait before retrying
+              schema:
+                type: integer
+components:
+  securitySchemes:
+    oauth2:
+      type: oauth2
+      description: OAuth 2.0 authorization code grant. Register a developer app at https://app.lawmatics.com/settings/developers (developer settings must be enabled by Lawmatics support). Access tokens are non-expiring; no refresh tokens are issued and scopes are not supported.
+      flows:
+        authorizationCode:
+          authorizationUrl: https://app.lawmatics.com/oauth/authorize
+          tokenUrl: https://api.lawmatics.com/oauth/token
+          scopes: {}
+    bearerAuth:
+      type: http
+      scheme: bearer
+      description: 'The OAuth 2.0 access token is sent as `Authorization: Bearer <access_token>`.'
+externalDocs:
+  description: Official Lawmatics RESTful API documentation (Postman)
+  url: https://docs.lawmatics.com/
+x-provenance:
+  generated: '2026-08-13'
+  method: derived
+  publisher: API Evangelist
+  source: https://docs.lawmatics.com/api/collections/26379991/2sA3JM7gbw?segregateAuth=true&versionTag=latest
+  source_type: Postman collection published by Lawmatics as its official API documentation
+  source_file: postman/lawmatics-oauth-api.postman_collection.json
+  note: 'NOT published by Lawmatics. Lawmatics publishes no OpenAPI. Every path, method, parameter, request example and response example in this document was converted mechanically from the provider-published Postman collection "Lawmatics OAuth API v1.22.0"; nothing was invented. Schemas are typed as generic objects because the collection carries examples, not JSON Schema. The server URL is the base documented in the collection Param Guide (https://api.lawmatics.com), not the collection''s disabled {{host}} placeholder. The 401 and 429 responses added to every authenticated operation are the provider-documented, globally applicable responses: the collection''s auth guide states a per-firm rate limit applies to all endpoints and returns 429 with a Retry-After header, and https://api.lawmatics.com/v1/contacts was observed returning 401 unauthenticated on 2026-08-13.'

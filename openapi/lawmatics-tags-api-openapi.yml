@@ -1,0 +1,761 @@
+openapi: 3.2.0
+info:
+  title: Lawmatics OAuth Tags API
+  version: 1.22.0
+  description: 'The official Lawmatics REST API for legal CRM, client intake and law firm automation. Manage matters (prospects), contacts, companies, custom forms and form entries, custom fields, events and appointments, tasks, notes, files, tags, users, time entries, expenses, invoices and transactions.
+
+
+    Authentication is OAuth 2.0 authorization code grant; access tokens do not expire, there are no refresh tokens, and Lawmatics does not currently support scopes - an authorized app receives full CRUD access to the granted account.
+
+
+    All list endpoints support the shared query-parameter grammar documented in the Param Guide: `fields` (field selection, one level deep, `fields=all` to expand), `page` (pagination), `sort_by`/`sort_order`, and `filter_by`/`filter_on`/`filter_with` (one filter at a time; operators `=`, `!=`, `<=`, `<`, `>=`, `>`, `like`, `ilike`, `null`, `not_null`).
+
+
+    Responses follow a JSON:API-style `data` / `attributes` / `relationships` envelope.'
+  contact:
+    name: Lawmatics API Support
+    email: api@lawmatics.com
+    url: https://docs.lawmatics.com/
+  termsOfService: https://www.lawmatics.com/terms-of-use
+servers:
+- url: https://api.lawmatics.com
+  description: Lawmatics production API
+security:
+- oauth2: []
+- bearerAuth: []
+tags:
+- name: Tags
+paths:
+  /v1/tags/{tag_id}:
+    get:
+      operationId: getTag
+      summary: Tag
+      description: A specific Tag in Lawmatics
+      tags:
+      - Tags
+      parameters:
+      - name: tag_id
+        in: path
+        required: true
+        description: The tag id
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+              examples:
+                getTag:
+                  summary: GET Tag
+                  value:
+                    data:
+                      id: '1'
+                      type: tag
+                      attributes:
+                        name: test
+                        description: null
+                        color: null
+                        created_at: '2022-03-07T09:49:33.433-08:00'
+                        updated_at: '2022-03-07T09:49:33.433-08:00'
+        '401':
+          description: Unauthorized - missing or invalid OAuth 2.0 bearer token
+        '429':
+          description: Too Many Requests - the per-firm rate limit was exceeded; a Retry-After header is returned
+          headers:
+            Retry-After:
+              description: Seconds to wait before retrying
+              schema:
+                type: integer
+    put:
+      operationId: updateTag
+      summary: Update Tag
+      description: 'Updates a Tag
+
+
+        Optional Fields: Description, Color
+
+
+        title: The Tag title
+
+
+        description: The Tag description
+
+
+        color: The Tag color. Can be any CSS valid color (hex, rgb, hsl, colorname string, etc)'
+      tags:
+      - Tags
+      parameters:
+      - name: tag_id
+        in: path
+        required: true
+        description: The tag id
+        schema:
+          type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+            example:
+              name: Updated Tag 76288a88-8c4c-4e65-9329-69288f3db815
+              color: '#554433'
+              description: One tag to rule them all
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                type: object
+              examples:
+                putUpdateTask:
+                  summary: PUT Update Task
+                  value:
+                    data:
+                      id: '5'
+                      type: tag
+                      attributes:
+                        name: Updated Tag
+                        color: '#554433'
+        '401':
+          description: Unauthorized - missing or invalid OAuth 2.0 bearer token
+        '429':
+          description: Too Many Requests - the per-firm rate limit was exceeded; a Retry-After header is returned
+          headers:
+            Retry-After:
+              description: Seconds to wait before retrying
+              schema:
+                type: integer
+    delete:
+      operationId: deleteTag
+      summary: Delete Tag
+      description: 'Delete a Tag
+
+
+        tag_id: ID of the tag to delete'
+      tags:
+      - Tags
+      parameters:
+      - name: tag_id
+        in: path
+        required: true
+        description: The tag id
+        schema:
+          type: string
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                type: object
+              examples:
+                deleteDeleteTag:
+                  summary: DELETE Delete Tag
+                  value:
+                    data:
+                      id: '5'
+                      type: tag
+                      attributes:
+                        name: Updated Tag
+                        color: '#554433'
+        '401':
+          description: Unauthorized - missing or invalid OAuth 2.0 bearer token
+        '429':
+          description: Too Many Requests - the per-firm rate limit was exceeded; a Retry-After header is returned
+          headers:
+            Retry-After:
+              description: Seconds to wait before retrying
+              schema:
+                type: integer
+  /v1/tags:
+    get:
+      operationId: getTags
+      summary: Tags
+      description: 'A paginated list of all Tags in Lawmatics
+
+
+        Can be filtered by matter_id , prospect_id , contact_id , company_id, task_id and user_id
+
+
+        as well as all the regular fields as referenced by our Param Guide (most fields returned by?fields=all).'
+      tags:
+      - Tags
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+              examples:
+                getTags:
+                  summary: GET Tags
+                  value:
+                    data:
+                    - id: '4'
+                      type: tag
+                      attributes:
+                        name: aeee
+                        description: null
+                        color: '#7997c9'
+                        created_at: '2022-03-08T04:56:46.862-08:00'
+                        updated_at: '2022-03-15T11:19:10.106-07:00'
+                    - id: '3'
+                      type: tag
+                      attributes:
+                        title: test 3
+                        description: null
+                        color: null
+                        created_at: '2022-03-08T04:56:42.595-08:00'
+                        updated_at: '2022-03-08T04:56:42.595-08:00'
+                    - id: '2'
+                      type: tag
+                      attributes:
+                        title: test2
+                        description: null
+                        color: null
+                        created_at: '2022-03-07T09:49:38.432-08:00'
+                        updated_at: '2022-03-07T09:49:38.432-08:00'
+                    - id: '1'
+                      type: tag
+                      attributes:
+                        title: test
+                        description: null
+                        color: null
+                        created_at: '2022-03-07T09:49:33.433-08:00'
+                        updated_at: '2022-03-07T09:49:33.433-08:00'
+                    meta:
+                      total_pages: 1
+                      limit_per_page: 25
+                      total_entries: 4
+                    links:
+                      self: /v1/tags?page=1
+                getTagsByMatter:
+                  summary: GET Tags by Matter
+                  value:
+                    data:
+                    - id: '4'
+                      type: tag
+                      attributes:
+                        name: aeee
+                        description: null
+                        color: '#7997c9'
+                        created_at: '2022-03-08T04:56:46.862-08:00'
+                        updated_at: '2022-03-15T11:19:10.106-07:00'
+                    - id: '3'
+                      type: tag
+                      attributes:
+                        title: test 3
+                        description: null
+                        color: null
+                        created_at: '2022-03-08T04:56:42.595-08:00'
+                        updated_at: '2022-03-08T04:56:42.595-08:00'
+                    - id: '2'
+                      type: tag
+                      attributes:
+                        title: test2
+                        description: null
+                        color: null
+                        created_at: '2022-03-07T09:49:38.432-08:00'
+                        updated_at: '2022-03-07T09:49:38.432-08:00'
+                    - id: '1'
+                      type: tag
+                      attributes:
+                        title: test
+                        description: null
+                        color: null
+                        created_at: '2022-03-07T09:49:33.433-08:00'
+                        updated_at: '2022-03-07T09:49:33.433-08:00'
+                    meta:
+                      total_pages: 1
+                      limit_per_page: 25
+                      total_entries: 4
+                    links:
+                      self: /v1/tags?page=1
+                getTagsByContact:
+                  summary: GET Tags by Contact
+                  value:
+                    data:
+                    - id: '4'
+                      type: tag
+                      attributes:
+                        name: aeee
+                        description: null
+                        color: '#7997c9'
+                        created_at: '2022-03-08T04:56:46.862-08:00'
+                        updated_at: '2022-03-15T11:19:10.106-07:00'
+                    - id: '3'
+                      type: tag
+                      attributes:
+                        title: test 3
+                        description: null
+                        color: null
+                        created_at: '2022-03-08T04:56:42.595-08:00'
+                        updated_at: '2022-03-08T04:56:42.595-08:00'
+                    - id: '2'
+                      type: tag
+                      attributes:
+                        title: test2
+                        description: null
+                        color: null
+                        created_at: '2022-03-07T09:49:38.432-08:00'
+                        updated_at: '2022-03-07T09:49:38.432-08:00'
+                    - id: '1'
+                      type: tag
+                      attributes:
+                        title: test
+                        description: null
+                        color: null
+                        created_at: '2022-03-07T09:49:33.433-08:00'
+                        updated_at: '2022-03-07T09:49:33.433-08:00'
+                    meta:
+                      total_pages: 1
+                      limit_per_page: 25
+                      total_entries: 4
+                    links:
+                      self: /v1/tags?page=1
+                getTagsByCompany:
+                  summary: GET Tags by Company
+                  value:
+                    data:
+                    - id: '4'
+                      type: tag
+                      attributes:
+                        name: aeee
+                        description: null
+                        color: '#7997c9'
+                        created_at: '2022-03-08T04:56:46.862-08:00'
+                        updated_at: '2022-03-15T11:19:10.106-07:00'
+                    - id: '3'
+                      type: tag
+                      attributes:
+                        title: test 3
+                        description: null
+                        color: null
+                        created_at: '2022-03-08T04:56:42.595-08:00'
+                        updated_at: '2022-03-08T04:56:42.595-08:00'
+                    - id: '2'
+                      type: tag
+                      attributes:
+                        title: test2
+                        description: null
+                        color: null
+                        created_at: '2022-03-07T09:49:38.432-08:00'
+                        updated_at: '2022-03-07T09:49:38.432-08:00'
+                    - id: '1'
+                      type: tag
+                      attributes:
+                        title: test
+                        description: null
+                        color: null
+                        created_at: '2022-03-07T09:49:33.433-08:00'
+                        updated_at: '2022-03-07T09:49:33.433-08:00'
+                    meta:
+                      total_pages: 1
+                      limit_per_page: 25
+                      total_entries: 4
+                    links:
+                      self: /v1/tags?page=1
+        '401':
+          description: Unauthorized - missing or invalid OAuth 2.0 bearer token
+        '429':
+          description: Too Many Requests - the per-firm rate limit was exceeded; a Retry-After header is returned
+          headers:
+            Retry-After:
+              description: Seconds to wait before retrying
+              schema:
+                type: integer
+    post:
+      operationId: createTag
+      summary: Create Tag
+      description: 'Create a new Tag
+
+
+        Optional Fields: Description, Color
+
+
+        title: The Tag title
+
+
+        description: The Tag description
+
+
+        color: The Tag color. Can be any CSS valid color (hex, rgb, hsl, colorname string, etc)'
+      tags:
+      - Tags
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+            example:
+              name: New Tag 9e7fb986-57ae-476d-82b7-cccb011ecc89
+              color: '#554433'
+              description: A tag to rule them all
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                type: object
+              examples:
+                postCreateTag:
+                  summary: POST Create Tag
+                  value:
+                    data:
+                      id: '5'
+                      type: tag
+                      attributes:
+                        name: New Tag
+                        color: '#554433'
+        '401':
+          description: Unauthorized - missing or invalid OAuth 2.0 bearer token
+        '429':
+          description: Too Many Requests - the per-firm rate limit was exceeded; a Retry-After header is returned
+          headers:
+            Retry-After:
+              description: Seconds to wait before retrying
+              schema:
+                type: integer
+  /v1/tags/attach:
+    post:
+      operationId: attachTag
+      summary: Attach Tag
+      description: 'Attaches tags to a Matter, Contact, Company, or Task
+
+
+        (type)_id: The ID of the entity to attach tags to. One of matter_id, contact_id, company_id, or task_id.
+
+
+        tags: List of tags to attach. If a tag does not exist, it will be created.'
+      tags:
+      - Tags
+      responses:
+        default:
+          description: Example response captured in the source Postman collection; the HTTP status code was not recorded by the publisher.
+          content:
+            application/json:
+              schema:
+                type: object
+              examples:
+                postAttachTag:
+                  summary: POST Attach Tag
+                  value:
+                    data:
+                      id: '290'
+                      type: prospect
+                      attributes:
+                        first_name: John
+                        last_name: Hancock
+                        case_title: null
+                        case_blurb: null
+                        status: pnc
+                        email: null
+                        phone: null
+                        phone_number: null
+                        email_address: null
+                        address: null
+                        photo_url: null
+                        birthdate: null
+                        name_prefix: null
+                        middle_name: null
+                        name_suffix: null
+                        sub_status: Pnc
+                        informal_name: null
+                        employer: null
+                        occupation: null
+                        citizenship: null
+                        bio: null
+                        title: null
+                        hobbies: null
+                        social_security: null
+                        age: null
+                        referring_url: null
+                        driver_license: null
+                        gender: null
+                        marital_status: null
+                        timezone: null
+                        estimated_value_cents: 0
+                        actual_value_cents: 0
+                        lead_cost_cents: 0
+                        date_of_last_contact: '2022-05-09T07:16:04.329-07:00'
+                        days_since_last_contact: 22
+                        converted_date: null
+                        statute_of_limitations: null
+                        utm_source: null
+                        utm_campaign: null
+                        utm_medium: null
+                        utm_term: null
+                        street: null
+                        street2: null
+                        city: null
+                        state: null
+                        zipcode: null
+                        country: null
+                        full_address: null
+                        full_street: null
+                        city_state_zip: null
+                        custom_fields: []
+                        custom_field_values: {}
+                        created_at: '2022-05-09T07:16:04.203-07:00'
+                        updated_at: '2022-05-31T16:40:25.234-07:00'
+                        last_contacted_date: '2022-05-09T07:16:04.329-07:00'
+                      relationships:
+                        source:
+                          data: null
+                        stage:
+                          data: null
+                        campaign:
+                          data: null
+                        practice_area:
+                          data:
+                            id: '6'
+                            type: practice_area
+                        salesperson:
+                          data: null
+                        lead_attorney:
+                          data: null
+                        originating_attorney:
+                          data: null
+                        owned_by:
+                          data: null
+                        created_by:
+                          data:
+                            id: '2'
+                            type: user
+                        contact:
+                          data:
+                            id: '306'
+                            type: contact
+                        company:
+                          data: null
+                        assigned_staff:
+                          data: []
+                        events:
+                          data: []
+                        file_requests:
+                          data: []
+                        documents:
+                          data: []
+                        notes:
+                          data: []
+                        tasks:
+                          data: []
+                        emails:
+                          data: []
+                        phone_numbers:
+                          data: []
+                        addresses:
+                          data: []
+                        invoices:
+                          data: []
+                        tags:
+                          data:
+                          - id: '4'
+                            type: tag
+                          - id: '1'
+                            type: tag
+                          - id: '6'
+                            type: tag
+                          - id: '8'
+                            type: tag
+                          - id: '9'
+                            type: tag
+                          - id: '10'
+                            type: tag
+                        relationships:
+                          data: []
+        '401':
+          description: Unauthorized - missing or invalid OAuth 2.0 bearer token
+        '429':
+          description: Too Many Requests - the per-firm rate limit was exceeded; a Retry-After header is returned
+          headers:
+            Retry-After:
+              description: Seconds to wait before retrying
+              schema:
+                type: integer
+  /v1/tags/detach:
+    post:
+      operationId: detachTag
+      summary: Detach Tag
+      description: 'Detaches tags from a Matter, Contact, Company, or Task
+
+
+        (type)_id: The ID of the entity to detach Tags from. One of matter_id, contact_id, company_id, or task_id.
+
+
+        tags: List of Tags to detach. If a Tag does not exist, it will be ignored.'
+      tags:
+      - Tags
+      responses:
+        default:
+          description: Example response captured in the source Postman collection; the HTTP status code was not recorded by the publisher.
+          content:
+            application/json:
+              schema:
+                type: object
+              examples:
+                postDetachTag:
+                  summary: POST Detach Tag
+                  value:
+                    data:
+                      id: '290'
+                      type: prospect
+                      attributes:
+                        first_name: John
+                        last_name: Hancock
+                        case_title: null
+                        case_blurb: null
+                        status: pnc
+                        email: null
+                        phone: null
+                        phone_number: null
+                        email_address: null
+                        address: null
+                        photo_url: null
+                        birthdate: null
+                        name_prefix: null
+                        middle_name: null
+                        name_suffix: null
+                        sub_status: Pnc
+                        informal_name: null
+                        employer: null
+                        occupation: null
+                        citizenship: null
+                        bio: null
+                        title: null
+                        hobbies: null
+                        social_security: null
+                        age: null
+                        referring_url: null
+                        driver_license: null
+                        gender: null
+                        marital_status: null
+                        timezone: null
+                        estimated_value_cents: 0
+                        actual_value_cents: 0
+                        lead_cost_cents: 0
+                        date_of_last_contact: '2022-05-09T07:16:04.329-07:00'
+                        days_since_last_contact: 22
+                        converted_date: null
+                        statute_of_limitations: null
+                        utm_source: null
+                        utm_campaign: null
+                        utm_medium: null
+                        utm_term: null
+                        street: null
+                        street2: null
+                        city: null
+                        state: null
+                        zipcode: null
+                        country: null
+                        full_address: null
+                        full_street: null
+                        city_state_zip: null
+                        custom_fields: []
+                        custom_field_values: {}
+                        created_at: '2022-05-09T07:16:04.203-07:00'
+                        updated_at: '2022-05-31T16:40:25.234-07:00'
+                        last_contacted_date: '2022-05-09T07:16:04.329-07:00'
+                      relationships:
+                        source:
+                          data: null
+                        stage:
+                          data: null
+                        campaign:
+                          data: null
+                        practice_area:
+                          data:
+                            id: '6'
+                            type: practice_area
+                        salesperson:
+                          data: null
+                        lead_attorney:
+                          data: null
+                        originating_attorney:
+                          data: null
+                        owned_by:
+                          data: null
+                        created_by:
+                          data:
+                            id: '2'
+                            type: user
+                        contact:
+                          data:
+                            id: '306'
+                            type: contact
+                        company:
+                          data: null
+                        assigned_staff:
+                          data: []
+                        events:
+                          data: []
+                        file_requests:
+                          data: []
+                        documents:
+                          data: []
+                        notes:
+                          data: []
+                        tasks:
+                          data: []
+                        emails:
+                          data: []
+                        phone_numbers:
+                          data: []
+                        addresses:
+                          data: []
+                        invoices:
+                          data: []
+                        tags:
+                          data:
+                          - id: '4'
+                            type: tag
+                          - id: '1'
+                            type: tag
+                          - id: '6'
+                            type: tag
+                          - id: '8'
+                            type: tag
+                        relationships:
+                          data: []
+        '401':
+          description: Unauthorized - missing or invalid OAuth 2.0 bearer token
+        '429':
+          description: Too Many Requests - the per-firm rate limit was exceeded; a Retry-After header is returned
+          headers:
+            Retry-After:
+              description: Seconds to wait before retrying
+              schema:
+                type: integer
+components:
+  securitySchemes:
+    oauth2:
+      type: oauth2
+      description: OAuth 2.0 authorization code grant. Register a developer app at https://app.lawmatics.com/settings/developers (developer settings must be enabled by Lawmatics support). Access tokens are non-expiring; no refresh tokens are issued and scopes are not supported.
+      flows:
+        authorizationCode:
+          authorizationUrl: https://app.lawmatics.com/oauth/authorize
+          tokenUrl: https://api.lawmatics.com/oauth/token
+          scopes: {}
+    bearerAuth:
+      type: http
+      scheme: bearer
+      description: 'The OAuth 2.0 access token is sent as `Authorization: Bearer <access_token>`.'
+externalDocs:
+  description: Official Lawmatics RESTful API documentation (Postman)
+  url: https://docs.lawmatics.com/
+x-provenance:
+  generated: '2026-08-13'
+  method: derived
+  publisher: API Evangelist
+  source: https://docs.lawmatics.com/api/collections/26379991/2sA3JM7gbw?segregateAuth=true&versionTag=latest
+  source_type: Postman collection published by Lawmatics as its official API documentation
+  source_file: postman/lawmatics-oauth-api.postman_collection.json
+  note: 'NOT published by Lawmatics. Lawmatics publishes no OpenAPI. Every path, method, parameter, request example and response example in this document was converted mechanically from the provider-published Postman collection "Lawmatics OAuth API v1.22.0"; nothing was invented. Schemas are typed as generic objects because the collection carries examples, not JSON Schema. The server URL is the base documented in the collection Param Guide (https://api.lawmatics.com), not the collection''s disabled {{host}} placeholder. The 401 and 429 responses added to every authenticated operation are the provider-documented, globally applicable responses: the collection''s auth guide states a per-firm rate limit applies to all endpoints and returns 429 with a Retry-After header, and https://api.lawmatics.com/v1/contacts was observed returning 401 unauthenticated on 2026-08-13.'

@@ -1,0 +1,3733 @@
+openapi: 3.2.0
+info:
+  title: Lawmatics OAuth Matters (Prospects) API
+  version: 1.22.0
+  description: 'The official Lawmatics REST API for legal CRM, client intake and law firm automation. Manage matters (prospects), contacts, companies, custom forms and form entries, custom fields, events and appointments, tasks, notes, files, tags, users, time entries, expenses, invoices and transactions.
+
+
+    Authentication is OAuth 2.0 authorization code grant; access tokens do not expire, there are no refresh tokens, and Lawmatics does not currently support scopes - an authorized app receives full CRUD access to the granted account.
+
+
+    All list endpoints support the shared query-parameter grammar documented in the Param Guide: `fields` (field selection, one level deep, `fields=all` to expand), `page` (pagination), `sort_by`/`sort_order`, and `filter_by`/`filter_on`/`filter_with` (one filter at a time; operators `=`, `!=`, `<=`, `<`, `>=`, `>`, `like`, `ilike`, `null`, `not_null`).
+
+
+    Responses follow a JSON:API-style `data` / `attributes` / `relationships` envelope.'
+  contact:
+    name: Lawmatics API Support
+    email: api@lawmatics.com
+    url: https://docs.lawmatics.com/
+  termsOfService: https://www.lawmatics.com/terms-of-use
+servers:
+- url: https://api.lawmatics.com
+  description: Lawmatics production API
+security:
+- oauth2: []
+- bearerAuth: []
+tags:
+- name: Matters (Prospects)
+  description: 'A Matter is a legal case, and the primary object in Lawmatics.
+
+
+    NOTE: You may see Matters referenced as "Prospects" or "PNCs". This is for legacy reasons, and we are working to migrate away from these names internally.
+
+
+    When creating a new Matter it will be in status PNC. This stands for Potential N'
+paths:
+  /v1/prospects/find_by_phone/{phone_number}:
+    get:
+      operationId: findMatterByPhoneNumber
+      summary: Find Matter By Phone Number
+      description: Fuzzy find a specific Matter by Phone Number.
+      tags:
+      - Matters (Prospects)
+      parameters:
+      - name: phone_number
+        in: path
+        required: true
+        description: Any valid phone number. We strip all non digits when matching, and try with and without the leading 1 for US country codes.
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+              examples:
+                getFindMatterByPhoneNumber:
+                  summary: GET Find Matter By Phone Number
+                  value:
+                    data:
+                      id: '41871'
+                      type: prospect
+                      attributes:
+                        first_name: Roey
+                        last_name: Chasman
+                        email: roey+api@lawmatics.com
+                        phone: '5555555555'
+                        created_at: '2018-10-17T17:24:43.293-07:00'
+                        updated_at: '2018-10-17T17:24:43.293-07:00'
+                      relationships: {}
+        '401':
+          description: Unauthorized - missing or invalid OAuth 2.0 bearer token
+        '429':
+          description: Too Many Requests - the per-firm rate limit was exceeded; a Retry-After header is returned
+          headers:
+            Retry-After:
+              description: Seconds to wait before retrying
+              schema:
+                type: integer
+  /v1/prospects/find_by_email/{email_address}:
+    get:
+      operationId: findMatterByEmailAddress
+      summary: Find Matter By Email Address
+      description: Fuzzy find a specific Matter by Email Address.
+      tags:
+      - Matters (Prospects)
+      parameters:
+      - name: email_address
+        in: path
+        required: true
+        description: A valid email address
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+              examples:
+                getFindMatterByEmailAddress:
+                  summary: GET Find Matter By Email Address
+                  value:
+                    data:
+                      id: '41871'
+                      type: prospect
+                      attributes:
+                        first_name: Roey
+                        last_name: Chasman
+                        email: roey+api@lawmatics.com
+                        phone: '5555555555'
+                        created_at: '2018-10-17T17:24:43.293-07:00'
+                        updated_at: '2018-10-17T17:24:43.293-07:00'
+                      relationships: {}
+        '401':
+          description: Unauthorized - missing or invalid OAuth 2.0 bearer token
+        '429':
+          description: Too Many Requests - the per-firm rate limit was exceeded; a Retry-After header is returned
+          headers:
+            Retry-After:
+              description: Seconds to wait before retrying
+              schema:
+                type: integer
+  /v1/prospects/find_by_name/{name}:
+    get:
+      operationId: findMatterByName
+      summary: Find Matter By Name
+      description: Fuzzy find (case-insensitive) a specific Matter by their Name. You can pass either '{first_name} {last_name}' or simply '{first_name}'
+      tags:
+      - Matters (Prospects)
+      parameters:
+      - name: name
+        in: path
+        required: true
+        description: We return the closest match. For better results include the PNC Contact's last name.
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+              examples:
+                getFindMatterByName:
+                  summary: GET Find Matter By Name
+                  value:
+                    data:
+                      id: '41871'
+                      type: prospect
+                      attributes:
+                        first_name: Roey
+                        last_name: Chasman
+                        email: roey+api@lawmatics.com
+                        phone: '5555555555'
+                        created_at: '2018-10-17T17:24:43.293-07:00'
+                        updated_at: '2018-10-17T17:24:43.293-07:00'
+                      relationships: {}
+        '401':
+          description: Unauthorized - missing or invalid OAuth 2.0 bearer token
+        '429':
+          description: Too Many Requests - the per-firm rate limit was exceeded; a Retry-After header is returned
+          headers:
+            Retry-After:
+              description: Seconds to wait before retrying
+              schema:
+                type: integer
+  /v1/interactions/{interaction_id}:
+    get:
+      operationId: getInteraction
+      summary: Interaction
+      description: Retrieves an interaction by its ID
+      tags:
+      - Matters (Prospects)
+      parameters:
+      - name: interaction_id
+        in: path
+        required: true
+        description: The interaction id
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+              examples:
+                getInteraction:
+                  summary: GET Interaction
+                  value:
+                    data:
+                      id: '69'
+                      type: interaction
+                      attributes:
+                        interaction_type: One kind of interaction
+                        body: The one - cannot change.
+                        happened_at: '2019-03-01T14:00:00.000-08:00'
+                        created_at: '2022-08-23T20:19:47.926-07:00'
+                        updated_at: '2022-08-24T15:30:15.255-07:00'
+                      relationships:
+                        created_by:
+                          data:
+                            id: '2'
+                            type: user
+                        interactable:
+                          data:
+                            id: '144'
+                            type: prospect
+        '401':
+          description: Unauthorized - missing or invalid OAuth 2.0 bearer token
+        '429':
+          description: Too Many Requests - the per-firm rate limit was exceeded; a Retry-After header is returned
+          headers:
+            Retry-After:
+              description: Seconds to wait before retrying
+              schema:
+                type: integer
+    put:
+      operationId: updateInteraction
+      summary: Update Interaction
+      description: 'Update an existing Interaction by ID.
+
+
+        PATCH works for this endpoint as well as PUT.'
+      tags:
+      - Matters (Prospects)
+      parameters:
+      - name: interaction_id
+        in: path
+        required: true
+        description: The interaction id
+        schema:
+          type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+            example:
+              happened_at: '2019-02-29T15:00:00-07:00'
+              body: The one - from 143 to 144
+              interaction_type: One kind of interaction
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+              examples:
+                putUpdateInteraction:
+                  summary: PUT Update Interaction
+                  value:
+                    data:
+                      id: '69'
+                      type: interaction
+                      attributes:
+                        interaction_type: One kind of interaction
+                        body: A changed body.
+                        happened_at: '2019-03-01T14:00:00.000-08:00'
+                        created_at: '2022-08-23T20:19:47.926-07:00'
+                        updated_at: '2022-08-24T20:43:05.020-07:00'
+                      relationships:
+                        created_by:
+                          data:
+                            id: '2'
+                            type: user
+                        interactable:
+                          data:
+                            id: '144'
+                            type: prospect
+        '401':
+          description: Unauthorized - missing or invalid OAuth 2.0 bearer token
+        '429':
+          description: Too Many Requests - the per-firm rate limit was exceeded; a Retry-After header is returned
+          headers:
+            Retry-After:
+              description: Seconds to wait before retrying
+              schema:
+                type: integer
+    delete:
+      operationId: deleteInteraction
+      summary: Delete Interaction
+      description: Deletes an existing interaction
+      tags:
+      - Matters (Prospects)
+      parameters:
+      - name: interaction_id
+        in: path
+        required: true
+        description: The interaction id
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+              examples:
+                deleteInteraction:
+                  summary: DELETE Interaction
+                  value:
+                    data:
+                      id: '69'
+                      type: interaction
+                      attributes:
+                        interaction_type: One kind of interaction
+                        body: A changed body.
+                        happened_at: '2019-03-01T14:00:00.000-08:00'
+                        created_at: '2022-08-23T20:19:47.926-07:00'
+                        updated_at: '2022-08-24T20:43:25.148-07:00'
+                      relationships:
+                        created_by:
+                          data:
+                            id: '2'
+                            type: user
+                        interactable:
+                          data:
+                            id: '144'
+                            type: prospect
+        '401':
+          description: Unauthorized - missing or invalid OAuth 2.0 bearer token
+        '429':
+          description: Too Many Requests - the per-firm rate limit was exceeded; a Retry-After header is returned
+          headers:
+            Retry-After:
+              description: Seconds to wait before retrying
+              schema:
+                type: integer
+  /v1/interactions:
+    get:
+      operationId: getInteractions
+      summary: Interactions
+      description: A paginated list of all Interactions in Lawmatics
+      tags:
+      - Matters (Prospects)
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+              examples:
+                getInteractions:
+                  summary: GET Interactions
+                  value:
+                    data:
+                    - id: '70'
+                      type: interaction
+                      attributes:
+                        interaction_type: A type of interaction
+                        body: The two.
+                        happened_at: '2022-06-29T15:00:00.000-07:00'
+                        created_at: '2022-08-24T15:29:44.289-07:00'
+                        updated_at: '2022-08-24T15:29:44.289-07:00'
+                      relationships:
+                        created_by:
+                          data:
+                            id: '2'
+                            type: user
+                        interactable:
+                          data:
+                            id: '143'
+                            type: prospect
+                    - id: '69'
+                      type: interaction
+                      attributes:
+                        interaction_type: One kind of interaction
+                        body: The one - cannot change.
+                        happened_at: '2019-03-01T14:00:00.000-08:00'
+                        created_at: '2022-08-23T20:19:47.926-07:00'
+                        updated_at: '2022-08-24T15:30:15.255-07:00'
+                      relationships:
+                        created_by:
+                          data:
+                            id: '2'
+                            type: user
+                        interactable:
+                          data:
+                            id: '144'
+                            type: prospect
+                    - id: '68'
+                      type: interaction
+                      attributes:
+                        interaction_type: some type of Interaction
+                        body: Body of the Interaction.
+                        happened_at: '2022-06-29T15:00:00.000-07:00'
+                        created_at: '2022-08-19T07:08:05.717-07:00'
+                        updated_at: '2022-08-19T07:08:05.717-07:00'
+                      relationships:
+                        created_by:
+                          data:
+                            id: '2'
+                            type: user
+                        interactable:
+                          data:
+                            id: '143'
+                            type: prospect
+                    - id: '67'
+                      type: interaction
+                      attributes:
+                        interaction_type: some type of Interaction
+                        body: Body of the Interaction.
+                        happened_at: '2022-06-29T15:00:00.000-07:00'
+                        created_at: '2022-08-19T06:57:07.842-07:00'
+                        updated_at: '2022-08-19T06:57:07.842-07:00'
+                      relationships:
+                        created_by:
+                          data:
+                            id: '2'
+                            type: user
+                        interactable:
+                          data:
+                            id: '143'
+                            type: prospect
+                    - id: '65'
+                      type: interaction
+                      attributes:
+                        interaction_type: Phone Call
+                        body: '2016'
+                        happened_at: '2016-08-18T21:02:00.790-07:00'
+                        created_at: '2022-08-18T21:03:08.111-07:00'
+                        updated_at: '2022-08-18T21:03:08.111-07:00'
+                      relationships:
+                        created_by:
+                          data:
+                            id: '2'
+                            type: user
+                        interactable:
+                          data:
+                            id: '143'
+                            type: prospect
+                    - id: '33'
+                      type: interaction
+                      attributes:
+                        interaction_type: some type of Interaction
+                        body: Body of the Interaction.
+                        happened_at: '2022-06-29T15:00:00.000-07:00'
+                        created_at: '2022-08-17T07:45:22.510-07:00'
+                        updated_at: '2022-08-17T07:45:22.510-07:00'
+                      relationships:
+                        created_by:
+                          data:
+                            id: '2'
+                            type: user
+                        interactable:
+                          data:
+                            id: '12'
+                            type: prospect
+                    - id: '32'
+                      type: interaction
+                      attributes:
+                        interaction_type: some type of Interaction
+                        body: Body of the Interaction.
+                        happened_at: '2022-06-29T15:00:00.000-07:00'
+                        created_at: '2022-08-17T07:18:57.068-07:00'
+                        updated_at: '2022-08-17T07:18:57.068-07:00'
+                      relationships:
+                        created_by:
+                          data:
+                            id: '2'
+                            type: user
+                        interactable:
+                          data:
+                            id: '12'
+                            type: prospect
+                    - id: '31'
+                      type: interaction
+                      attributes:
+                        interaction_type: some type of Interaction
+                        body: Body of the Interaction.
+                        happened_at: '2022-06-29T15:00:00.000-07:00'
+                        created_at: '2022-08-17T07:18:20.243-07:00'
+                        updated_at: '2022-08-17T07:18:20.243-07:00'
+                      relationships:
+                        created_by:
+                          data:
+                            id: '2'
+                            type: user
+                        interactable:
+                          data:
+                            id: '12'
+                            type: prospect
+                    - id: '29'
+                      type: interaction
+                      attributes:
+                        interaction_type: some type of Interaction
+                        body: Body of the Interaction.
+                        happened_at: '2022-06-29T15:00:00.000-07:00'
+                        created_at: '2022-08-16T18:31:05.746-07:00'
+                        updated_at: '2022-08-16T18:31:05.748-07:00'
+                      relationships:
+                        created_by:
+                          data:
+                            id: '2'
+                            type: user
+                        interactable:
+                          data:
+                            id: '121'
+                            type: prospect
+                    - id: '28'
+                      type: interaction
+                      attributes:
+                        interaction_type: some type of Interaction
+                        body: Body of the Interaction.
+                        happened_at: '2022-06-29T15:00:00.000-07:00'
+                        created_at: '2022-08-16T18:31:00.704-07:00'
+                        updated_at: '2022-08-16T18:31:00.713-07:00'
+                      relationships:
+                        created_by:
+                          data:
+                            id: '2'
+                            type: user
+                        interactable:
+                          data:
+                            id: '12'
+                            type: prospect
+                    - id: '27'
+                      type: interaction
+                      attributes:
+                        interaction_type: some type of Interaction
+                        body: Body of the Interaction.
+                        happened_at: '2022-06-29T15:00:00.000-07:00'
+                        created_at: '2022-08-16T10:13:38.683-07:00'
+                        updated_at: '2022-08-16T10:13:38.685-07:00'
+                      relationships:
+                        created_by:
+                          data:
+                            id: '2'
+                            type: user
+                        interactable:
+                          data:
+                            id: '12'
+                            type: prospect
+                    - id: '26'
+                      type: interaction
+                      attributes:
+                        interaction_type: some type of Interaction too
+                        body: Body of the Interaction!
+                        happened_at: '2022-06-29T15:00:00.000-07:00'
+                        created_at: '2022-08-16T10:13:28.379-07:00'
+                        updated_at: '2022-08-16T10:13:28.381-07:00'
+                      relationships:
+                        created_by:
+                          data:
+                            id: '2'
+                            type: user
+                        interactable:
+                          data:
+                            id: '12'
+                            type: prospect
+                    - id: '25'
+                      type: interaction
+                      attributes:
+                        interaction_type: some type of Interaction
+                        body: Body of the Interaction!
+                        happened_at: '2022-06-29T15:00:00.000-07:00'
+                        created_at: '2022-08-16T10:13:20.531-07:00'
+                        updated_at: '2022-08-16T10:13:20.534-07:00'
+                      relationships:
+                        created_by:
+                          data:
+                            id: '2'
+                            type: user
+                        interactable:
+                          data:
+                            id: '12'
+                            type: prospect
+                    - id: '24'
+                      type: interaction
+                      attributes:
+                        interaction_type: some type of Interaction
+                        body: Body of the Interaction
+                        happened_at: '2022-06-29T15:00:00.000-07:00'
+                        created_at: '2022-08-16T10:13:16.189-07:00'
+                        updated_at: '2022-08-16T10:13:16.207-07:00'
+                      relationships:
+                        created_by:
+                          data:
+                            id: '2'
+                            type: user
+                        interactable:
+                          data:
+                            id: '12'
+                            type: prospect
+                    - id: '23'
+                      type: interaction
+                      attributes:
+                        interaction_type: some type of Interaction
+                        body: Body of the Interaction
+                        happened_at: '2022-06-29T15:00:00.000-07:00'
+                        created_at: '2022-08-16T10:04:07.490-07:00'
+                        updated_at: '2022-08-16T10:04:07.522-07:00'
+                      relationships:
+                        created_by:
+                          data:
+                            id: '2'
+                            type: user
+                        interactable:
+                          data:
+                            id: '12'
+                            type: prospect
+                    - id: '22'
+                      type: interaction
+                      attributes:
+                        interaction_type: some type of Interaction
+                        body: Body of the Interaction
+                        happened_at: '2022-06-29T15:00:00.000-07:00'
+                        created_at: '2022-08-16T09:52:39.900-07:00'
+                        updated_at: '2022-08-16T09:52:39.917-07:00'
+                      relationships:
+                        created_by:
+                          data:
+                            id: '2'
+                            type: user
+                        interactable:
+                          data:
+                            id: '12'
+                            type: prospect
+                    - id: '21'
+                      type: interaction
+                      attributes:
+                        interaction_type: '77777'
+                        body: '77777'
+                        happened_at: '2022-03-01T14:00:00.000-08:00'
+                        created_at: '2022-08-16T09:04:14.069-07:00'
+                        updated_at: '2022-08-16T09:12:12.824-07:00'
+                      relationships:
+                        created_by:
+                          data:
+                            id: '2'
+                            type: user
+                        interactable:
+                          data:
+                            id: '12'
+                            type: prospect
+                    - id: '6'
+                      type: interaction
+                      attributes:
+                        interaction_type: '77777'
+                        body: '77777'
+                        happened_at: '2022-03-01T14:00:00.000-08:00'
+                        created_at: '2022-08-16T08:23:18.610-07:00'
+                        updated_at: '2022-08-16T10:20:42.847-07:00'
+                      relationships:
+                        created_by:
+                          data:
+                            id: '2'
+                            type: user
+                        interactable:
+                          data:
+                            id: '12'
+                            type: prospect
+                    meta:
+                      total_pages: 1
+                      limit_per_page: 25
+                      total_entries: 18
+                    links:
+                      self: /v1/interactions?page=1
+        '401':
+          description: Unauthorized - missing or invalid OAuth 2.0 bearer token
+        '429':
+          description: Too Many Requests - the per-firm rate limit was exceeded; a Retry-After header is returned
+          headers:
+            Retry-After:
+              description: Seconds to wait before retrying
+              schema:
+                type: integer
+    post:
+      operationId: createInteraction
+      summary: Create Interaction
+      description: 'Create a new Interaction
+
+
+        Required fields:
+
+
+        happened_at: timestamp meaning when the interaction happened
+
+
+        prospect_id: Integer value, id of the prospect this interaction is related to
+
+
+        body: text describing the interaction
+
+
+        interaction_type: a string describing the kind of interaction that happened'
+      tags:
+      - Matters (Prospects)
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                type: object
+              examples:
+                postCreateInteraction:
+                  summary: POST Create Interaction
+                  value:
+                    data:
+                      id: '71'
+                      type: interaction
+                      attributes:
+                        interaction_type: A type of interaction
+                        body: the body
+                        happened_at: '2022-06-29T15:00:00.000-07:00'
+                        created_at: '2022-08-24T20:42:19.343-07:00'
+                        updated_at: '2022-08-24T20:42:19.343-07:00'
+                      relationships:
+                        created_by:
+                          data:
+                            id: '2'
+                            type: user
+                        interactable:
+                          data:
+                            id: '143'
+                            type: prospect
+        '401':
+          description: Unauthorized - missing or invalid OAuth 2.0 bearer token
+        '429':
+          description: Too Many Requests - the per-firm rate limit was exceeded; a Retry-After header is returned
+          headers:
+            Retry-After:
+              description: Seconds to wait before retrying
+              schema:
+                type: integer
+  /v1/campaigns/{campaign_id}:
+    get:
+      operationId: getCampaign
+      summary: Campaign
+      description: A specific Marketing Campaign by ID
+      tags:
+      - Matters (Prospects)
+      parameters:
+      - name: campaign_id
+        in: path
+        required: true
+        description: The campaign id
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+              examples:
+                getCampaign:
+                  summary: GET Campaign
+                  value:
+                    data:
+                      id: '192'
+                      type: campaign
+                      attributes:
+                        name: ClioCon 2018
+                        description: ClioCon in New Orleans 2018
+                        utm_match: clio_con
+                        tracking_number: '+18556347246'
+                        pnc_count: 9
+                        created_at: '2018-10-04T10:35:00.880-07:00'
+                        updated_at: '2018-10-04T10:35:00.880-07:00'
+                      relationships:
+                        source:
+                          data:
+                            id: '2'
+                            type: source
+                        prospects:
+                          data:
+                          - id: '12505'
+                            type: prospect
+                          - id: '6017'
+                            type: prospect
+                          - id: '5977'
+                            type: prospect
+                          - id: '5974'
+                            type: prospect
+                          - id: '5971'
+                            type: prospect
+                          - id: '5968'
+                            type: prospect
+                          - id: '5966'
+                            type: prospect
+                          - id: '5963'
+                            type: prospect
+                          - id: '5959'
+                            type: prospect
+        '401':
+          description: Unauthorized - missing or invalid OAuth 2.0 bearer token
+        '429':
+          description: Too Many Requests - the per-firm rate limit was exceeded; a Retry-After header is returned
+          headers:
+            Retry-After:
+              description: Seconds to wait before retrying
+              schema:
+                type: integer
+  /v1/campaigns:
+    get:
+      operationId: getCampaigns
+      summary: Campaigns
+      description: A paginated list of all Marketing Campaigns in Lawmatics
+      tags:
+      - Matters (Prospects)
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+              examples:
+                getCampaigns:
+                  summary: GET Campaigns
+                  value:
+                    data:
+                    - id: '284'
+                      type: campaign
+                      attributes:
+                        name: Landing Page Ad 1
+                        created_at: '2018-10-11T18:09:55.363-07:00'
+                        updated_at: '2018-10-11T18:09:55.363-07:00'
+                      relationships: {}
+                    - id: '285'
+                      type: campaign
+                      attributes:
+                        name: Blog Ad 1
+                        created_at: '2018-10-12T15:28:16.893-07:00'
+                        updated_at: '2018-10-12T15:28:23.512-07:00'
+                      relationships: {}
+                    - id: '286'
+                      type: campaign
+                      attributes:
+                        name: Banner Ad 1
+                        created_at: '2018-10-12T15:28:34.041-07:00'
+                        updated_at: '2018-10-12T15:28:34.041-07:00'
+                      relationships: {}
+                    - id: '287'
+                      type: campaign
+                      attributes:
+                        name: Banner Ad 2
+                        created_at: '2018-10-12T15:28:41.512-07:00'
+                        updated_at: '2018-10-12T15:28:45.320-07:00'
+                      relationships: {}
+                    - id: '288'
+                      type: campaign
+                      attributes:
+                        name: Roey Chasman
+                        created_at: '2018-10-12T15:38:08.058-07:00'
+                        updated_at: '2018-10-12T15:38:08.058-07:00'
+                      relationships: {}
+                    meta:
+                      total_pages: 1
+                      limit_per_page: 25
+                      total_entries: 5
+                    links:
+                      self: /v1/campaigns?page=1
+        '401':
+          description: Unauthorized - missing or invalid OAuth 2.0 bearer token
+        '429':
+          description: Too Many Requests - the per-firm rate limit was exceeded; a Retry-After header is returned
+          headers:
+            Retry-After:
+              description: Seconds to wait before retrying
+              schema:
+                type: integer
+  /v1/sources/{source_id}:
+    get:
+      operationId: getSource
+      summary: Source
+      description: A specific Marketing Source by ID
+      tags:
+      - Matters (Prospects)
+      parameters:
+      - name: source_id
+        in: path
+        required: true
+        description: The source id
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+              examples:
+                getSource:
+                  summary: GET Source
+                  value:
+                    data:
+                      id: '243'
+                      type: source
+                      attributes:
+                        name: Facebook
+                        description: null
+                        color: '#F70303'
+                        utm_match: null
+                        spend_frequency: weekly
+                        tracking_number: null
+                        pnc_count: 0
+                        created_at: '2018-09-20T10:45:21.681-07:00'
+                        updated_at: '2018-09-20T10:45:21.681-07:00'
+                      relationships:
+                        campaigns:
+                          data:
+                          - id: '174'
+                            type: campaign
+                        prospects:
+                          data: []
+        '401':
+          description: Unauthorized - missing or invalid OAuth 2.0 bearer token
+        '429':
+          description: Too Many Requests - the per-firm rate limit was exceeded; a Retry-After header is returned
+          headers:
+            Retry-After:
+              description: Seconds to wait before retrying
+              schema:
+                type: integer
+  /v1/sources:
+    get:
+      operationId: getSources
+      summary: Sources
+      description: A paginated list of all Marketing Sources in Lawmatics
+      tags:
+      - Matters (Prospects)
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+              examples:
+                getSources:
+                  summary: GET Sources
+                  value:
+                    data:
+                    - id: '243'
+                      type: source
+                      attributes:
+                        name: Facebook
+                        created_at: '2018-09-20T10:45:21.681-07:00'
+                        updated_at: '2018-09-20T10:45:21.681-07:00'
+                      relationships: {}
+                    - id: '200'
+                      type: source
+                      attributes:
+                        name: Nolo
+                        created_at: '2018-08-29T15:14:15.629-07:00'
+                        updated_at: '2018-08-29T15:14:15.629-07:00'
+                      relationships: {}
+                    - id: '90'
+                      type: source
+                      attributes:
+                        name: ChatBot 101
+                        created_at: '2018-07-20T09:44:43.821-07:00'
+                        updated_at: '2018-07-20T09:44:43.821-07:00'
+                      relationships: {}
+                    - id: '6'
+                      type: source
+                      attributes:
+                        name: Referrals
+                        created_at: '2018-03-04T02:17:45.924-08:00'
+                        updated_at: '2018-04-12T14:13:01.357-07:00'
+                      relationships: {}
+                    - id: '3'
+                      type: source
+                      attributes:
+                        name: Google
+                        created_at: '2018-01-24T10:44:54.260-08:00'
+                        updated_at: '2018-01-24T10:44:54.260-08:00'
+                      relationships: {}
+                    - id: '2'
+                      type: source
+                      attributes:
+                        name: Conferences
+                        created_at: '2018-01-08T10:47:20.997-08:00'
+                        updated_at: '2018-10-05T09:02:59.114-07:00'
+                      relationships: {}
+                    - id: '1'
+                      type: source
+                      attributes:
+                        name: Google PPC
+                        created_at: '2018-01-08T10:02:16.040-08:00'
+                        updated_at: '2018-10-05T07:29:39.386-07:00'
+                      relationships: {}
+                    meta:
+                      total_pages: 1
+                      limit_per_page: 25
+                      total_entries: 7
+                    links:
+                      self: /v1/source?page=1
+        '401':
+          description: Unauthorized - missing or invalid OAuth 2.0 bearer token
+        '429':
+          description: Too Many Requests - the per-firm rate limit was exceeded; a Retry-After header is returned
+          headers:
+            Retry-After:
+              description: Seconds to wait before retrying
+              schema:
+                type: integer
+  /v1/pipelines/{pipeline_id}:
+    get:
+      operationId: getPipeline
+      summary: Pipeline
+      description: A specific Pipeline by id
+      tags:
+      - Matters (Prospects)
+      parameters:
+      - name: pipeline_id
+        in: path
+        required: true
+        description: The pipeline id
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+              examples:
+                getPipeline:
+                  summary: GET Pipeline
+                  value:
+                    data:
+                      id: '4'
+                      type: pipeline
+                      attributes:
+                        name: Intake
+                        description: Intake Pipeline
+                        statuses:
+                        - pnc
+                        pipeline_type: intake
+                        matter_count: 174
+                        estimated_value: $0.22
+                        created_at: '2019-02-28T07:21:48.362-08:00'
+                        updated_at: '2019-02-28T07:21:48.362-08:00'
+                      relationships:
+                        stages:
+                          data:
+                          - id: '6'
+                            type: stage
+                          - id: '7'
+                            type: stage
+                          - id: '9'
+                            type: stage
+                          - id: '148'
+                            type: stage
+                          - id: '352'
+                            type: stage
+                          - id: '138'
+                            type: stage
+                          - id: '146'
+                            type: stage
+                          - id: '147'
+                            type: stage
+                        created_by:
+                          data:
+                            id: '14'
+                            type: user
+        '401':
+          description: Unauthorized - missing or invalid OAuth 2.0 bearer token
+        '429':
+          description: Too Many Requests - the per-firm rate limit was exceeded; a Retry-After header is returned
+          headers:
+            Retry-After:
+              description: Seconds to wait before retrying
+              schema:
+                type: integer
+  /v1/pipelines:
+    get:
+      operationId: getPipelines
+      summary: Pipelines
+      description: A paginated list of all Pipelines in Lawmatics
+      tags:
+      - Matters (Prospects)
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+              examples:
+                getPipelines:
+                  summary: GET Pipelines
+                  value:
+                    data:
+                    - id: '61'
+                      type: pipeline
+                      attributes:
+                        name: sdf
+                        description: sdfdfs
+                        statuses:
+                        - pnc
+                        pipeline_type: normal
+                        matter_count: 0
+                        estimated_value: $0
+                        created_at: '2019-04-01T13:47:21.156-07:00'
+                        updated_at: '2019-04-01T13:47:21.156-07:00'
+                      relationships:
+                        stages:
+                          data: []
+                        created_by:
+                          data:
+                            id: '3'
+                            type: user
+                    - id: '60'
+                      type: pipeline
+                      attributes:
+                        name: test23
+                        description: wow
+                        statuses:
+                        - pnc
+                        pipeline_type: intake
+                        matter_count: 0
+                        estimated_value: $0
+                        created_at: '2019-04-01T13:46:50.796-07:00'
+                        updated_at: '2019-04-01T13:46:50.796-07:00'
+                      relationships:
+                        stages:
+                          data:
+                          - id: '374'
+                            type: stage
+                        created_by:
+                          data:
+                            id: '3'
+                            type: user
+                    - id: '16'
+                      type: pipeline
+                      attributes:
+                        name: test
+                        description: test
+                        statuses:
+                        - pnc
+                        pipeline_type: intake
+                        matter_count: 0
+                        estimated_value: $0
+                        created_at: '2019-03-12T10:45:35.796-07:00'
+                        updated_at: '2019-03-12T10:45:35.796-07:00'
+                      relationships:
+                        stages:
+                          data: []
+                        created_by:
+                          data:
+                            id: '3'
+                            type: user
+                    - id: '4'
+                      type: pipeline
+                      attributes:
+                        name: Intake
+                        description: Intake Pipeline
+                        statuses:
+                        - pnc
+                        pipeline_type: intake
+                        matter_count: 173
+                        estimated_value: $0.22
+                        created_at: '2019-02-28T07:21:48.362-08:00'
+                        updated_at: '2019-02-28T07:21:48.362-08:00'
+                      relationships:
+                        stages:
+                          data:
+                          - id: '6'
+                            type: stage
+                          - id: '7'
+                            type: stage
+                          - id: '9'
+                            type: stage
+                          - id: '148'
+                            type: stage
+                          - id: '352'
+                            type: stage
+                          - id: '138'
+                            type: stage
+                          - id: '146'
+                            type: stage
+                          - id: '147'
+                            type: stage
+                        created_by:
+                          data:
+                            id: '14'
+                            type: user
+                    meta:
+                      total_pages: 1
+                      limit_per_page: 25
+                      total_entries: 4
+                    links:
+                      self: /v1/pipeline?page=1
+        '401':
+          description: Unauthorized - missing or invalid OAuth 2.0 bearer token
+        '429':
+          description: Too Many Requests - the per-firm rate limit was exceeded; a Retry-After header is returned
+          headers:
+            Retry-After:
+              description: Seconds to wait before retrying
+              schema:
+                type: integer
+  /v1/stages/{stage_id}:
+    get:
+      operationId: getStage
+      summary: Stage
+      description: A specific Stage by id
+      tags:
+      - Matters (Prospects)
+      parameters:
+      - name: stage_id
+        in: path
+        required: true
+        description: The stage id
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+              examples:
+                getStage:
+                  summary: GET Stage
+                  value:
+                    data:
+                      id: '147'
+                      type: stage
+                      attributes:
+                        name: Initial Call
+                        color: '#bcc2c94d'
+                        order: 7
+                        created_at: '2018-10-02T11:25:35.532-07:00'
+                        updated_at: '2019-02-28T19:28:40.101-08:00'
+                      relationships:
+                        prospects:
+                          data:
+                          - id: '50645'
+                            type: prospect
+                        pipeline:
+                          data:
+                            id: '4'
+                            type: pipeline
+        '401':
+          description: Unauthorized - missing or invalid OAuth 2.0 bearer token
+        '429':
+          description: Too Many Requests - the per-firm rate limit was exceeded; a Retry-After header is returned
+          headers:
+            Retry-After:
+              description: Seconds to wait before retrying
+              schema:
+                type: integer
+  /v1/stages:
+    get:
+      operationId: getStages
+      summary: Stages
+      description: A paginated list of all Stages in Lawmatics
+      tags:
+      - Matters (Prospects)
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+              examples:
+                getStagesFilteredByPipeline:
+                  summary: GET Stages Filtered By Pipeline
+                  value:
+                    data:
+                    - id: '352'
+                      type: stage
+                      attributes:
+                        name: test      w
+                      relationships:
+                        pipeline:
+                          data:
+                            id: '4'
+                            type: pipeline
+                    - id: '148'
+                      type: stage
+                      attributes:
+                        name: Consult Completed
+                      relationships:
+                        pipeline:
+                          data:
+                            id: '4'
+                            type: pipeline
+                    - id: '147'
+                      type: stage
+                      attributes:
+                        name: Initial Call
+                      relationships:
+                        pipeline:
+                          data:
+                            id: '4'
+                            type: pipeline
+                    - id: '146'
+                      type: stage
+                      attributes:
+                        name: Consult Scheduled
+                      relationships:
+                        pipeline:
+                          data:
+                            id: '4'
+                            type: pipeline
+                    - id: '138'
+                      type: stage
+                      attributes:
+                        name: Really very way too long stage name
+                      relationships:
+                        pipeline:
+                          data:
+                            id: '4'
+                            type: pipeline
+                    - id: '9'
+                      type: stage
+                      attributes:
+                        name: Stage 3
+                      relationships:
+                        pipeline:
+                          data:
+                            id: '4'
+                            type: pipeline
+                    - id: '7'
+                      type: stage
+                      attributes:
+                        name: Stage 2
+                      relationships:
+                        pipeline:
+                          data:
+                            id: '4'
+                            type: pipeline
+                    - id: '6'
+                      type: stage
+                      attributes:
+                        name: Stage 1
+                      relationships:
+                        pipeline:
+                          data:
+                            id: '4'
+                            type: pipeline
+                    meta:
+                      total_pages: 1
+                      limit_per_page: 25
+                      total_entries: 8
+                    links:
+                      self: /v1/stage?page=1
+                getStages:
+                  summary: GET Stages
+                  value:
+                    data:
+                    - id: '352'
+                      type: stage
+                      attributes:
+                        name: test      w
+                        color: '#757F8F'
+                        order: 4
+                        created_at: '2019-01-10T16:13:55.733-08:00'
+                        updated_at: '2019-03-06T23:08:42.168-08:00'
+                      relationships:
+                        prospects:
+                          data:
+                          - id: '54736'
+                            type: prospect
+                          - id: '50661'
+                            type: prospect
+                        pipeline:
+                          data:
+                            id: '4'
+                            type: pipeline
+                    - id: '148'
+                      type: stage
+                      attributes:
+                        name: Consult Completed
+                        color: '#bcc2c94d'
+                        order: 3
+                        created_at: '2018-10-02T11:25:36.329-07:00'
+                        updated_at: '2019-03-06T23:08:42.168-08:00'
+                      relationships:
+                        prospects:
+                          data:
+                          - id: '54747'
+                            type: prospect
+                          - id: '54787'
+                            type: prospect
+                          - id: '54748'
+                            type: prospect
+                          - id: '54749'
+                            type: prospect
+                          - id: '54750'
+                            type: prospect
+                        pipeline:
+                          data:
+                            id: '4'
+                            type: pipeline
+                    - id: '147'
+                      type: stage
+                      attributes:
+                        name: Initial Call
+                        color: '#bcc2c94d'
+                        order: 7
+                        created_at: '2018-10-02T11:25:35.532-07:00'
+                        updated_at: '2019-02-28T19:28:40.101-08:00'
+                      relationships:
+                        prospects:
+                          data:
+                          - id: '50645'
+                            type: prospect
+                        pipeline:
+                          data:
+                            id: '4'
+                            type: pipeline
+                    - id: '146'
+                      type: stage
+                      attributes:
+                        name: Consult Scheduled
+                        color: '#bcc2c94d'
+                        order: 6
+                        created_at: '2018-10-02T11:25:35.363-07:00'
+                        updated_at: '2019-02-28T19:28:40.096-08:00'
+                      relationships:
+                        prospects:
+                          data:
+                          - id: '79'
+                            type: prospect
+                          - id: '32'
+                            type: prospect
+                          - id: '10'
+                            type: prospect
+                          - id: '100'
+                            type: prospect
+                          - id: '46'
+                            type: prospect
+                          - id: '17877'
+                            type: prospect
+                          - id: '17683'
+                            type: prospect
+                          - id: '27'
+                            type: prospect
+                        pipeline:
+                          data:
+                            id: '4'
+                            type: pipeline
+                    - id: '138'
+                      type: stage
+                      attributes:
+                        name: Really very way too long stage name
+                        color: '#F70303'
+                        order: 5
+                        created_at: '2018-08-07T16:55:52.659-07:00'
+                        updated_at: '2019-02-28T19:28:40.091-08:00'
+                      relationships:
+                        prospects:
+                          data:
+                          - id: '54688'
+                            type: prospect
+                          - id: '19'
+                            type: prospect
+                          - id: '54767'
+                            type: prospect
+                          - id: '45305'
+                            type: prospect
+                          - id: '6'
+                            type: prospect
+                          - id: '41789'
+                            type: prospect
+                          - id: '65'
+                            type: prospect
+                          - id: '45302'
+                            type: prospect
+                          - id: '16'
+                            type: prospect
+                          - id: '90'
+                            type: prospect
+                          - id: '93'
+                            type: prospect
+                          - id: '60'
+                            type: prospect
+                        pipeline:
+                          data:
+                            id: '4'
+                            type: pipeline
+                    - id: '9'
+                      type: stage
+                      attributes:
+                        name: Stage 3
+                        color: '#70B08B'
+                        order: 2
+                        created_at: '2018-07-17T17:40:21.805-07:00'
+                        updated_at: '2019-03-06T23:08:42.170-08:00'
+                      relationships:
+                        prospects:
+                          data:
+                          - id: '50662'
+                            type: prospect
+                          - id: '45306'
+                            type: prospect
+                          - id: '41788'
+                            type: prospect
+                          - id: '17682'
+                            type: prospect
+                          - id: '17681'
+                            type: prospect
+                          - id: '45303'
+                            type: prospect
+                          - id: '128'
+                            type: prospect
+                          - id: '21'
+                            type: prospect
+                          - id: '68'
+                            type: prospect
+                          - id: '26'
+                            type: prospect
+                          - id: '95'
+                            type: prospect
+                          - id: '52'
+                            type: prospect
+                        pipeline:
+                          data:
+                            id: '4'
+                            type: pipeline
+                    - id: '7'
+                      type: stage
+                      attributes:
+                        name: Stage 2
+                        color: '#DC438F'
+                        order: 1
+                        created_at: '2018-07-16T15:12:39.502-07:00'
+                        updated_at: '2019-03-06T23:08:40.445-08:00'
+                      relationships:
+                        prospects:
+                          data:
+                          - id: '40'
+                            type: prospect
+                          - id: '45310'
+                            type: prospect
+                          - id: '50649'
+                            type: prospect
+                          - id: '45311'
+                            type: prospect
+                          - id: '72'
+                            type: prospect
+                          - id: '63'
+                            type: prospect
+                          - id: '57'
+                            type: prospect
+                          - id: '23'
+                            type: prospect
+                          - id: '43'
+                            type: prospect
+                          - id: '35'
+                            type: prospect
+                          - id: '67'
+                            type: prospect
+                          - id: '62'
+                            type: prospect
+                          - id: '58'
+                            type: prospect
+                          - id: '12'
+                            type: prospect
+                          - id: '17'
+                            type: prospect
+                          - id: '20'
+                            type: prospect
+                          - id: '80'
+                            type: prospect
+                          - id: '55'
+                            type: prospect
+                          - id: '53'
+                            type: prospect
+                          - id: '77'
+                            type: prospect
+                          - id: '44'
+                            type: prospect
+                          - id: '99'
+                            type: prospect
+                        pipeline:
+                          data:
+                            id: '4'
+                            type: pipeline
+                    - id: '6'
+                      type: stage
+                      attributes:
+                        name: Stage 1
+                        color: '#7997C9'
+                        order: 0
+                        created_at: '2018-07-16T15:12:39.495-07:00'
+                        updated_at: '2019-02-28T07:21:48.506-08:00'
+                      relationships:
+                        prospects:
+                          data:
+                          - id: '54896'
+                            type: prospect
+                          - id: '54895'
+                            type: prospect
+                          - id: '54894'
+                            type: prospect
+                          - id: '54893'
+                            type: prospect
+                          - id: '54892'
+                            type: prospect
+                          - id: '54891'
+                            type: prospect
+                          - id: '54890'
+                            type: prospect
+                          - id: '54889'
+                            type: prospect
+                          - id: '54888'
+                            type: prospect
+                          - id: '54887'
+                            type: prospect
+                          - id: '54886'
+                            type: prospect
+                          - id: '54885'
+                            type: prospect
+                          - id: '54884'
+                            type: prospect
+                          - id: '54883'
+                            type: prospect
+                          - id: '54882'
+                            type: prospect
+                          - id: '54881'
+                            type: prospect
+                          - id: '54880'
+                            type: prospect
+                          - id: '54879'
+                            type: prospect
+                          - id: '54878'
+                            type: prospect
+                          - id: '54877'
+                            type: prospect
+                          - id: '54876'
+                            type: prospect
+                          - id: '54875'
+                            type: prospect
+                          - id: '54874'
+                            type: prospect
+                          - id: '54873'
+                            type: prospect
+                          - id: '54872'
+                            type: prospect
+                          - id: '54871'
+                            type: prospect
+                          - id: '54870'
+                            type: prospect
+                          - id: '54869'
+                            type: prospect
+                          - id: '54868'
+                            type: prospect
+                          - id: '54867'
+                            type: prospect
+                          - id: '54866'
+                            type: prospect
+                          - id: '54865'
+                            type: prospect
+                          - id: '54864'
+                            type: prospect
+                          - id: '54863'
+                            type: prospect
+                          - id: '54862'
+                            type: prospect
+                          - id: '54861'
+                            type: prospect
+                          - id: '54860'
+                            type: prospect
+                          - id: '54859'
+                            type: prospect
+                          - id: '54858'
+                            type: prospect
+                          - id: '54857'
+                            type: prospect
+                          - id: '54856'
+                            type: prospect
+                          - id: '54855'
+                            type: prospect
+                          - id: '54854'
+                            type: prospect
+                          - id: '54853'
+                            type: prospect
+                          - id: '54852'
+                            type: prospect
+                          - id: '54851'
+                            type: prospect
+                          - id: '54850'
+                            type: prospect
+                          - id: '54849'
+                            type: prospect
+                          - id: '54848'
+                            type: prospect
+                          - id: '54846'
+                            type: prospect
+                          - id: '54845'
+                            type: prospect
+                          - id: '54844'
+                            type: prospect
+                          - id: '54843'
+                            type: prospect
+                          - id: '54842'
+                            type: prospect
+                          - id: '54841'
+                            type: prospect
+                          - id: '54840'
+                            type: prospect
+                          - id: '54839'
+                            type: prospect
+                          - id: '54838'
+                            type: prospect
+                          - id: '54837'
+                            type: prospect
+                          - id: '54836'
+                            type: prospect
+                          - id: '54833'
+                            type: prospect
+                          - id: '54832'
+                            type: prospect
+                          - id: '54831'
+                            type: prospect
+                          - id: '54820'
+                            type: prospect
+                          - id: '54810'
+                            type: prospect
+                          - id: '54808'
+                            type: prospect
+                          - id: '54807'
+                            type: prospect
+                          - id: '54730'
+                            type: prospect
+                          - id: '54733'
+                            type: prospect
+                          - id: '50659'
+                            type: prospect
+                          - id: '50664'
+                            type: prospect
+                          - id: '50663'
+                            type: prospect
+                          - id: '50665'
+                            type: prospect
+                          - id: '45307'
+                            type: prospect
+                          - id: '122'
+                            type: prospect
+                          - id: '127'
+                            type: prospect
+                          - id: '45308'
+                            type: prospect
+                          - id: '45301'
+                            type: prospect
+                          - id: '28'
+                            type: prospect
+                          - id: '8'
+                            type: prospect
+                          - id: '87'
+                            type: prospect
+                          - id: '86'
+                            type: prospect
+                          - id: '82'
+                            type: prospect
+                          - id: '22'
+                            type: prospect
+                          - id: '18'
+                            type: prospect
+                          - id: '9'
+                            type: prospect
+                          - id: '98'
+                            type: prospect
+                          - id: '61'
+                            type: prospect
+                          - id: '7'
+                            type: prospect
+                          - id: '5'
+                            type: prospect
+                          - id: '74'
+                            type: prospect
+                          - id: '70'
+                            type: prospect
+                          - id: '69'
+                            type: prospect
+                          - id: '59'
+                            type: prospect
+                          - id: '51'
+                            type: prospect
+                          - id: '49'
+                            type: prospect
+                          - id: '42'
+                            type: prospect
+                          - id: '41'
+                            type: prospect
+                          - id: '36'
+                            type: prospect
+                          - id: '34'
+                            type: prospect
+                          - id: '30'
+                            type: prospect
+                          - id: '97'
+                            type: prospect
+                          - id: '94'
+                            type: prospect
+                          - id: '92'
+                            type: prospect
+                          - id: '91'
+                            type: prospect
+                        pipeline:
+                          data:
+                            id: '4'
+                            type: pipeline
+                    meta:
+                      total_pages: 1
+                      limit_per_page: 25
+                      total_entries: 8
+                    links:
+                      self: /v1/stage?page=1
+        '401':
+          description: Unauthorized - missing or invalid OAuth 2.0 bearer token
+        '429':
+          description: Too Many Requests - the per-firm rate limit was exceeded; a Retry-After header is returned
+          headers:
+            Retry-After:
+              description: Seconds to wait before retrying
+              schema:
+                type: integer
+  /v1/practice_areas/{practice_area_id}:
+    get:
+      operationId: getPracticeArea
+      summary: Practice Area
+      description: A specific Practice Area by id
+      tags:
+      - Matters (Prospects)
+      parameters:
+      - name: practice_area_id
+        in: path
+        required: true
+        description: The practice area id
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+              examples:
+                getPracticeArea:
+                  summary: GET Practice Area
+                  value:
+                    data:
+                      id: '63'
+                      type: practice_area
+                      attributes:
+                        name: Family Law
+                        color: '#bcc2c9'
+                        created_at: '2018-07-23T14:41:38.401-07:00'
+                        updated_at: '2018-07-23T14:41:38.401-07:00'
+        '401':
+          description: Unauthorized - missing or invalid OAuth 2.0 bearer token
+        '429':
+          description: Too Many Requests - the per-firm rate limit was exceeded; a Retry-After header is returned
+          headers:
+            Retry-After:
+              description: Seconds to wait before retrying
+              schema:
+                type: integer
+    put:
+      operationId: updatePracticeArea
+      summary: Update Practice Area
+      description: 'Updates an existing Practice Area
+
+
+        Optional Fields: statute_of_limitations_enabled
+
+
+        name: The Area name
+
+
+        color: The Area color. Can be any CSS valid color (hex, rgb, hsl, colorname string, etc)
+
+
+        statute_of_limitations_enabled: If Statute of Limitations is enabled'
+      tags:
+      - Matters (Prospects)
+      parameters:
+      - name: practice_area_id
+        in: path
+        required: true
+        description: The practice area id
+        schema:
+          type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+            example:
+              name: New Name
+              color: '#bcc2c9'
+              statute_of_limitations_enabled: true
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                type: object
+              examples:
+                putUpdatePracticeArea:
+                  summary: PUT Update Practice Area
+                  value:
+                    data:
+                      id: '9'
+                      type: practice_area
+                      attributes:
+                        name: New Name
+                        color: '#bcc2c9'
+                        statute_of_limitations_enabled: true
+                        matter_count: 0
+                        created_at: '2022-05-26T10:54:59.444-07:00'
+                        updated_at: '2022-05-26T11:27:35.598-07:00'
+                      relationships:
+                        prospects:
+                          data: []
+        '401':
+          description: Unauthorized - missing or invalid OAuth 2.0 bearer token
+        '429':
+          description: Too Many Requests - the per-firm rate limit was exceeded; a Retry-After header is returned
+          headers:
+            Retry-After:
+              description: Seconds to wait before retrying
+              schema:
+                type: integer
+    delete:
+      operationId: deletePracticeArea
+      summary: Delete Practice Area
+      description: Deletes an existing Practice Area
+      tags:
+      - Matters (Prospects)
+      parameters:
+      - name: practice_area_id
+        in: path
+        required: true
+        description: The practice area id
+        schema:
+          type: string
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                type: object
+              examples:
+                deleteUpdatePracticeArea:
+                  summary: DELETE Update Practice Area
+                  value:
+                    data:
+                      id: '9'
+                      type: practice_area
+                      attributes:
+                        name: New Name
+                        created_at: '2022-05-26T10:54:59.444-07:00'
+                        updated_at: '2022-05-26T11:45:32.351-07:00'
+                      relationships: {}
+        '401':
+          description: Unauthorized - missing or invalid OAuth 2.0 bearer token
+        '429':
+          description: Too Many Requests - the per-firm rate limit was exceeded; a Retry-After header is returned
+          headers:
+            Retry-After:
+              description: Seconds to wait before retrying
+              schema:
+                type: integer
+  /v1/practice_areas:
+    get:
+      operationId: getPracticeAreas
+      summary: Practice Areas
+      description: A paginated list of all Practice Areas in Lawmatics
+      tags:
+      - Matters (Prospects)
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+              examples:
+                getPracticeAreas:
+                  summary: GET Practice Areas
+                  value:
+                    data:
+                    - id: '4'
+                      type: practice_area
+                      attributes:
+                        name: Criminal Defense
+                        color: '#bcc2c9'
+                        created_at: '2018-07-16T15:13:04.112-07:00'
+                        updated_at: '2018-07-16T15:13:04.112-07:00'
+                    - id: '5'
+                      type: practice_area
+                      attributes:
+                        name: Intellectual Property
+                        color: '#bcc2c9'
+                        created_at: '2018-07-16T15:13:04.114-07:00'
+                        updated_at: '2018-07-16T15:13:04.114-07:00'
+                    - id: '6'
+                      type: practice_area
+                      attributes:
+                        name: Divorce
+                        color: '#bcc2c9'
+                        created_at: '2018-07-16T15:13:04.116-07:00'
+                        updated_at: '2018-07-16T15:13:04.116-07:00'
+                    - id: '63'
+                      type: practice_area
+                      attributes:
+                        name: Family Law
+                        color: '#bcc2c9'
+                        created_at: '2018-07-23T14:41:38.401-07:00'
+                        updated_at: '2018-07-23T14:41:38.401-07:00'
+                    - id: '64'
+                      type: practice_area
+                      attributes:
+                        name: Veterans Disability
+                        color: '#bcc2c9'
+                        created_at: '2018-07-23T14:41:38.691-07:00'
+                        updated_at: '2018-07-23T14:41:38.691-07:00'
+                    - id: '65'
+                      type: practice_area
+                      attributes:
+                        name: Estate Planning
+                        color: '#bcc2c9'
+                        created_at: '2018-07-23T14:41:39.193-07:00'
+                        updated_at: '2018-07-23T14:41:39.193-07:00'
+                    - id: '94'
+                      type: practice_area
+                      attributes:
+                        name: Expungement
+                        color: '#bcc2c9'
+                        created_at: '2018-08-07T16:49:06.060-07:00'
+                        updated_at: '2018-08-07T16:49:06.060-07:00'
+                    - id: '95'
+                      type: practice_area
+                      attributes:
+                        name: Dui
+                        color: '#bcc2c9'
+                        created_at: '2018-08-07T16:49:06.134-07:00'
+                        updated_at: '2018-08-07T16:49:06.134-07:00'
+                    - id: '96'
+                      type: practice_area
+                      attributes:
+                        name: Unknown
+                        color: '#bcc2c9'
+                        created_at: '2018-08-07T16:49:06.187-07:00'
+                        updated_at: '2018-08-07T16:49:06.187-07:00'
+                    - id: '97'
+                      type: practice_area
+                      attributes:
+                        name: Misdemeanor
+                        color: '#bcc2c9'
+                        created_at: '2018-08-07T16:49:06.221-07:00'
+                        updated_at: '2018-08-07T16:49:06.221-07:00'
+                    - id: '98'
+                      type: practice_area
+                      attributes:
+                        name: Non Practice Area
+                        color: '#bcc2c9'
+                        created_at: '2018-08-07T16:49:06.233-07:00'
+                        updated_at: '2018-08-07T16:49:06.233-07:00'
+                    - id: '99'
+                      type: practice_area
+                      attributes:
+                        name: Domestic Violence
+                        color: '#bcc2c9'
+                        created_at: '2018-08-07T16:49:06.302-07:00'
+                        updated_at: '2018-08-07T16:49:06.302-07:00'
+                    - id: '100'
+                      type: practice_area
+                      attributes:
+                        name: Felony
+                        color: '#bcc2c9'
+                        created_at: '2018-08-07T16:49:06.384-07:00'
+                        updated_at: '2018-08-07T16:49:06.384-07:00'
+                    - id: '101'
+                      type: practice_area
+                      attributes:
+                        name: Marijuana
+                        color: '#bcc2c9'
+                        created_at: '2018-08-07T16:49:06.691-07:00'
+                        updated_at: '2018-08-07T16:49:06.691-07:00'
+                    - id: '102'
+                      type: practice_area
+                      attributes:
+                        name: Asset Forfeiture
+                        color: '#bcc2c9'
+                        created_at: '2018-08-07T16:49:06.927-07:00'
+                        updated_at: '2018-08-07T16:49:06.927-07:00'
+                    - id: '103'
+                      type: practice_area
+                      attributes:
+                        name: Juvenile
+                        color: '#bcc2c9'
+                        created_at: '2018-08-07T16:49:07.191-07:00'
+                        updated_at: '2018-08-07T16:49:07.191-07:00'
+                    - id: '104'
+                      type: practice_area
+                      attributes:
+                        name: Marijuana Business
+                        color: '#bcc2c9'
+                        created_at: '2018-08-07T16:49:07.315-07:00'
+                        updated_at: '2018-08-07T16:49:07.315-07:00'
+                    - id: '105'
+                      type: practice_area
+                      attributes:
+                        name: Prop 64
+                        color: '#bcc2c9'
+                        created_at: '2018-08-07T16:49:08.097-07:00'
+                        updated_at: '2018-08-07T16:49:08.097-07:00'
+                    - id: '106'
+                      type: practice_area
+                      attributes:
+                        name: Prop 57
+                        color: '#bcc2c9'
+                        created_at: '2018-08-07T16:49:09.110-07:00'
+                        updated_at: '2018-08-07T16:49:09.110-07:00'
+                    - id: '107'
+                      type: practice_area
+                      attributes:
+                        name: Unassigned
+                        color: '#bcc2c9'
+                        created_at: '2018-08-07T16:49:09.644-07:00'
+                        updated_at: '2018-08-07T16:49:09.644-07:00'
+                    - id: '109'
+                      type: practice_area
+                      attributes:
+                        name: Business - Business General
+                        color: '#757F8F'
+                        created_at: '2018-08-24T16:36:17.715-07:00'
+                        updated_at: '2018-08-24T16:36:17.715-07:00'
+                    - id: '125'
+                      type: practice_area
+                      attributes:
+                        name: Paternity
+                        color: '#bcc2c9'
+                        created_at: '2018-10-08T14:26:25.945-07:00'
+                        updated_at: '2018-10-08T14:26:25.945-07:00'
+                    - id: '128'
+                      type: practice_area
+                      attributes:
+                        name: Limited Scope
+                        color: '#bcc2c9'
+                        created_at: '2018-10-11T10:11:54.969-07:00'
+                        updated_at: '2018-10-11T10:11:54.969-07:00'
+                    meta:
+                      total_pages: 1
+                      limit_per_page: 25
+                      total_entries: 23
+                    links:
+                      self: /v1/practice_areas?page=1
+        '401':
+          description: Unauthorized - missing or invalid OAuth 2.0 bearer token
+        '429':
+          description: Too Many Requests - the per-firm rate limit was exceeded; a Retry-After header is returned
+          headers:
+            Retry-After:
+              description: Seconds to wait before retrying
+              schema:
+                type: integer
+    post:
+      operationId: createPracticeArea
+      summary: Create Practice Area
+      description: 'Create a new Practice Area
+
+
+        Optional Fields: statute_of_limitations_enabled
+
+
+        name: The Area name
+
+
+        color: The Area color. Can be any CSS valid color (hex, rgb, hsl, colorname string, etc)
+
+
+        statute_of_limitations_enabled: If Statute of Limitations is enabled'
+      tags:
+      - Matters (Prospects)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+            example:
+              name: Test Practice Area c87d06a9-05b2-44ab-861f-43cd1ee1de67
+              color: '#bcc2c9'
+              statute_of_limitations_enabled: true
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                type: object
+              examples:
+                postCreatePracticeArea:
+                  summary: POST Create Practice Area
+                  value:
+                    data:
+                      id: '9'
+                      type: practice_area
+                      attributes:
+                        name: New Area
+                        color: '#bcc2c9'
+                        statute_of_limitations_enabled: true
+                        matter_count: 0
+                        created_at: '2022-05-26T10:54:59.444-07:00'
+                        updated_at: '2022-05-26T10:54:59.444-07:00'
+                      relationships:
+                        prospects:
+                          data: []
+        '401':
+          description: Unauthorized - missing or invalid OAuth 2.0 bearer token
+        '429':
+          description: Too Many Requests - the per-firm rate limit was exceeded; a Retry-After header is returned
+          headers:
+            Retry-After:
+              description: Seconds to wait before retrying
+              schema:
+                type: integer
+  /v1/relationships/{relationship_id}:
+    get:
+      operationId: getRelationship
+      summary: Relationship
+      description: A specific Relationship by ID
+      tags:
+      - Matters (Prospects)
+      parameters:
+      - name: relationship_id
+        in: path
+        required: true
+        description: The relationship id
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+              examples:
+                getRelationship:
+                  summary: GET Relationship
+                  value:
+                    data:
+                      id: '2'
+                      type: relationship
+                      attributes:
+                        name: Spouse
+                        prospect_id: 101
+                        contact_id: 6
+                        relationship_type_id: 1
+                        created_at: '2021-10-31T19:34:53.641-07:00'
+                        updated_at: '2021-10-31T19:34:53.641-07:00'
+        '401':
+          description: Unauthorized - missing or invalid OAuth 2.0 bearer token
+        '429':
+          description: Too Many Requests - the per-firm rate limit was exceeded; a Retry-After header is returned
+          headers:
+            Retry-After:
+              description: Seconds to wait before retrying
+              schema:
+                type: integer
+    put:
+      operationId: updateRelationship
+      summary: Update Relationship
+      description: Update Relationship
+      tags:
+      - Matters (Prospects)
+      parameters:
+      - name: relationship_id
+        in: path
+        required: true
+        description: The relationship id
+        schema:
+          type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+            example:
+              prospect_id: '{{prospect_id}}'
+              contact_id: '{{contact_id}}'
+              relationship_type_id: '{{relationship_type_id}}'
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                type: object
+              examples:
+                putUpdateRelationship:
+                  summary: PUT Update Relationship
+                  value:
+                    data:
+                      id: '19'
+                      type: relationship
+                      attributes:
+                        name: Aunties
+                        prospect_id: 99
+                        contact_id: 7
+                        created_at: '2021-10-31T23:17:44.457-07:00'
+                        updated_at: '2021-10-31T23:20:50.162-07:00'
+                        relationship_type_id: 9
+        '401':
+          description: Unauthorized - missing or invalid OAuth 2.0 bearer token
+        '429':
+          description: Too Many Requests - the per-firm rate limit was exceeded; a Retry-After header is returned
+          headers:
+            Retry-After:
+              description: Seconds to wait before retrying
+              schema:
+                type: integer
+    delete:
+      operationId: deleteRelationship
+      summary: Delete Relationship
+      description: Delete a Relationship by ID
+      tags:
+      - Matters (Prospects)
+      parameters:
+      - name: relationship_id
+        in: path
+        required: true
+        description: The relationship id
+        schema:
+          type: string
+      responses:
+        '204':
+          description: No Content
+        '401':
+          description: Unauthorized - missing or invalid OAuth 2.0 bearer token
+        '429':
+          description: Too Many Requests - the per-firm rate limit was exceeded; a Retry-After header is returned
+          headers:
+            Retry-After:
+              description: Seconds to wait before retrying
+              schema:
+                type: integer
+  /v1/relationships:
+    get:
+      operationId: getRelationships
+      summary: Relationships
+      description: A paginated list of all Relationships in Lawmatics
+      tags:
+      - Matters (Prospects)
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+              examples:
+                getRelationships:
+                  summary: GET Relationships
+                  value:
+                    data:
+                    - id: '4'
+                      type: relationship
+                      attributes:
+                        name: Child
+                        prospect_id: 101
+                        contact_id: 8
+                        has_portal_access?: false
+                        created_at: '2021-10-31T20:26:39.243-07:00'
+                        updated_at: '2021-10-31T20:26:39.243-07:00'
+                      relationships:
+                        relationship_type:
+                          data:
+                            id: '3'
+                            type: relationship_type
+                        custom_field:
+                          data:
+                            id: '3'
+                            type: custom_field
+                    - id: '2'
+                      type: relationship
+                      attributes:
+                        name: Spouse
+                        prospect_id: 101
+                        contact_id: 102
+                        has_portal_access?: false
+                        created_at: '2021-10-31T19:34:53.637-07:00'
+                        updated_at: '2021-10-31T19:34:53.637-07:00'
+                      relationships:
+                        relationship_type:
+                          data:
+                            id: '1'
+                            type: relationship_type
+                        custom_field:
+                          data:
+                            id: '1'
+                            type: custom_field
+                    - id: '1'
+                      type: relationship
+                      attributes:
+                        name: Brother
+                        prospect_id: 101
+                        contact_id: 101
+                        has_portal_access?: true
+                        created_at: '2021-10-31T19:31:56.908-07:00'
+                        updated_at: '2021-10-31T19:31:56.908-07:00'
+                      relationships:
+                        relationship_type:
+                          data:
+                            id: '2'
+                            type: relationship_type
+                        custom_field:
+                          data:
+                            id: '2'
+                            type: custom_field
+                    meta:
+                      total_pages: 1
+                      limit_per_page: 25
+                      total_entries: 3
+                    links:
+                      self: /v1/relationships?page=1
+        '401':
+          description: Unauthorized - missing or invalid OAuth 2.0 bearer token
+        '429':
+          description: Too Many Requests - the per-firm rate limit was exceeded; a Retry-After header is returned
+          headers:
+            Retry-After:
+              description: Seconds to wait before retrying
+              schema:
+                type: integer
+    post:
+      operationId: createRelationship
+      summary: Create Relationship
+      description: 'Create a new Relationship
+
+
+        If the Relationship Type allows multiple, you can create more than one Relationship per Matter.'
+      tags:
+      - Matters (Prospects)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+            example:
+              prospect_id: '{{prospect_id}}'
+              contact_id: '{{contact_id}}'
+              relationship_type_id: '{{relationship_type_id}}'
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                type: object
+              examples:
+                postCreateRelationship:
+                  summary: POST Create Relationship
+                  value:
+                    data:
+                      id: '21'
+                      type: relationship
+                      attributes:
+                        name: Brother
+                        prospect_id: 101
+                        contact_id: 8
+                        relationship_type_id: 2
+                        created_at: '2021-10-31T23:21:53.269-07:00'
+                        updated_at: '2021-10-31T23:21:53.269-07:00'
+        '401':
+          description: Unauthorized - missing or invalid OAuth 2.0 bearer token
+        '429':
+          description: Too Many Requests - the per-firm rate limit was exceeded; a Retry-After header is returned
+          headers:
+            Retry-After:
+              description: Seconds to wait before retrying
+              schema:
+                type: integer
+  /v1/relationship_types/{relationship_type_id}:
+    get:
+      operationId: getRelationshipType
+      summary: Relationship Type
+      description: A specific Relationship Type by ID
+      tags:
+      - Matters (Prospects)
+      parameters:
+      - name: relationship_type_id
+        in: path
+        required: true
+        description: The relationship type id
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+              examples:
+                getRelationship:
+                  summary: GET Relationship
+                  value:
+                    data:
+                      id: '2'
+                      type: relationship
+                      attributes:
+                        name: Spouse
+                        prospect_id: 101
+                        contact_id: 6
+                        relationship_type_id: 1
+                        created_at: '2021-10-31T19:34:53.641-07:00'
+                        updated_at: '2021-10-31T19:34:53.641-07:00'
+        '401':
+          description: Unauthorized - missing or invalid OAuth 2.0 bearer token
+        '429':
+          description: Too Many Requests - the per-firm rate limit was exceeded; a Retry-After header is returned
+          headers:
+            Retry-After:
+              description: Seconds to wait before retrying
+              schema:
+                type: integer
+    put:
+      operationId: updateRelationshipType
+      summary: Update Relationship Type
+      description: Update Relationship
+      tags:
+      - Matters (Prospects)
+      parameters:
+      - name: relationship_type_id
+        in: path
+        required: true
+        description: The relationship type id
+        schema:
+          type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+            example:
+              name: Sister
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+              examples:
+                putUpdateRelationshipType:
+                  summary: PUT Update Relationship Type
+                  value:
+                    data:
+                      id: '2'
+                      type: relationship_type
+                      attributes:
+                        name: Changed Relationship Type
+                        is_repeatable: true
+                        created_at: '2021-10-31T16:22:05.472-07:00'
+                        updated_at: '2022-08-08T17:53:27.925-07:00'
+                      relationships: {}
+        '401':
+          description: Unauthorized - missing or invalid OAuth 2.0 bearer token
+        '429':
+          description: Too Many Requests - the per-firm rate limit was exceeded; a Retry-After header is returned
+          headers:
+            Retry-After:
+              description: Seconds to wait before retrying
+              schema:
+                type: integer
+  /v1/relationship_types:
+    get:
+      operationId: getRelationshipTypes
+      summary: Relationship Types
+      description: A paginated list of all Relationship Types in Lawmatics
+      tags:
+      - Matters (Prospects)
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+              examples:
+                getRelationshipTypes:
+                  summary: GET Relationship Types
+                  value:
+                    data:
+                    - id: '3'
+                      type: relationship_type
+                      attributes:
+                        name: Child
+                        is_repeatable: true
+                      relationships:
+                        created_by:
+                          data:
+                            id: '5'
+                            type: user
+                    - id: '2'
+                      type: relationship_type
+                      attributes:
+                        name: Brother
+                        is_repeatable: true
+                      relationships:
+                        created_by:
+                          data:
+                            id: '5'
+                            type: user
+                    - id: '1'
+                      type: relationship_type
+                      attributes:
+                        name: Spouse
+                        is_repeatable: false
+                      relationships:
+                        created_by:
+                          data:
+                            id: '5'
+                            type: user
+                    meta:
+                      total_pages: 1
+                      limit_per_page: 25
+                      total_entries: 3
+                    links:
+                      self: /v1/relationship_types?page=1
+        '401':
+          description: Unauthorized - missing or invalid OAuth 2.0 bearer token
+        '429':
+          description: Too Many Requests - the per-firm rate limit was exceeded; a Retry-After header is returned
+          headers:
+            Retry-After:
+              description: Seconds to wait before retrying
+              schema:
+                type: integer
+    post:
+      operationId: createRelationshipType
+      summary: Create Relationship Type
+      description: Create a new Relationship Type
+      tags:
+      - Matters (Prospects)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+            example:
+              name: Spouse b07b09e7-7886-4e99-b833-44df2483b9cf
+              is_repeatable: false
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                type: object
+              examples:
+                postCreateRelationshipType:
+                  summary: POST Create Relationship Type
+                  value:
+                    data:
+                      id: '9'
+                      type: relationship_type
+                      attributes:
+                        name: Aunties
+                      relationships: {}
+        '401':
+          description: Unauthorized - missing or invalid OAuth 2.0 bearer token
+        '429':
+          description: Too Many Requests - the per-firm rate limit was exceeded; a Retry-After header is returned
+          headers:
+            Retry-After:
+              description: Seconds to wait before retrying
+              schema:
+                type: integer
+  /v1/sub_statuses/{status_id}:
+    get:
+      operationId: getSubStatus
+      summary: Sub Status
+      description: A specific Stage by id
+      tags:
+      - Matters (Prospects)
+      parameters:
+      - name: status_id
+        in: path
+        required: true
+        description: The status id
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+              examples:
+                getSubStatus:
+                  summary: GET Sub Status
+                  value:
+                    data:
+                      id: '3'
+                      type: sub_status
+                      attributes: {}
+                      relationships:
+                        prospects:
+                          data:
+                          - id: '116'
+                            type: prospect
+        '401':
+          description: Unauthorized - missing or invalid OAuth 2.0 bearer token
+        '429':
+          description: Too Many Requests - the per-firm rate limit was exceeded; a Retry-After header is returned
+          headers:
+            Retry-After:
+              description: Seconds to wait before retrying
+              schema:
+                type: integer
+  /v1/sub_statuses:
+    get:
+      operationId: getSubStatuses
+      summary: Sub Statuses
+      description: A paginated list of all Stages in Lawmatics
+      tags:
+      - Matters (Prospects)
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+              examples:
+                getSubStatuses:
+                  summary: GET Sub Statuses
+                  value:
+                    data:
+                    - id: '3'
+                      type: sub_status
+                      attributes:
+                        name: Divorced
+                        status: hired
+                        created_at: '2022-02-14T11:49:44.857-08:00'
+                        updated_at: '2022-02-14T11:49:44.857-08:00'
+                      relationships: {}
+                    - id: '2'
+                      type: sub_status
+                      attributes:
+                        name: Tickled
+                        status: pnc
+                        created_at: '2022-02-14T11:49:06.326-08:00'
+                        updated_at: '2022-02-14T11:49:06.326-08:00'
+                      relationships: {}
+                    - id: '1'
+                      type: sub_status
+                      attributes:
+                        name: Slapped
+                        status: lost
+                        created_at: '2022-02-14T11:48:54.191-08:00'
+                        updated_at: '2022-02-14T11:48:54.191-08:00'
+                      relationships: {}
+                    meta:
+                      total_pages: 1
+                      limit_per_page: 25
+                      total_entries: 3
+                    links:
+                      self: /v1/sub_statuses?page=1
+        '401':
+          description: Unauthorized - missing or invalid OAuth 2.0 bearer token
+        '429':
+          description: Too Many Requests - the per-firm rate limit was exceeded; a Retry-After header is returned
+          headers:
+            Retry-After:
+              description: Seconds to wait before retrying
+              schema:
+                type: integer
+    post:
+      operationId: createSubStatus
+      summary: Create Sub Status
+      description: 'Create a new Matter Sub Status
+
+
+        Valid statusvalues: ''hired'', ''pnc'', ''lost'' (default ''pnc'')
+
+
+        Accepts created_by_id'
+      tags:
+      - Matters (Prospects)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+            example:
+              name: Deal Closed 0249231e-774f-41dc-8133-d27c15900f3d
+              status: hired
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                type: object
+              examples:
+                postCreateSubStatus:
+                  summary: POST Create Sub Status
+                  value:
+                    data:
+                      id: '8'
+                      type: prospect_sub_status
+                      attributes:
+                        name: Deal Closed
+                        status: hired
+                        created_at: '2023-09-27T14:35:12.604-07:00'
+                        updated_at: '2023-09-27T14:35:12.604-07:00'
+                      relationships:
+                        prospects:
+                          data: []
+                        created_by:
+                          data:
+                            id: '1'
+                            type: user
+        '401':
+          description: Unauthorized - missing or invalid OAuth 2.0 bearer token
+        '429':
+          description: Too Many Requests - the per-firm rate limit was exceeded; a Retry-After header is returned
+          headers:
+            Retry-After:
+              description: Seconds to wait before retrying
+              schema:
+                type: integer
+  /v1/sub_statuses/{sub_status_id}:
+    put:
+      operationId: updateSubStatus
+      summary: Update Sub Status
+      description: 'Update an existing Matter Sub Status by ID
+
+
+        Valid statusvalues: ''hired'', ''pnc'', ''lost'' (default ''pnc'')
+
+
+        Accepts created_by_id'
+      tags:
+      - Matters (Prospects)
+      parameters:
+      - name: sub_status_id
+        in: path
+        required: true
+        description: The sub status id
+        schema:
+          type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+            example:
+              name: New Hired
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+              examples:
+                putUpdateSubStatus:
+                  summary: PUT Update Sub Status
+                  value:
+                    data:
+                      id: '12'
+                      type: prospect_sub_status
+                      attributes:
+                        name: New Hired
+                        status: hired
+                        created_at: '2023-09-27T14:43:01.169-07:00'
+                        updated_at: '2023-09-27T14:43:27.373-07:00'
+                      relationships: {}
+        '401':
+          description: Unauthorized - missing or invalid OAuth 2.0 bearer token
+        '429':
+          description: Too Many Requests - the per-firm rate limit was exceeded; a Retry-After header is returned
+          headers:
+            Retry-After:
+              description: Seconds to wait before retrying
+              schema:
+                type: integer
+    delete:
+      operationId: deleteSubStatus
+      summary: Delete Sub Status
+      description: 'Delete an existing Matter Sub Status by ID.
+
+
+        Warning: This is irreversible!'
+      tags:
+      - Matters (Prospects)
+      parameters:
+      - name: sub_status_id
+        in: path
+        required: true
+        description: The sub status id
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+              examples:
+                delDeleteSubStatus:
+                  summary: DEL Delete Sub Status
+                  value:
+                    data:
+                      id: '13'
+                      type: prospect_sub_status
+                      attributes:
+                        name: Deal Closed
+                        status: hired
+                        created_at: '2023-09-27T14:43:55.410-07:00'
+                        updated_at: '2023-09-27T14:43:55.410-07:00'
+                      relationships: {}
+        '401':
+          description: Unauthorized - missing or invalid OAuth 2.0 bearer token
+        '429':
+          description: Too Many Requests - the per-firm rate limit was exceeded; a Retry-After header is returned
+          headers:
+            Retry-After:
+              description: Seconds to wait before retrying
+              schema:
+                type: integer
+  /v1/prospects:
+    post:
+      operationId: createMatter
+      summary: Create Matter
+      description: Create a new Matter
+      tags:
+      - Matters (Prospects)
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                type: object
+              examples:
+                postCreateMatter:
+                  summary: POST Create Matter
+                  value:
+                    data:
+                      id: '6446448'
+                      type: prospect
+                      attributes:
+                        first_name: Lawmatics
+                        last_name: Example
+                        case_title: null
+                        case_number: null
+                        case_blurb: null
+                        status: pnc
+                        type_of_billing: null
+                        email: roey@lawmatics.com
+                        phone: 123-123-1234
+                        phone_number: 123-123-1234
+                        email_address: roey@lawmatics.com
+                        address: null
+                        birthdate: null
+                        name_prefix: null
+                        middle_name: null
+                        name_suffix: null
+                        sub_status: Pnc
+                        informal_name: null
+                        employer: null
+                        occupation: null
+                        citizenship: null
+                        bio: bio field
+                        title: null
+                        hobbies: null
+                        social_security: null
+                        age: null
+                        referring_url: null
+                        driver_license: null
+                        gender: null
+                        marital_status: null
+                        timezone: null
+                        estimated_value_cents: 0
+                        actual_value_cents: 0
+                        lead_cost_cents: 0
+                        date_of_last_contact: '2023-02-03T15:25:51.843-08:00'
+                        days_since_last_contact: 232
+                        converted_date: null
+                        statute_of_limitations: null
+                        utm_source: null
+                        utm_campaign: null
+                        utm_medium: null
+                        utm_term: null
+                        street: null
+                        street2: null
+                        city: null
+                        state: null
+                        zipcode: null
+                        country: null
+                        full_street: null
+                        city_state_zip: null
+                        full_address: null
+                        photo_url: null
+                        custom_fields:
+                        - id: '6433'
+                          name: API TEST BOOLEAN (dont delete me)
+                          field_type: boolean
+                          value: true
+                          formatted_value: 'Yes'
+                        - id: '6435'
+                          name: API TEST PICKLIST (dont delete me)
+                          field_type: list
+                          value: '3240'
+                          formatted_value: '1'
+                        - id: '6434'
+                          name: API TEST STRING (dont delete me)
+                          field_type: string
+                          value: Contact String
+                          formatted_value: Contact String
+                        - id: '6470'
+                          name: Date Unsubscribed
+                          field_type: date
+                          value: '1991-06-28'
+                          formatted_value: June 28, 1991
+                        - id: '4'
+                          name: Date of Accident
+                          field_type: datetime
+                          value: '2023-12-30T16:00:00.000-08:00'
+                          formatted_value: December 30, 2023 at 4:00pm PST
+                        custom_field_values:
+                          '4':
+                            id: '4'
+                            name: Date of Accident
+                            field_type: datetime
+                            value: '2023-12-30T16:00:00.000-08:00'
+                            formatted_value: December 30, 2023 at 4:00pm PST
+                          '6433':
+                            id: '6433'
+                            name: API TEST BOOLEAN (dont delete me)
+                            field_type: boolean
+                            value: true
+                            formatted_value: 'Yes'
+                          '6434':
+                            id: '6434'
+                            name: API TEST STRING (dont delete me)
+                            field_type: string
+                            value: Contact String
+                            formatted_value: Contact String
+                          '6435':
+                            id: '6435'
+                            name: API TEST PICKLIST (dont delete me)
+                            field_type: list
+                            value: '3240'
+                            formatted_value: '1'
+                          '6470':
+                            id: '6470'
+                            name: Date Unsubscribed
+                            field_type: date
+                            value: '1991-06-28'
+                            formatted_value: June 28, 1991
+                        created_at: '2023-09-23T17:09:01.232-07:00'
+                        updated_at: '2023-09-23T17:09:01.360-07:00'
+                        last_contacted_date: '2023-02-03T15:25:51.843-08:00'
+                      relationships:
+                        source:
+                          data: null
+                        stage:
+                          data: null
+                        campaign:
+                          data: null
+                        practice_area:
+                          data:
+                            id: '986'
+                            type: practice_area
+                        salesperson:
+                          data: null
+                        lead_attorney:
+                          data: null
+                        originating_attorney:
+                          data: null
+                        owned_by:
+                          data: null
+                        created_by:
+                          data:
+                            id: '17'
+                            type: user
+                        contact:
+                          data:
+                            id: '3546976'
+                            type: contact
+                        company:
+                          data: null
+                        assigned_staff:
+                          data: []
+                        events:
+                          data: []
+                        file_requests:
+                          data: []
+                        documents:
+                          data: []
+                        notes:
+                          data:
+                          - id: '6726504'
+                            type: note
+                        tasks:
+                          data: []
+                        emails:
+                          data:
+                          - id: '4503447'
+                            type: email_address
+                        phone_numbers:
+                          data:
+                          - id: '4503448'
+                            type: phone_number
+                        addresses:
+                          data: []
+                        invoices:
+                          data: []
+                        tags:
+                          data:
+                          - id: '17506'
+                            type: tag
+                          - id: '17507'
+                            type: tag
+                        relationships:
+                          data: []
+        '401':
+          description: Unauthorized - missing or invalid OAuth 2.0 bearer token
+        '429':
+          description: Too Many Requests - the per-firm rate limit was exceeded; a Retry-After header is returned
+          headers:
+            Retry-After:
+              description: Seconds to wait before retrying
+              schema:
+                type: integer
+    get:
+      operationId: getMatters
+      summary: Matters
+      description: A paginated list of all Matters in Lawmatics
+      tags:
+      - Matters (Prospects)
+      parameters:
+      - name: fields
+        in: query
+        required: false
+        schema:
+          type: string
+        example: all
+      - name: filter_by
+        in: query
+        required: false
+        schema:
+          type: string
+        example: practice_area_id
+      - name: filter_on
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: filter_with
+        in: query
+        required: false
+        schema:
+          type: string
+        example: '>'
+      - name: sort_by
+        in: query
+        required: false
+        schema:
+          type: string
+        example: actual_value_cents
+      - name: sort_order
+        in: query
+        required: false
+        schema:
+          type: string
+        example: asc
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+              examples:
+                getMatters:
+                  summary: GET Matters
+                  value:
+                    data:
+                    - id: '1'
+                      type: prospect
+                      attributes:
+                        first_name: Roey
+                        last_name: Chasman
+                        email: roey+pnc@lawmatics.com
+                        created_at: '2018-01-05T17:18:09.735-08:00'
+                        updated_at: '2018-09-17T11:22:58.324-07:00'
+                      relationships: {}
+                    - id: '2'
+                      type: prospect
+                      attributes:
+                        first_name: Saul
+                        last_name: Goodman
+                        email: matt+saul@lawmatics.com
+                        created_at: '2018-01-06T10:04:29.517-08:00'
+                        updated_at: '2018-03-20T07:00:28.427-07:00'
+                      relationships: {}
+                    - id: '3'
+                      type: prospect
+                      attributes:
+                        first_name: Adam
+                        last_name: Tester
+                        email: adam@tester.com
+                        created_at: '2018-01-08T02:30:27.925-08:00'
+                        updated_at: '2018-03-20T07:00:28.092-07:00'
+                      relationships: {}
+                    - id: '4'
+                      type: prospect
+                      attributes:
+                        first_name: Kim
+                        last_name: Tester
+                        email: testergel@gmail.com
+                        created_at: '2018-01-08T10:10:03.043-08:00'
+                        updated_at: '2018-03-20T07:00:28.357-07:00'
+                      relationships: {}
+                    - id: '5'
+                      type: prospect
+                      attributes:
+                        first_name: Hunter
+                        last_name: Tester
+                        email: test@smokeball.com
+                        created_at: '2018-01-08T13:42:36.375-08:00'
+                        updated_at: '2018-03-20T07:00:28.495-07:00'
+                      relationships: {}
+                    - id: '6'
+                      type: prospect
+                      attributes:
+                        first_name: John
+                        last_name: Tester
+                        email: tester@gmail.com
+                        created_at: '2018-01-08T13:43:15.135-08:00'
+                        updated_at: '2018-09-21T13:27:24.267-07:00'
+                      relationships: {}
+                    - id: '7'
+                      type: prospect
+                      attributes:
+                        first_name: Jason
+                        last_name: Tester
+                        email: tester@gmail.com
+                        created_at: '2018-01-11T13:54:29.469-08:00'
+                        updated_at: '2018-03-20T07:00:28.378-07:00'
+                      relationships: {}
+                    - id: '8'
+                      type: prospect
+                      attributes:
+                        first_name: Mike
+                        last_name: Snow
+                        email: testerl@gmail.com
+                        created_at: '2018-01-23T14:56:18.406-08:00'
+                        updated_at: '2018-03-20T07:00:28.388-07:00'
+                      relationships: {}
+                    - id: '9'
+                      type: prospect
+                      attributes:
+                        first_name: James
+                        last_name: Tester
+                        email: test@gmail.com
+                        created_at: '2018-01-23T17:11:09.145-08:00'
+                        updated_at: '2018-03-20T07:00:28.408-07:00'
+                      relationships: {}
+                    - id: '10'
+                      type: prospect
+                      attributes:
+                        first_name: Gyi
+                        last_name: Tester
+                        email: test@lawmatics.com
+                        created_at: '2018-01-24T10:50:59.490-08:00'
+                        updated_at: '2018-03-20T07:00:28.511-07:00'
+                      relationships: {}
+                    - id: '15'
+                      type: prospect
+                      attributes:
+                        first_name: Joe
+                        last_name: Test
+                        email: tester@lawmatics.com
+                        created_at: '2018-02-05T16:47:54.276-08:00'
+                        updated_at: '2018-08-14T10:05:34.844-07:00'
+                      relationships: {}
+                    - id: '16'
+                      type: prospect
+                      attributes:
+                        first_name: Jeff
+                        last_name: Tester
+                        email: tester@lawmatics.com
+                        created_at: '2018-02-06T19:38:40.814-08:00'
+                        updated_at: '2018-03-20T07:00:28.603-07:00'
+                      relationships: {}
+                    - id: '17'
+                      type: prospect
+                      attributes:
+                        first_name: Sarah
+                        last_name: Tester
+                        email: sarah@lawmatics.com
+                        created_at: '2018-02-09T15:14:46.629-08:00'
+                        updated_at: '2018-03-20T07:00:28.461-07:00'
+                      relationships: {}
+                    - id: '18'
+                      type: prospect
+                      attributes:
+                        first_name: John
+                        last_name: Snow
+                        email: john@westeros.com
+                        created_at: '2018-03-06T06:09:22.068-08:00'
+                        updated_at: '2018-03-20T07:00:28.230-07:00'
+                      relationships: {}
+                    - id: '19'
+                      type: prospect
+                      attributes:
+                        first_name: Daenerys
+                        last_name: Targaryen
+                        email: motherofdragons@daenerys.com
+                        created_at: '2018-03-07T13:29:08.119-08:00'
+                        updated_at: '2018-03-26T12:28:22.505-07:00'
+                      relationships: {}
+                    - id: '20'
+                      type: prospect
+                      attributes:
+                        first_name: John
+                        last_name: Snow
+                        email: johnsnow@nightswatch.com
+                        created_at: '2018-03-07T13:32:00.708-08:00'
+                        updated_at: '2018-03-30T12:38:00.155-07:00'
+                      relationships: {}
+                    - id: '21'
+                      type: prospect
+                      attributes:
+                        first_name: Gregor
+                        last_name: Clegane
+                        email: gregor@clegane.com
+                        created_at: '2018-03-07T13:38:58.311-08:00'
+                        updated_at: '2018-03-20T07:00:28.690-07:00'
+                      relationships: {}
+                    - id: '25'
+                      type: prospect
+                      attributes:
+                        first_name: Tyrion
+                        last_name: Lannister
+                        email: tyrion@small.com
+                        created_at: '2018-03-07T13:51:38.789-08:00'
+                        updated_at: '2018-10-16T14:43:25.697-07:00'
+                      relationships: {}
+                    - id: '26'
+                      type: prospect
+                      attributes:
+                        first_name: Arya
+                        last_name: Stark
+                        email: arya@littlesword.com
+                        created_at: '2018-03-07T13:58:24.673-08:00'
+                        updated_at: '2018-03-20T07:00:28.588-07:00'
+                      relationships: {}
+                    - id: '27'
+                      type: prospect
+                      attributes:
+                        first_name: Sansa
+                        last_name: Stark
+                        email: matt.spiegel@gmail.com
+                        created_at: '2018-03-07T13:59:57.315-08:00'
+                        updated_at: '2018-06-18T14:51:36.116-07:00'
+                      relationships: {}
+                    - id: '28'
+                      type: prospect
+                      attributes:
+                        first_name: Khal
+                        last_name: Drogo
+                        email: khal@getripped.com
+                        created_at: '2018-03-07T14:04:11.582-08:00'
+                        updated_at: '2018-10-16T14:43:26.055-07:00'
+                      relationships: {}
+                    - id: '29'
+                      type: prospect
+                      attributes:
+                        first_name: Eddard
+                        last_name: Stark
+                        email: eddard@north.com
+                        created_at: '2018-03-08T06:04:52.771-08:00'
+                        updated_at: '2018-10-16T16:32:20.312-07:00'
+                      relationships: {}
+                    - id: '30'
+                      type: prospect
+                      attributes:
+                        first_name: Joffrey
+                        last_name: Baratheon
+                        email: joffrey@nobodylikesme.com
+                        created_at: '2018-03-08T06:10:41.420-08:00'
+                        updated_at: '2018-03-20T07:00:28.318-07:00'
+                      relationships: {}
+                    - id: '31'
+                      type: prospect
+                      attributes:
+                        first_name: Petyr
+                        last_name: Baelish
+                        email: littlefinger@backstabber.com
+                        created_at: '2018-03-08T06:11:58.640-08:00'
+                        updated_at: '2018-03-20T07:00:28.328-07:00'
+                      relationships: {}
+                    - id: '32'
+                      type: prospect
+                      attributes:
+                        first_name: Jaime
+                        last_name: Lannister
+                        email: jaime@ishegoodorbad.com
+                        created_at: '2018-03-08T06:43:07.974-08:00'
+                        updated_at: '2018-10-16T14:43:25.814-07:00'
+                      relationships: {}
+                    meta:
+                      total_pages: 11
+                      limit_per_page: 25
+                      total_entries: 265
+                    links:
+                      self: /v1/prospect?page=1
+                      next: /v1/prospect?page=2
+        '401':
+          description: Unauthorized - missing or invalid OAuth 2.0 bearer token
+        '429':
+          description: Too Many Requests - the per-firm rate limit was exceeded; a Retry-After header is returned
+          headers:
+            Retry-After:
+              description: Seconds to wait before retrying
+              schema:
+                type: integer
+  /v1/prospects/{prospect_id}:
+    get:
+      operationId: getMatter
+      summary: Matter
+      description: Return one Matter by id
+      tags:
+      - Matters (Prospects)
+      parameters:
+      - name: prospect_id
+        in: path
+        required: true
+        description: The prospect id
+        schema:
+          type: string
+      - name: fields
+        in: query
+        required: false
+        schema:
+          type: string
+        example: all
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+              examples:
+                getMatter:
+                  summary: GET Matter
+                  value:
+                    data:
+                      id: '25'
+                      type: prospect
+                      attributes:
+                        first_name: Tyrion
+                        last_name: Lannister
+                        case_title: Drank bad wine
+                        case_blurb: Client drank a glass of wine and it made him sick
+                        status: active
+                        email: tyrion@small.com
+                        phone: null
+                        phone_number: null
+                        email_address: tyrion@small.com
+                        address: null
+                        birthdate: null
+                        name_prefix: null
+                        middle_name: null
+                        name_suffix: null
+                        sub_status: Active
+                        informal_name: null
+                        employer: null
+                        occupation: null
+                        citizenship: null
+                        bio: null
+                        title: null
+                        hobbies: null
+                        social_security: null
+                        age: null
+                        referring_url: null
+                        driver_license: null
+                        gender: null
+                        marital_status: null
+                        timezone: null
+                        estimated_value_cents: 250000
+                        actual_value_cents: 500000
+                        lead_cost_cents: 0
+                        date_of_last_contact: '2018-03-07T13:51:38.789-08:00'
+                        days_since_last_contact: 223
+                        photo_url: https://lm.lawmatics.com/attachments/421159fc72cbab9106329e36635b4939b8a1ad93/store/14da96fb7824ad411b34313189f4aaaba4192b6d7b0624f7948f218225e7/photo
+                        custom_fields: []
+                        created_at: '2018-03-07T13:51:38.789-08:00'
+                        updated_at: '2018-10-16T14:43:25.697-07:00'
+                      relationships:
+                        source:
+                          data:
+                            id: '6'
+                            type: source
+                        stage:
+                          data:
+                            id: '2'
+                            type: stage
+                        campaign:
+                          data:
+                            id: '7'
+                            type: campaign
+                        practice_area:
+                          data:
+                            id: '3'
+                            type: practice_area
+                        owned_by:
+                          data: null
+                        created_by:
+                          data:
+                            id: '15'
+                            type: user
+                        events:
+                          data: []
+                        documents:
+                          data: []
+                        notes:
+                          data: []
+                        tasks:
+                          data:
+                          - id: '51'
+                            type: task
+                        invoices:
+                          data: []
+                        emails:
+                          data:
+                          - id: '29'
+                            type: email
+                        phone_numbers:
+                          data: []
+                        addresses:
+                          data: []
+                        relationships:
+                          data: []
+        '401':
+          description: Unauthorized - missing or invalid OAuth 2.0 bearer token
+        '429':
+          description: Too Many Requests - the per-firm rate limit was exceeded; a Retry-After header is returned
+          headers:
+            Retry-After:
+              description: Seconds to wait before retrying
+              schema:
+                type: integer
+    put:
+      operationId: updateMatter
+      summary: Update Matter
+      description: 'Update an existing Matter by ID.
+
+
+        Passing Custom Field id and value, will set the custom field value on the Matter, and overwrite any existing value. Passing null as the value will clear it out.'
+      tags:
+      - Matters (Prospects)
+      parameters:
+      - name: prospect_id
+        in: path
+        required: true
+        description: The prospect id
+        schema:
+          type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+            example:
+              first_name: Lawmatics
+              last_name: ExampleChanged
+              email: carlo99@example.com
+              phone: 123-123-1234
+              assigned_staff_ids: []
+              notes:
+              - name: Cool Note
+                body: This is a long form sweet new note
+              tags:
+              - Tag 1
+              - Tag 2
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+              examples:
+                putPATCHUpdateMatter:
+                  summary: PUT/PATCH Update Matter
+                  value:
+                    data:
+                      id: '2309744'
+                      type: prospect
+                      attributes:
+                        first_name: Lawmatics
+                        last_name: ExampleChanged
+                        email: roey+changed@lawmatics.com
+                        custom_fields:
+                        - id: 6434
+                          name: API TEST STRING (dont delete me)
+                          field_type: string
+                          value: Contact String
+                          formatted_value: Contact String
+                        - id: 6435
+                          name: API TEST PICKLIST (dont delete me)
+                          field_type: list
+                          value: '3241'
+                          formatted_value: '2'
+                        - id: 6433
+                          name: API TEST BOOLEAN (dont delete me)
+                          field_type: boolean
+                          value: false
+                          formatted_value: 'No'
+                      relationships: {}
+        '401':
+          description: Unauthorized - missing or invalid OAuth 2.0 bearer token
+        '429':
+          description: Too Many Requests - the per-firm rate limit was exceeded; a Retry-After header is returned
+          headers:
+            Retry-After:
+              description: Seconds to wait before retrying
+              schema:
+                type: integer
+    delete:
+      operationId: deleteMatter
+      summary: Delete Matter
+      description: 'Delete an existing Matter by ID.
+
+
+        Warning: This is irreversible!'
+      tags:
+      - Matters (Prospects)
+      parameters:
+      - name: prospect_id
+        in: path
+        required: true
+        description: The prospect id
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+              examples:
+                deleteMatter:
+                  summary: DELETE Matter
+                  value:
+                    data:
+                      id: '41835'
+                      type: prospect
+                      attributes:
+                        first_name: Lawmatics
+                        last_name: Example
+                        email: null
+                        created_at: '2018-10-15T15:26:09.927-07:00'
+                        updated_at: '2018-10-15T15:26:09.927-07:00'
+                      relationships: {}
+        '401':
+          description: Unauthorized - missing or invalid OAuth 2.0 bearer token
+        '429':
+          description: Too Many Requests - the per-firm rate limit was exceeded; a Retry-After header is returned
+          headers:
+            Retry-After:
+              description: Seconds to wait before retrying
+              schema:
+                type: integer
+components:
+  securitySchemes:
+    oauth2:
+      type: oauth2
+      description: OAuth 2.0 authorization code grant. Register a developer app at https://app.lawmatics.com/settings/developers (developer settings must be enabled by Lawmatics support). Access tokens are non-expiring; no refresh tokens are issued and scopes are not supported.
+      flows:
+        authorizationCode:
+          authorizationUrl: https://app.lawmatics.com/oauth/authorize
+          tokenUrl: https://api.lawmatics.com/oauth/token
+          scopes: {}
+    bearerAuth:
+      type: http
+      scheme: bearer
+      description: 'The OAuth 2.0 access token is sent as `Authorization: Bearer <access_token>`.'
+externalDocs:
+  description: Official Lawmatics RESTful API documentation (Postman)
+  url: https://docs.lawmatics.com/
+x-provenance:
+  generated: '2026-08-13'
+  method: derived
+  publisher: API Evangelist
+  source: https://docs.lawmatics.com/api/collections/26379991/2sA3JM7gbw?segregateAuth=true&versionTag=latest
+  source_type: Postman collection published by Lawmatics as its official API documentation
+  source_file: postman/lawmatics-oauth-api.postman_collection.json
+  note: 'NOT published by Lawmatics. Lawmatics publishes no OpenAPI. Every path, method, parameter, request example and response example in this document was converted mechanically from the provider-published Postman collection "Lawmatics OAuth API v1.22.0"; nothing was invented. Schemas are typed as generic objects because the collection carries examples, not JSON Schema. The server URL is the base documented in the collection Param Guide (https://api.lawmatics.com), not the collection''s disabled {{host}} placeholder. The 401 and 429 responses added to every authenticated operation are the provider-documented, globally applicable responses: the collection''s auth guide states a per-firm rate limit applies to all endpoints and returns 429 with a Retry-After header, and https://api.lawmatics.com/v1/contacts was observed returning 401 unauthenticated on 2026-08-13.'

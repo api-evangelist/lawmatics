@@ -1,0 +1,604 @@
+openapi: 3.2.0
+info:
+  title: Lawmatics OAuth Payment Expenses API
+  version: 1.22.0
+  description: 'The official Lawmatics REST API for legal CRM, client intake and law firm automation. Manage matters (prospects), contacts, companies, custom forms and form entries, custom fields, events and appointments, tasks, notes, files, tags, users, time entries, expenses, invoices and transactions.
+
+
+    Authentication is OAuth 2.0 authorization code grant; access tokens do not expire, there are no refresh tokens, and Lawmatics does not currently support scopes - an authorized app receives full CRUD access to the granted account.
+
+
+    All list endpoints support the shared query-parameter grammar documented in the Param Guide: `fields` (field selection, one level deep, `fields=all` to expand), `page` (pagination), `sort_by`/`sort_order`, and `filter_by`/`filter_on`/`filter_with` (one filter at a time; operators `=`, `!=`, `<=`, `<`, `>=`, `>`, `like`, `ilike`, `null`, `not_null`).
+
+
+    Responses follow a JSON:API-style `data` / `attributes` / `relationships` envelope.'
+  contact:
+    name: Lawmatics API Support
+    email: api@lawmatics.com
+    url: https://docs.lawmatics.com/
+  termsOfService: https://www.lawmatics.com/terms-of-use
+servers:
+- url: https://api.lawmatics.com
+  description: Lawmatics production API
+security:
+- oauth2: []
+- bearerAuth: []
+tags:
+- name: Payment Expenses
+paths:
+  /v1/expenses:
+    get:
+      operationId: getExpenses
+      summary: Expenses
+      description: A paginated list of all Time Entries in Lawmatics
+      tags:
+      - Payment Expenses
+      parameters:
+      - name: fields
+        in: query
+        required: false
+        schema:
+          type: string
+        example: all
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+              examples:
+                getExpenses:
+                  summary: GET Expenses
+                  value:
+                    data:
+                    - id: '39'
+                      type: expense
+                      attributes:
+                        description: Phone Call
+                        duration: 0.1
+                        duration_rounded: 0.1
+                        started_at: '2022-12-26T16:19:51.917-08:00'
+                        completed_at: '2022-12-26T16:25:51.917-08:00'
+                        created_at: '2022-12-26T16:20:24.936-08:00'
+                        updated_at: '2022-12-26T16:23:49.489-08:00'
+                        billable: true
+                        rate_flat_fee: true
+                        rate:
+                          cents: 123000
+                          currency_iso: USD
+                      relationships:
+                        user:
+                          data:
+                            id: '5'
+                            type: user
+                        created_by:
+                          data:
+                            id: '5'
+                            type: user
+                        activity_type:
+                          data:
+                            id: '1'
+                            type: activity_type
+                        contactable:
+                          data:
+                            id: '101'
+                            type: prospect
+                        invoice:
+                          data:
+                            id: '1'
+                            type: invoice
+                    - id: '37'
+                      type: expense
+                      attributes:
+                        description: null
+                        duration: 0
+                        duration_rounded: 0
+                        started_at: '2022-07-05T13:01:52.086-07:00'
+                        completed_at: null
+                        created_at: '2022-07-05T13:01:52.089-07:00'
+                        updated_at: '2022-07-05T13:01:52.089-07:00'
+                        billable: true
+                        rate_flat_fee: false
+                        rate:
+                          cents: 0
+                          currency_iso: USD
+                      relationships:
+                        user:
+                          data:
+                            id: '11'
+                            type: user
+                        created_by:
+                          data:
+                            id: '11'
+                            type: user
+                        activity_type:
+                          data: null
+                        contactable:
+                          data: null
+                        invoice:
+                          data: null
+                    - id: '36'
+                      type: expense
+                      attributes:
+                        description: null
+                        duration: 0.004429444444444444
+                        duration_rounded: 0.1
+                        started_at: '2022-03-14T12:02:44.172-07:00'
+                        completed_at: null
+                        created_at: '2022-03-14T12:02:44.355-07:00'
+                        updated_at: '2023-01-10T15:15:46.748-08:00'
+                        billable: true
+                        rate_flat_fee: false
+                        rate:
+                          cents: 123000
+                          currency_iso: USD
+                      relationships:
+                        user:
+                          data:
+                            id: '5'
+                            type: user
+                        created_by:
+                          data:
+                            id: '5'
+                            type: user
+                        activity_type:
+                          data:
+                            id: '1'
+                            type: activity_type
+                        contactable:
+                          data: null
+                        invoice:
+                          data: null
+                    - id: '16'
+                      type: expense
+                      attributes:
+                        description: null
+                        duration: 0
+                        duration_rounded: 0
+                        started_at: '2022-01-27T16:13:29.750-08:00'
+                        completed_at: null
+                        created_at: '2022-01-27T16:13:29.752-08:00'
+                        updated_at: '2022-01-27T16:13:29.752-08:00'
+                        billable: true
+                        rate_flat_fee: false
+                        rate:
+                          cents: 0
+                          currency_iso: USD
+                      relationships:
+                        user:
+                          data:
+                            id: '5'
+                            type: user
+                        created_by:
+                          data:
+                            id: '5'
+                            type: user
+                        activity_type:
+                          data: null
+                        contactable:
+                          data: null
+                        invoice:
+                          data: null
+                    - id: '11'
+                      type: expense
+                      attributes:
+                        description: null
+                        duration: 0.006879166666666667
+                        duration_rounded: 0.1
+                        started_at: '2021-11-04T18:15:11.498-07:00'
+                        completed_at: null
+                        created_at: '2021-11-04T18:15:11.500-07:00'
+                        updated_at: '2022-01-05T16:40:11.136-08:00'
+                        billable: true
+                        rate_flat_fee: false
+                        rate:
+                          cents: 0
+                          currency_iso: USD
+                      relationships:
+                        user:
+                          data:
+                            id: '5'
+                            type: user
+                        created_by:
+                          data:
+                            id: '5'
+                            type: user
+                        activity_type:
+                          data:
+                            id: '1'
+                            type: activity_type
+                        contactable:
+                          data: null
+                        invoice:
+                          data: null
+                    - id: '10'
+                      type: expense
+                      attributes:
+                        description: ''
+                        duration: 0
+                        duration_rounded: 0.1
+                        started_at: '2021-11-04T18:15:03.000-07:00'
+                        completed_at: '2021-11-04T18:15:11.299-07:00'
+                        created_at: '2021-11-04T18:15:03.154-07:00'
+                        updated_at: '2022-03-22T11:23:51.773-07:00'
+                        billable: true
+                        rate_flat_fee: false
+                        rate:
+                          cents: 123123
+                          currency_iso: USD
+                      relationships:
+                        user:
+                          data:
+                            id: '3'
+                            type: user
+                        created_by:
+                          data:
+                            id: '5'
+                            type: user
+                        activity_type:
+                          data:
+                            id: '1'
+                            type: activity_type
+                        contactable:
+                          data:
+                            id: '19'
+                            type: prospect
+                        invoice:
+                          data: null
+                    - id: '9'
+                      type: expense
+                      attributes:
+                        description: ''
+                        duration: 0.003985277777777779
+                        duration_rounded: 0.1
+                        started_at: '2021-11-02T10:27:10.000-07:00'
+                        completed_at: '2021-11-04T18:15:03.033-07:00'
+                        created_at: '2021-11-02T10:27:10.168-07:00'
+                        updated_at: '2021-11-04T18:15:03.080-07:00'
+                        billable: true
+                        rate_flat_fee: false
+                        rate:
+                          cents: 0
+                          currency_iso: USD
+                      relationships:
+                        user:
+                          data:
+                            id: '5'
+                            type: user
+                        created_by:
+                          data:
+                            id: '5'
+                            type: user
+                        activity_type:
+                          data:
+                            id: '1'
+                            type: activity_type
+                        contactable:
+                          data:
+                            id: '14'
+                            type: prospect
+                        invoice:
+                          data: null
+                    - id: '8'
+                      type: expense
+                      attributes:
+                        description: Test
+                        duration: 0.003545555555555556
+                        duration_rounded: 0.1
+                        started_at: '2021-10-26T16:32:57.000-07:00'
+                        completed_at: '2021-10-26T16:33:09.764-07:00'
+                        created_at: '2021-10-26T16:32:57.553-07:00'
+                        updated_at: '2022-12-26T16:22:52.245-08:00'
+                        billable: true
+                        rate_flat_fee: false
+                        rate:
+                          cents: 0
+                          currency_iso: USD
+                      relationships:
+                        user:
+                          data:
+                            id: '5'
+                            type: user
+                        created_by:
+                          data:
+                            id: '5'
+                            type: user
+                        activity_type:
+                          data:
+                            id: '1'
+                            type: activity_type
+                        contactable:
+                          data:
+                            id: '101'
+                            type: prospect
+                        invoice:
+                          data:
+                            id: '1'
+                            type: invoice
+                    meta:
+                      total_pages: 1
+                      limit_per_page: 25
+                      total_entries: 8
+                    links:
+                      self: /v1/expenses?page=1
+        '401':
+          description: Unauthorized - missing or invalid OAuth 2.0 bearer token
+        '429':
+          description: Too Many Requests - the per-firm rate limit was exceeded; a Retry-After header is returned
+          headers:
+            Retry-After:
+              description: Seconds to wait before retrying
+              schema:
+                type: integer
+    post:
+      operationId: createExpense
+      summary: Create Expense
+      description: A specific Time Entry in Lawmatics
+      tags:
+      - Payment Expenses
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                billable:
+                  type: string
+                contactable_type:
+                  type: string
+                contactable_id:
+                  type: string
+                cost_cents:
+                  type: string
+                description:
+                  type: string
+                created_by_id:
+                  type: string
+                user_id:
+                  type: string
+                expensed_at:
+                  type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+              examples:
+                createExpense:
+                  summary: Create Expense
+                  value:
+                    data:
+                      id: '34'
+                      type: expense
+                      attributes:
+                        description: Postage
+                        duration: 61
+                        is_billable: true
+                        is_flat_fee: false
+                      relationships:
+                        staff:
+                          data:
+                            id: '2'
+                            type: user
+                        contactable:
+                          data:
+                            id: '12'
+                            type: prospect
+                        activity_type:
+                          data:
+                            id: '1'
+                            type: activity_type
+                        invoice:
+                          data: null
+        '401':
+          description: Unauthorized - missing or invalid OAuth 2.0 bearer token
+        '429':
+          description: Too Many Requests - the per-firm rate limit was exceeded; a Retry-After header is returned
+          headers:
+            Retry-After:
+              description: Seconds to wait before retrying
+              schema:
+                type: integer
+  /v1/expenses/{expense_id}:
+    get:
+      operationId: getExpense
+      summary: Expense
+      description: A specific Time Entry in Lawmatics
+      tags:
+      - Payment Expenses
+      parameters:
+      - name: expense_id
+        in: path
+        required: true
+        description: The expense id
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+              examples:
+                getExpense:
+                  summary: GET Expense
+                  value:
+                    data:
+                      id: '9'
+                      type: time_entry
+                      attributes:
+                        description: null
+                        duration: 0
+                        is_billable: true
+                        is_flat_fee: false
+                      relationships:
+                        staff:
+                          data:
+                            id: '1'
+                            type: user
+                        contactable:
+                          data: null
+                        activity_type:
+                          data: null
+                        invoice:
+                          data: null
+        '401':
+          description: Unauthorized - missing or invalid OAuth 2.0 bearer token
+        '429':
+          description: Too Many Requests - the per-firm rate limit was exceeded; a Retry-After header is returned
+          headers:
+            Retry-After:
+              description: Seconds to wait before retrying
+              schema:
+                type: integer
+    put:
+      operationId: updateExpense
+      summary: Update Expense
+      description: A specific Time Entry in Lawmatics
+      tags:
+      - Payment Expenses
+      parameters:
+      - name: expense_id
+        in: path
+        required: true
+        description: The expense id
+        schema:
+          type: string
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                billable:
+                  type: string
+                description:
+                  type: string
+                contactable_type:
+                  type: string
+                contactable_id:
+                  type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+              examples:
+                updateExpense:
+                  summary: Update Expense
+                  value:
+                    data:
+                      id: '35'
+                      type: expense
+                      attributes:
+                        description: Postage
+                        duration: 200
+                        is_billable: false
+                        is_flat_fee: true
+                      relationships:
+                        staff:
+                          data:
+                            id: '2'
+                            type: user
+                        contactable:
+                          data: null
+                        activity_type:
+                          data:
+                            id: '1'
+                            type: activity_type
+                        invoice:
+                          data: null
+        '401':
+          description: Unauthorized - missing or invalid OAuth 2.0 bearer token
+        '429':
+          description: Too Many Requests - the per-firm rate limit was exceeded; a Retry-After header is returned
+          headers:
+            Retry-After:
+              description: Seconds to wait before retrying
+              schema:
+                type: integer
+    delete:
+      operationId: deleteExpense
+      summary: Expense
+      description: A specific Time Entry in Lawmatics
+      tags:
+      - Payment Expenses
+      parameters:
+      - name: expense_id
+        in: path
+        required: true
+        description: The expense id
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+              examples:
+                deleteExpense:
+                  summary: DELETE Expense
+                  value:
+                    data:
+                      id: '9'
+                      type: expense
+                      attributes:
+                        description: null
+                        duration: 0
+                        is_billable: true
+                        is_flat_fee: false
+                      relationships:
+                        staff:
+                          data:
+                            id: '1'
+                            type: user
+                        contactable:
+                          data: null
+                        activity_type:
+                          data: null
+                        invoice:
+                          data: null
+        '401':
+          description: Unauthorized - missing or invalid OAuth 2.0 bearer token
+        '429':
+          description: Too Many Requests - the per-firm rate limit was exceeded; a Retry-After header is returned
+          headers:
+            Retry-After:
+              description: Seconds to wait before retrying
+              schema:
+                type: integer
+components:
+  securitySchemes:
+    oauth2:
+      type: oauth2
+      description: OAuth 2.0 authorization code grant. Register a developer app at https://app.lawmatics.com/settings/developers (developer settings must be enabled by Lawmatics support). Access tokens are non-expiring; no refresh tokens are issued and scopes are not supported.
+      flows:
+        authorizationCode:
+          authorizationUrl: https://app.lawmatics.com/oauth/authorize
+          tokenUrl: https://api.lawmatics.com/oauth/token
+          scopes: {}
+    bearerAuth:
+      type: http
+      scheme: bearer
+      description: 'The OAuth 2.0 access token is sent as `Authorization: Bearer <access_token>`.'
+externalDocs:
+  description: Official Lawmatics RESTful API documentation (Postman)
+  url: https://docs.lawmatics.com/
+x-provenance:
+  generated: '2026-08-13'
+  method: derived
+  publisher: API Evangelist
+  source: https://docs.lawmatics.com/api/collections/26379991/2sA3JM7gbw?segregateAuth=true&versionTag=latest
+  source_type: Postman collection published by Lawmatics as its official API documentation
+  source_file: postman/lawmatics-oauth-api.postman_collection.json
+  note: 'NOT published by Lawmatics. Lawmatics publishes no OpenAPI. Every path, method, parameter, request example and response example in this document was converted mechanically from the provider-published Postman collection "Lawmatics OAuth API v1.22.0"; nothing was invented. Schemas are typed as generic objects because the collection carries examples, not JSON Schema. The server URL is the base documented in the collection Param Guide (https://api.lawmatics.com), not the collection''s disabled {{host}} placeholder. The 401 and 429 responses added to every authenticated operation are the provider-documented, globally applicable responses: the collection''s auth guide states a per-firm rate limit applies to all endpoints and returns 429 with a Retry-After header, and https://api.lawmatics.com/v1/contacts was observed returning 401 unauthenticated on 2026-08-13.'
