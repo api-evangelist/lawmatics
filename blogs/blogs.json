@@ -2,22 +2,22 @@
   "repo": "lawmatics",
   "feeds": [
     {
-      "source": "https://docs.lawmatics.com/",
-      "feed_url": "https://docs.lawmatics.com/",
+      "source": "https://www.lawmatics.com/privacy-policy",
+      "feed_url": "https://www.lawmatics.com/privacy-policy",
       "title": "",
       "saved": 0,
       "method": "none"
     },
     {
-      "source": "https://www.lawmatics.com/privacy-policy",
-      "feed_url": "https://www.lawmatics.com/privacy-policy",
+      "source": "https://docs.lawmatics.com/",
+      "feed_url": "https://docs.lawmatics.com/",
       "title": "",
       "saved": 0,
       "method": "none"
     }
   ],
   "post_count": 1,
-  "fetched": "2026-08-30T22:33:40Z",
+  "fetched": "2026-09-06T19:17:18Z",
   "agent_pulled": "2026-07-04",
   "feed_nature": "vendor-blog",
   "feed_nature_basis": "path_blog",
