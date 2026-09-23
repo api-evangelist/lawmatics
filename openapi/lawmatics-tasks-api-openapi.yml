@@ -2,16 +2,7 @@ openapi: 3.2.0
 info:
   title: Lawmatics OAuth Tasks API
   version: 1.22.0
-  description: 'The official Lawmatics REST API for legal CRM, client intake and law firm automation. Manage matters (prospects), contacts, companies, custom forms and form entries, custom fields, events and appointments, tasks, notes, files, tags, users, time entries, expenses, invoices and transactions.
-
-
-    Authentication is OAuth 2.0 authorization code grant; access tokens do not expire, there are no refresh tokens, and Lawmatics does not currently support scopes - an authorized app receives full CRUD access to the granted account.
-
-
-    All list endpoints support the shared query-parameter grammar documented in the Param Guide: `fields` (field selection, one level deep, `fields=all` to expand), `page` (pagination), `sort_by`/`sort_order`, and `filter_by`/`filter_on`/`filter_with` (one filter at a time; operators `=`, `!=`, `<=`, `<`, `>=`, `>`, `like`, `ilike`, `null`, `not_null`).
-
-
-    Responses follow a JSON:API-style `data` / `attributes` / `relationships` envelope.'
+  description: The official Lawmatics REST API for legal CRM, client intake and law firm automation.
   contact:
     name: Lawmatics API Support
     email: api@lawmatics.com
@@ -98,7 +89,83 @@ paths:
     put:
       operationId: updateTask
       summary: Update Task
-      description: "Updates a Task\n\nOptional Fields: user_ids, priority, done, taskable, tag_ids, assigned_by_id, recurrence_rule\n\ndue_date: Task due date (iso8601 datetime)\n\nuser_ids: The Firm User ids that will be assigned to this Task.\n\npriority: high, medium, low (default)\n\ndone: true or false (default)\n\ntaskable_type, taskable_id: Record type, ID the Task is associated with (Prospect (Matter), Contact, Company, Client).\n\ntag_ids: Tags to associate to this **Task.  \n\nassigned_by_id:** The user id the task is assigned by.\n\nrecurrence_rule: Json object. Following are the fields with which we can create a recurrence_rule.\nRecurrenceType options are the following = 'daily' or 'weekly' or monthly' or 'yearly';\n\nfields of the json object you can choose from:\ntype: RecurrenceType;\nendOption?: boolean;\nendDate?: Date;\n\n// If you choose type to be daily\n\nfrequency?: number;\n\n// If you choose type to be weekly\n\nsunday?: boolean;\nmonday?: boolean;\ntuesday?: boolean;\nwednesday?: boolean;\nthursday?: boolean;\nfriday?: boolean;\nsaturday?: boolean;\n\n// If you choose type to be monthly\nmonthlyFrequency?: number;\ndayOfMonth?: number;\n\n// If you choose type to be yearly\nmonth?: string;\ndayOfMonthYear?: number;"
+      description: 'Updates a Task
+
+
+        Optional Fields: user_ids, priority, done, taskable, tag_ids, assigned_by_id, recurrence_rule
+
+
+        due_date: Task due date (iso8601 datetime)
+
+
+        user_ids: The Firm User ids that will be assigned to this Task.
+
+
+        priority: high, medium, low (default)
+
+
+        done: true or false (default)
+
+
+        taskable_type, taskable_id: Record type, ID the Task is associated with (Prospect (Matter), Contact, Company, Client).
+
+
+        tag_ids: Tags to associate to this **Task.
+
+
+        assigned_by_id:** The user id the task is assigned by.
+
+
+        recurrence_rule: Json object. Following are the fields with which we can create a recurrence_rule.
+
+        RecurrenceType options are the following = ''daily'' or ''weekly'' or monthly'' or ''yearly'';
+
+
+        fields of the json object you can choose from:
+
+        type: RecurrenceType;
+
+        endOption?: boolean;
+
+        endDate?: Date;
+
+
+        // If you choose type to be daily
+
+
+        frequency?: number;
+
+
+        // If you choose type to be weekly
+
+
+        sunday?: boolean;
+
+        monday?: boolean;
+
+        tuesday?: boolean;
+
+        wednesday?: boolean;
+
+        thursday?: boolean;
+
+        friday?: boolean;
+
+        saturday?: boolean;
+
+
+        // If you choose type to be monthly
+
+        monthlyFrequency?: number;
+
+        dayOfMonth?: number;
+
+
+        // If you choose type to be yearly
+
+        month?: string;
+
+        dayOfMonthYear?: number;'
       tags:
       - Tasks
       parameters:
@@ -1157,7 +1224,27 @@ paths:
     post:
       operationId: createComment
       summary: Create Comment
-      description: "Creates a comment on a task in Lawmatics.\noptional field: mentioned_user_ids\n\nmentioned_user_ids: list of user ids.\n\nFeel free to add HTML tags to format your comments.\n\nFollowing is a simple comment with formatting example using bold italic etc.  \n\nThis is a simple comment with formatting example using bold italics\n\nAnother example of comment with mentioned users.  \n\nHi its a new comment on task 45 @Jasmine Rattan"
+      description: 'Creates a comment on a task in Lawmatics.
+
+        optional field: mentioned_user_ids
+
+
+        mentioned_user_ids: list of user ids.
+
+
+        Feel free to add HTML tags to format your comments.
+
+
+        Following is a simple comment with formatting example using bold italic etc.
+
+
+        This is a simple comment with formatting example using bold italics
+
+
+        Another example of comment with mentioned users.
+
+
+        Hi its a new comment on task 45 @Jasmine Rattan'
       tags:
       - Tasks
       parameters:

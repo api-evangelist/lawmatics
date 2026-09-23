@@ -2,16 +2,7 @@ openapi: 3.2.0
 info:
   title: Lawmatics OAuth Collections API
   version: 1.22.0
-  description: 'The official Lawmatics REST API for legal CRM, client intake and law firm automation. Manage matters (prospects), contacts, companies, custom forms and form entries, custom fields, events and appointments, tasks, notes, files, tags, users, time entries, expenses, invoices and transactions.
-
-
-    Authentication is OAuth 2.0 authorization code grant; access tokens do not expire, there are no refresh tokens, and Lawmatics does not currently support scopes - an authorized app receives full CRUD access to the granted account.
-
-
-    All list endpoints support the shared query-parameter grammar documented in the Param Guide: `fields` (field selection, one level deep, `fields=all` to expand), `page` (pagination), `sort_by`/`sort_order`, and `filter_by`/`filter_on`/`filter_with` (one filter at a time; operators `=`, `!=`, `<=`, `<`, `>=`, `>`, `like`, `ilike`, `null`, `not_null`).
-
-
-    Responses follow a JSON:API-style `data` / `attributes` / `relationships` envelope.'
+  description: The official Lawmatics REST API for legal CRM, client intake and law firm automation.
   contact:
     name: Lawmatics API Support
     email: api@lawmatics.com
@@ -1028,7 +1019,117 @@ paths:
     post:
       operationId: createCollectionItem
       summary: Create Collection Item
-      description: "Creates a new collection item, associating a contact or matter record with a collection and optionally setting custom field values.\n\nRequest Body\n\nField\nType\nRequired\nDescription\n\ncontactable_type\nstring\nYes\nThe type of the associated record. Accepted values: Prospect, Contact.\n\ncontactable_id\ninteger\nYes\nThe ID of the associated record.\n\ncollection_id\ninteger\nYes\nThe ID of the collection to add the item to.\n\ncustom_field_values\narray\nNo\nArray of custom field value objects to set on the item.\n\ncustom_field_values Object\n\nField\nType\nDescription\n\nid\ninteger\nThe ID of the custom field.\n\nvalue\nstring\nThe value to set for the custom field.\n\nExample Request Body\n{\n    \"contactable_type\": \"Prospect\",\n    \"contactable_id\": 185,\n    \"collection_id\": 1,\n    \"custom_field_values\": [\n        {\n            \"id\": 295,\n            \"value\": \"The Matrix\"\n        },\n        {\n            \"id\": 296,\n            \"value\": \"1999-03-31\"\n        }\n    ]\n}\n\nResponse\nReturns a 201 Created with the newly created collection item object under data."
+      description: 'Creates a new collection item, associating a contact or matter record with a collection and optionally setting custom field values.
+
+
+        Request Body
+
+
+        Field
+
+        Type
+
+        Required
+
+        Description
+
+
+        contactable_type
+
+        string
+
+        Yes
+
+        The type of the associated record. Accepted values: Prospect, Contact.
+
+
+        contactable_id
+
+        integer
+
+        Yes
+
+        The ID of the associated record.
+
+
+        collection_id
+
+        integer
+
+        Yes
+
+        The ID of the collection to add the item to.
+
+
+        custom_field_values
+
+        array
+
+        No
+
+        Array of custom field value objects to set on the item.
+
+
+        custom_field_values Object
+
+
+        Field
+
+        Type
+
+        Description
+
+
+        id
+
+        integer
+
+        The ID of the custom field.
+
+
+        value
+
+        string
+
+        The value to set for the custom field.
+
+
+        Example Request Body
+
+        {
+
+        "contactable_type": "Prospect",
+
+        "contactable_id": 185,
+
+        "collection_id": 1,
+
+        "custom_field_values": [
+
+        {
+
+        "id": 295,
+
+        "value": "The Matrix"
+
+        },
+
+        {
+
+        "id": 296,
+
+        "value": "1999-03-31"
+
+        }
+
+        ]
+
+        }
+
+
+        Response
+
+        Returns a 201 Created with the newly created collection item object under data.'
       tags:
       - Collections
       responses:

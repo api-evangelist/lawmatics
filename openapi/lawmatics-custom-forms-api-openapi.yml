@@ -2,16 +2,7 @@ openapi: 3.2.0
 info:
   title: Lawmatics OAuth Custom Forms API
   version: 1.22.0
-  description: 'The official Lawmatics REST API for legal CRM, client intake and law firm automation. Manage matters (prospects), contacts, companies, custom forms and form entries, custom fields, events and appointments, tasks, notes, files, tags, users, time entries, expenses, invoices and transactions.
-
-
-    Authentication is OAuth 2.0 authorization code grant; access tokens do not expire, there are no refresh tokens, and Lawmatics does not currently support scopes - an authorized app receives full CRUD access to the granted account.
-
-
-    All list endpoints support the shared query-parameter grammar documented in the Param Guide: `fields` (field selection, one level deep, `fields=all` to expand), `page` (pagination), `sort_by`/`sort_order`, and `filter_by`/`filter_on`/`filter_with` (one filter at a time; operators `=`, `!=`, `<=`, `<`, `>=`, `>`, `like`, `ilike`, `null`, `not_null`).
-
-
-    Responses follow a JSON:API-style `data` / `attributes` / `relationships` envelope.'
+  description: The official Lawmatics REST API for legal CRM, client intake and law firm automation.
   contact:
     name: Lawmatics API Support
     email: api@lawmatics.com
@@ -701,7 +692,7 @@ paths:
   /v1/forms/{custom_form_uuid}/submit:
     post:
       operationId: submitCustomFormEntryFormDataBody
-      summary: Submit Custom Form Entry  (Form Data Body)
+      summary: Submit Custom Form Entry (Form Data Body)
       description: 'This Unauthenticated (YOU DO NOT NEED A DEVELOPER APP) endpoint submits Custom Form values. Keys for the values use the Custom Form field ids found in Lawmatics, or found via the GET endpoint.
 
 
