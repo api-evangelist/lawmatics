@@ -51,7 +51,7 @@ tags:
   - Marketing Automation
   - Matter Management
   - E-Signature
-  - Workflow-Automation
+  - Workflow Automation
   - Legal Tech
   - Time and Billing
   - Webhook
@@ -69,6 +69,7 @@ tags_raw:
   - Time and Billing
   - Webhooks
   - OAuth
+  - Workflow-Automation
 apis:
 - aid: lawmatics:lawmatics-addresses-api
   name: Lawmatics Addresses API
