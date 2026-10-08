@@ -84,3 +84,28 @@ notes:
     quote
   - General range is approximately $99 to $199 per user per month depending on plan
     and firm size
+x-canonical:
+  generated: '2026-10-08'
+  vocabulary: all/0-working/economics/plans-canonical.yml
+  models:
+  - negotiated
+  units: []
+  plans:
+  - name: Essential
+    access: paid
+    model: unstated
+    model_how: derived
+    units: []
+    periods: []
+  - name: Premium
+    access: paid
+    model: unstated
+    model_how: derived
+    units: []
+    periods: []
+  - name: Enterprise
+    access: negotiated
+    model: negotiated
+    model_how: stated
+    units: []
+    periods: []
