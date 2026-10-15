@@ -103,7 +103,6 @@
   arazzo: null
 - slug: lawmatics-create-items-in-monday-com-from-new-lawmatics-forms-to-streamline-workflow
   label: Create items in monday.com from new Lawmatics forms to streamline workflow
-  partner: monday-com
   partner_name: monday.com
   category: Project Management
   use_case: Create items in monday.com from new Lawmatics forms to streamline workflow
@@ -113,7 +112,7 @@
   evidence: https://zapier.com/apps/lawmatics/integrations/monday/1231907/create-items-in-mondaycom-from-new-lawmatics-forms-to-streamline-workflow
   template: https://zapier.com/apps/lawmatics/integrations/monday/1231907/create-items-in-mondaycom-from-new-lawmatics-forms-to-streamline-workflow
   source: template
-  status: pending-generation
+  status: pending-partner-spec
   arazzo: null
 - slug: lawmatics-submit-new-smith-ai-calls-as-custom-form-entries-in-lawmatics
   label: Submit new Smith.ai calls as custom form entries in Lawmatics
@@ -385,5 +384,56 @@
   channel: ipaas-usage
   evidence: https://zapier.com/apps/lawmatics/integrations/asana
   source: edge
+  status: pending-generation
+  arazzo: null
+- slug: lawmatics-zapier
+  label: Zapier
+  partner: zapier
+  partner_name: Zapier
+  type: marketplace
+  marketplace: zapier-directory
+  channel: ipaas-listing
+  evidence: https://zapier.com/apps/lawmatics/integrations
+  source: edge
+  relationship: ipaas-bridge
+  contract_reference:
+    register: Zapier app directory (zapier.com/api/v4/apps)
+    spec_file: null
+    role: ipaas-connector:zapier
+    registered_name: Lawmatics
+    matched_domain: lawmatics.com
+    matched_by: domain
+    detected_by: sweep-workflow-automation.py
+    detected: '2026-10-15'
+    signal_note: one edge per (provider, platform); actions, triggers and usage counts are context, never read
+    app_slug: lawmatics
+    beta: false
+    builder: unknown (not in the directory record)
+  status: pending-generation
+  arazzo: null
+- slug: lawmatics-pipedream
+  label: Pipedream
+  partner: pipedream
+  partner_name: Pipedream
+  type: marketplace
+  marketplace: pipedream-components
+  channel: open-source-node
+  evidence: https://github.com/PipedreamHQ/pipedream/tree/94800dd6de6640b942c65ea7ee655f71ac56d438/components/lawmatics
+  source: edge
+  relationship: ipaas-bridge
+  contract_reference:
+    register: Pipedream components (PipedreamHQ/pipedream components/)
+    spec_file: null
+    role: ipaas-connector:pipedream
+    registered_name: lawmatics
+    matched_domain: lawmatics.com
+    matched_by: domain
+    detected_by: sweep-workflow-automation.py
+    detected: '2026-10-15'
+    signal_note: one edge per (provider, platform); actions, triggers and usage counts are context, never read
+    app_slug: lawmatics
+    actions: true
+    sources: true
+    builder: Pipedream repo (component)
   status: pending-generation
   arazzo: null
