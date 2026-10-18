@@ -9,6 +9,7 @@ checked:
 - https://n8n.io/integrations/lawmatics/
 - https://zapier.com/api/v4/apps/
 - https://zapier.com/apps/lawmatics/integrations
+- zoom/integrations/zoom-integration-edges.yml
 summary: null
 marketplace_apps:
 - marketplace: zapier
@@ -444,6 +445,23 @@ edges:
     builder: Pipedream repo (component)
   detected_by: sweep-workflow-automation.py
   first_seen: '2026-10-15'
+- partner_name: Zoom (own)
+  partner: zoom
+  partner_match: mirror
+  mirror_match: domain
+  type: marketplace
+  relationship: platform-app
+  direction: third-party
+  channel: partner-built
+  marketplace: own
+  evidence: https://marketplace.zoom.us/apps/qbpne1ppRXCtNLHekBws-A
+  mirror_of: zoom/integrations/zoom-integration-edges.yml
+  apps:
+  - Lawmatics
+  listing_count: 1
+  detected: '2026-10-18'
+  detected_by: mirror-platform-listings.py
+  category: Zoom app
 templates:
 - title: Create Google Ads offline conversions when new appointments are made in Lawmatics
   url: https://zapier.com/apps/google-ads/integrations/lawmatics/1657515/create-google-ads-offline-conversions-when-new-appointments-are-made-in-lawmatics

@@ -437,3 +437,16 @@
     builder: Pipedream repo (component)
   status: not-a-workflow
   arazzo: null
+- slug: lawmatics-zoom-own
+  label: Zoom (own)
+  partner: zoom
+  partner_name: Zoom (own)
+  category: Zoom app
+  type: marketplace
+  marketplace: own
+  channel: partner-built
+  evidence: https://marketplace.zoom.us/apps/qbpne1ppRXCtNLHekBws-A
+  source: edge
+  relationship: platform-app
+  status: not-a-workflow
+  arazzo: null
