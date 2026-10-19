@@ -3,10 +3,17 @@ method: searched
 source:
 - https://zapier.com/apps/lawmatics/integrations
 checked:
+- https://api.nuget.org/v3
 - https://composio.dev/toolkits/lawmatics
+- https://crates.io/api/v1
 - https://github.com/PipedreamHQ/pipedream/tree/94800dd6de6640b942c65ea7ee655f71ac56d438/components/
 - https://monid.ai/tools/lawmatics
 - https://n8n.io/integrations/lawmatics/
+- https://proxy.golang.org
+- https://pypi.org/pypi
+- https://registry.npmjs.org
+- https://repo1.maven.org/maven2
+- https://rubygems.org/api/v1
 - https://zapier.com/api/v4/apps/
 - https://zapier.com/apps/lawmatics/integrations
 - zoom/integrations/zoom-integration-edges.yml
@@ -462,6 +469,36 @@ edges:
   detected: '2026-10-18'
   detected_by: mirror-platform-listings.py
   category: Zoom app
+- partner_name: npm registry
+  partner: npm
+  partner_match: register
+  type: register
+  direction: provider-built
+  category: official SDK (JavaScript/TypeScript)
+  evidence: https://www.npmjs.com/package/@lawmatics/ckeditor5-build-classic
+  channel: package-registry
+  relationship: distribution-channel
+  contract_reference:
+    register: npm registry (public registry JSON)
+    spec_file: null
+    language: JavaScript/TypeScript
+    packages:
+    - name: '@lawmatics/ckeditor5-build-classic'
+      version: 41.4.0
+      released: '2026-03-12'
+      released_field: modified
+      lapsed: false
+      page: https://www.npmjs.com/package/@lawmatics/ckeditor5-build-classic
+      repo_leg: github-org:boost-legal
+      publisher_leg: email:lawmatics.com
+      matched_by: domain
+    current: true
+    signal_note: 'an official package on the registry: distribution, not an integration; lapsed = no release in
+      24 months'
+    detected_by: sweep-official-sdks.py
+    detected: '2026-10-18'
+  detected_by: sweep-official-sdks.py
+  first_seen: '2026-10-18'
 templates:
 - title: Create Google Ads offline conversions when new appointments are made in Lawmatics
   url: https://zapier.com/apps/google-ads/integrations/lawmatics/1657515/create-google-ads-offline-conversions-when-new-appointments-are-made-in-lawmatics
